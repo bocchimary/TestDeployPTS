@@ -1,0 +1,912 @@
+{% extends 'main-registrar.html' %}
+{% load static %}
+
+{% block title %}REGISTRAR CLEARANCE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/RCLEARANCE.css' %}?v=1.2">
+<style>
+/* Preview & Print Modal Styles */
+.preview-print-content {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: white;
+  padding: 20px;
+}
+
+.clearance-form {
+  margin-bottom: 30px;
+}
+
+.copy-container {
+  position: relative;
+  border: 1px solid #333;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: white;
+}
+
+.watermark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 10px;
+  color: #666;
+  font-weight: bold;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.subtitle {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+.clearance {
+  margin: 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.year {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+.row-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.name, .course {
+  font-weight: bold;
+  text-align: left;
+  font-size: 10px;
+}
+
+.row-line, .row-line-1 {
+  text-decoration: underline;
+  margin: 0 5px;
+}
+
+.desc {
+  font-size: 10px;
+  display: block;
+  margin: 10px 0;
+}
+
+.dept-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 9px;
+}
+
+.dept-table th, .dept-table td {
+  border: 1px solid #333;
+  padding: 5px;
+  text-align: left;
+}
+
+.dept-text {
+  width: 60%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dept-sign {
+  width: 40%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.approved-signature {
+  color: green;
+  font-weight: bold;
+  font-size: 9px;
+}
+
+.disapproved-signature {
+  color: red;
+  font-weight: bold;
+  font-size: 9px;
+}
+
+.pending-signature {
+  color: orange;
+  font-weight: bold;
+  font-size: 9px;
+}
+
+.signatory-reminder, .purpose {
+  font-size: 8px;
+  text-align: center;
+  margin: 5px 0;
+}
+
+.page-break {
+  page-break-before: always;
+  border-top: 2px dashed #ccc;
+  margin: 20px 0;
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+
+.page-break::before {
+  content: "Page Break";
+  background: white;
+  padding: 0 10px;
+}
+
+/* Modal preview styles only - printing handled by iframe */
+</style>
+{% endblock %}
+
+{% block main_content %}
+ 
+  <div class="registrar_clearance_main-content">
+    <script>
+      // Mark the clearance link as active
+      document.addEventListener('DOMContentLoaded', function() {
+        const clearanceLink = document.querySelector('a[href="{% url "registrar_clearance" %}"]');
+        if (clearanceLink) {
+          clearanceLink.classList.add('active');
+        }
+      });
+    </script>
+    <form id="registrar_clearance_form">
+      <div class="text-end text-muted mb-2 small"><strong>Date:</strong> <span id="registrar_clearance_dateToday"></span></div>
+      <h1 class="fw-bold">List of Clearance</h1>
+
+             <!-- Filter + Search Row -->
+       <div class="row mb-3">
+         <div class="col-12">
+           <div class="d-flex flex-wrap gap-3 align-items-center">
+             <div class="filter-group">
+               <select class="form-select form-select-sm" style="min-width: 180px;" id="registrar_clearance_filter_course">
+                 <option selected disabled>Filter by Course</option>
+                 {% for course in courses %}
+                 <option value="{{ course }}">{{ course }}</option>
+                 {% endfor %}
+               </select>
+             </div>
+             <div class="filter-group">
+               <select class="form-select form-select-sm" style="min-width: 150px;" id="registrar_clearance_filter_year">
+                 <option selected disabled>Filter by Year</option>
+                 {% for year in years %}
+                 <option value="{{ year }}">{{ year }}</option>
+                 {% endfor %}
+               </select>
+             </div>
+             <div class="filter-group">
+               <select class="form-select form-select-sm" style="min-width: 160px;" id="registrar_clearance_filter_section">
+                 <option selected disabled>Filter by Section</option>
+                 {% for section in sections %}
+                 <option value="{{ section }}">{{ section }}</option>
+                 {% endfor %}
+               </select>
+             </div>
+             <div class="filter-group">
+               <select class="form-select form-select-sm" style="min-width: 160px;" id="registrar_clearance_filter_status">
+                 <option selected disabled>Filter by Status</option>
+                 <option value="pending">Pending</option>
+                 <option value="completed">Completed</option>
+               </select>
+             </div>
+             
+             <!-- Search input -->
+             <div class="registrar_clearance_search-bar input-group" style="min-width: 300px;">
+               <input type="text" class="form-control" placeholder="Search by name or ID number..." id="registrar_clearance_search_input">
+               <span class="input-group-text"><i class="bi bi-search"></i></span>
+             </div>
+           </div>
+         </div>
+       </div>
+
+        <!-- Bulk Actions Section -->
+        <div class="row mb-3" id="registrar_clearance_bulk_actions" style="display: none;">
+          <div class="col-12">
+            <div class="d-flex gap-2 align-items-center">
+              <span class="text-muted small" id="registrar_clearance_selected_count">0 selected</span>
+              <button type="button" class="btn btn-primary btn-sm" onclick="bulkApproveClearance()">
+                <i class="bi bi-check-circle me-1"></i>Bulk Approve
+              </button>
+              <button type="button" class="btn btn-warning btn-sm" onclick="bulkDisapproveClearance()">
+                <i class="bi bi-x-circle me-1"></i>Bulk Disapprove
+              </button>
+              <button type="button" class="btn btn-success btn-sm" onclick="bulkPrintClearance()">
+                <i class="bi bi-printer me-1"></i>Bulk Print
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="bulkDeleteClearanceFromButton()">
+                <i class="bi bi-trash me-1"></i>Bulk Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      
+      <div class="registrar_clearance_table-fixed-container">
+        <div class="registrar_clearance_table-scroll-wrapper">
+          <!-- [TABLE CODE TRUNCATED for brevity, but I can format the entire <table> too if needed] -->
+          <table class="table registrar_clearance_table text-center align-middle">
+                             <thead class="table-dark">
+                   <tr>
+                   <th style="width: 50px; min-width: 50px;">
+                     <input type="checkbox" id="registrar_clearance_select_all" title="Select All">
+                   </th>
+                   <th style="width: 200px; min-width: 200px;">Student Name</th>
+                   <th style="width: 120px; min-width: 120px;">Course</th>
+                   <th style="width: 80px; min-width: 80px;">Year</th>
+                   <th style="width: 100px; min-width: 100px;">Section</th>
+                   <th style="width: 120px; min-width: 120px;">ID Number</th>
+                   <th style="width: 140px; min-width: 140px;">Date Submitted</th>
+                   <th style="width: 140px; min-width: 140px;">Dorm Supervisor</th>
+                   <th style="width: 140px; min-width: 140px;">Canteen</th>
+                   <th style="width: 140px; min-width: 140px;">Library</th>
+                   <th style="width: 140px; min-width: 140px;">Scholarship</th>
+                   <th style="width: 140px; min-width: 140px;">IT</th>
+                   <th style="width: 140px; min-width: 140px;">Student Affairs</th>
+                   <th style="width: 140px; min-width: 140px;">Cashier</th>
+                   <th style="width: 140px; min-width: 140px;">Business Mgr</th>
+                   <th style="width: 140px; min-width: 140px;">Registrar</th>
+                   <th style="width: 140px; min-width: 140px;">Academic Dean</th>
+                   <th style="width: 120px; min-width: 120px;">Status</th>
+                   <th style="width: 100px; min-width: 100px;">Actions</th>
+                   </tr>
+               </thead>
+              <tbody>
+                  <!-- Dynamic content will be loaded here by JavaScript -->
+                  <tr>
+                      <td colspan="19" class="text-center text-muted py-4">
+                          <i class="bi bi-hourglass-split fs-1"></i><br>
+                          Loading clearance data...
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+          <!-- OTP SIDEBAR -->
+          <div id="registrar_clearance_otpSidebar" class="registrar_clearance_otp-sidebar">
+            <div class="registrar_clearance_otp-header d-flex justify-content-between align-items-start">
+              <h4 class="mb-0 fw-bold" id="registrar_clearance_approve_title">APPROVAL PIN</h4>
+              <button type="button" class="btn-close" onclick="closeOtpSidebar()" aria-label="Close"></button>
+            </div>
+            <div class="registrar_clearance_otp-body d-flex flex-column align-items-center justify-content-center text-center">
+              <p class="text-muted mb-3 w-100 text-start">Input Pincode to Proceed:</p>
+              <div class="d-flex justify-content-center gap-2 mb-3">
+                <input type="password" class="form-control text-center" maxlength="8" placeholder="Enter PIN" id="registrar_clearance_otpinput">
+              </div>
+              <div class="mb-3 w-100">
+                <label for="registrar_clearance_otpComment" class="form-label text-muted">Comment (optional):</label>
+                <textarea class="form-control" rows="2" id="registrar_clearance_otpComment" placeholder="Add a comment..."></textarea>
+              </div>
+              <div class="text-center">
+                <button type="button" class="btn btn-dark registrar_clearance_approve-btn" id="registrar_clearance_verifyOtpBtn">APPROVE</button>
+              </div>
+              <div class="text-danger mt-2" id="registrar_clearance_otpError" style="display: none;">Incorrect PIN</div>
+            </div>
+          </div>
+
+          <!-- DISAPPROVE SIDEBAR -->
+          <div id="registrar_clearance_disapproveSidebar" class="registrar_clearance_otp-sidebar">
+            <div class="registrar_clearance_otp-header d-flex justify-content-between align-items-start">
+              <h4 class="mb-0 fw-bold" id="registrar_clearance_disapprove_title">DISAPPROVE REASON</h4>
+              <button type="button" class="btn-close" onclick="closeDisapproveSidebar()" aria-label="Close"></button>
+            </div>
+
+            <!-- WRAPPER for body steps -->
+            <div class="registrar_clearance_otp-body">
+
+              <!-- STEP 1: PIN -->
+              <div id="registrar_clearance_disapprove_pin_step">
+                <p class="text-muted mb-3 w-100 text-start">Input Pincode to Proceed:</p>
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                  <input type="password" class="form-control text-center" maxlength="8" placeholder="Enter PIN" id="registrar_clearance_disapprove_pin_input">
+                </div>
+                <div class="text-center mb-2">
+                  <button type="button" class="btn btn-dark" id="registrar_clearance_disapprove_pin_submit_btn">VERIFY</button>
+                </div>
+                <div class="text-danger mt-2" id="registrar_clearance_disapprove_pin_error" style="display: none;">Incorrect PIN</div>
+              </div>
+
+              <!-- STEP 2: Reason (Initially hidden) -->
+              <div id="registrar_clearance_disapprove_reason_step" style="display: none;">
+                <p class="text-muted mb-3 w-100 text-start">Please select a reason:</p>
+
+                <!-- REASONS -->
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Unpaid fees" id="registrar_clearance_reason1">
+                  <label class="form-check-label" for="registrar_clearance_reason1">Unpaid fees</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Damage to school property" id="registrar_clearance_reason2">
+                  <label class="form-check-label" for="registrar_clearance_reason2">Damage to school property</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Violation of rules" id="registrar_clearance_reason3">
+                  <label class="form-check-label" for="registrar_clearance_reason3">Violation of rules</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Unreturned school property" id="registrar_clearance_reason4">
+                  <label class="form-check-label" for="registrar_clearance_reason4">Unreturned school property</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Incomplete Requirements/Documents" id="registrar_clearance_reason5">
+                  <label class="form-check-label" for="registrar_clearance_reason5">Incomplete Requirements/Documents</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Incomplete course requirements" id="registrar_clearance_reason6">
+                  <label class="form-check-label" for="registrar_clearance_reason6">Incomplete course requirements</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Unsettled promissory note" id="registrar_clearance_reason7">
+                  <label class="form-check-label" for="registrar_clearance_reason7">Unsettled promissory note</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Incomplete academic units" id="registrar_clearance_reason8">
+                  <label class="form-check-label" for="registrar_clearance_reason8">Incomplete academic units</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Other" id="registrar_clearance_reasonOther" onchange="toggleOtherReasonInput()">
+                  <label class="form-check-label" for="registrar_clearance_reasonOther">Other</label>
+                </div>
+                
+                <div class="mb-2" id="registrar_clearance_otherReasonContainer" style="display: none;">
+                  <input type="text" id="registrar_clearance_otherReasonInput" class="form-control" placeholder="Enter other reason">
+                </div>
+
+                <!-- Comment -->
+                <div class="mb-3 w-100">
+                  <label for="registrar_clearance_disapproveComment" class="form-label text-muted">Comment (optional):</label>
+                  <textarea class="form-control" rows="2" id="registrar_clearance_disapproveComment" placeholder="Add a comment..."></textarea>
+                </div>
+
+                <!-- Appointment -->
+                <div id="registrar_clearance_appointmentContainer" class="mt-4">
+                  <label for="registrar_clearance_appointmentDate" class="form-label text-muted">Set Appointment Date:</label>
+                  <input type="date" id="registrar_clearance_appointmentDate" class="form-control mb-2">
+                  <button type="button" class="btn btn-primary btn-sm w-100" id="registrar_clearance_submit_Appointment_Disapproval_Btn">Submit Disapproval and Appointment</button>
+
+                  <div class="text-danger mt-2" id="registrar_clearance_disapproveError" style="display: none;">Please select a reason</div>
+                  <div class="text-danger mt-1" id="registrar_clearance_appointmentError" style="display: none;">Please select an appointment date</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </form>  
+
+    <!-- PREVIEW & PRINT MODAL -->
+    <div class="modal fade" id="previewPrintModal" tabindex="-1" aria-labelledby="previewPrintModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="previewPrintModalLabel">
+              <i class="bi bi-printer me-2"></i>Preview & Print Clearance Forms
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-0">
+            <!-- Loading spinner -->
+            <div id="previewLoadingSpinner" class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading preview...</span>
+              </div>
+              <span class="ms-2">Loading preview...</span>
+            </div>
+            
+            <!-- Preview content container -->
+            <div id="previewContent" class="preview-print-content" style="display: none;">
+              <!-- Content will be loaded here -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle me-1"></i>Close
+            </button>
+            <button type="button" class="btn btn-primary" id="printPreviewBtn">
+              <i class="bi bi-printer me-1"></i>Print
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/RCLEARANCE.js' %}?v=1.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  
+  <script>
+    // Get CSRF token from Django template 
+    const CSRF_TOKEN = '{{ csrf_token }}';
+    
+    // Global variable to track current request for cancellation
+    let currentPreviewController = null;
+    
+    // Override print functions to use modal preview
+    function printClearance(clearanceId) {
+        openPreviewModal([clearanceId]);
+    }
+
+    function bulkPrintClearance() {
+        const selectedCheckboxes = document.querySelectorAll('.clearance-checkbox:checked');
+        
+        if (selectedCheckboxes.length === 0) {
+            showNotification('Please select at least one clearance form to print', 'warning');
+            return;
+        }
+
+        const clearanceIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+        openPreviewModal(clearanceIds);
+    }
+
+    function hidePreviewLoader() {
+        const spinnerEl = document.getElementById('previewLoadingSpinner');
+        if (spinnerEl) {
+            spinnerEl.style.display = 'none';
+            spinnerEl.classList.remove('d-flex');
+        }
+    }
+    
+    function showPreviewLoader() {
+        const spinnerEl = document.getElementById('previewLoadingSpinner');
+        const contentEl = document.getElementById('previewContent');
+        
+        if (spinnerEl) {
+            spinnerEl.style.display = 'flex';
+            spinnerEl.classList.add('d-flex');
+        }
+        if (contentEl) {
+            contentEl.style.display = 'none';
+        }
+    }
+    
+    function resetPreviewModal() {
+        hidePreviewLoader();
+        const contentEl = document.getElementById('previewContent');
+        if (contentEl) {
+            contentEl.innerHTML = '';
+            contentEl.style.display = 'none';
+        }
+    }
+    
+    function printPreviewContent() {
+        const contentEl = document.getElementById('previewContent');
+        
+        if (!contentEl || !contentEl.innerHTML.trim()) {
+            showNotification('No content to print. Please wait for preview to load.', 'warning');
+            return;
+        }
+        
+        // Create dedicated iframe for printing
+        createPrintIframe(contentEl.innerHTML);
+    }
+    
+    function createPrintIframe(htmlContent) {
+        // Create hidden iframe
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.top = '-9999px';
+        iframe.style.left = '-9999px';
+        iframe.style.width = '210mm'; // A4 width
+        iframe.style.height = '297mm'; // A4 height
+        iframe.style.border = 'none';
+        
+        // Add to body
+        document.body.appendChild(iframe);
+        
+        // Build complete HTML document for iframe
+        const printCSS = `
+            <style>
+                @page {
+                    size: A4;
+                    margin: 10mm;
+                }
+                
+                * {
+                    box-sizing: border-box;
+                }
+                
+                body {
+                    margin: 0;
+                    padding: 0;
+                    font-family: Arial, sans-serif;
+                    line-height: 1.2;
+                    color: #000;
+                    background: white;
+                }
+                
+                /* Compress clearance form to fit on one page */
+                .clearance-form {
+                    break-inside: avoid !important;
+                    page-break-inside: avoid !important;
+                    page-break-before: auto;
+                    page-break-after: avoid;
+                    max-height: 277mm;
+                    overflow: visible;
+                    display: flex;
+                    flex-direction: column;
+                    margin: 0;
+                    padding: 0;
+                }
+                
+                /* Compress both copies to fit in one page */
+                .copy-container {
+                    border: 1px solid #000;
+                    padding: 4px;
+                    margin-bottom: 2px;
+                    background: white;
+                    position: relative;
+                    flex: 1;
+                    max-height: 45%; /* Each copy takes about 45% of page height */
+                    overflow: hidden;
+                }
+                
+                .copy-container:last-child {
+                    margin-bottom: 0;
+                }
+                
+                .page-break {
+                    break-after: page !important;
+                    page-break-after: always !important;
+                    height: 0 !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    border: none !important;
+                    visibility: hidden !important;
+                    display: none !important;
+                }
+                
+                .watermark {
+                    position: absolute;
+                    top: 3px;
+                    right: 8px;
+                    font-size: 8px;
+                    color: #666;
+                    font-weight: bold;
+                }
+                
+                .title {
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 14px;
+                    margin: 0 0 2px 0;
+                    line-height: 1.1;
+                }
+                
+                .subtitle {
+                    text-align: center;
+                    font-size: 10px;
+                    margin: 0 0 2px 0;
+                    line-height: 1.1;
+                }
+                
+                .clearance {
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 12px;
+                    margin: 0 0 4px 0;
+                    line-height: 1.1;
+                }
+                
+                .year {
+                    text-align: center;
+                    font-size: 10px;
+                    margin: 0 0 6px 0;
+                    line-height: 1.1;
+                }
+                
+                .row-container {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 4px 0;
+                }
+                
+                .name, .course {
+                    font-weight: bold;
+                    font-size: 10px;
+                    line-height: 1.1;
+                }
+                
+                .row-line, .row-line-1 {
+                    text-decoration: underline;
+                    margin: 0 3px;
+                }
+                
+                .desc {
+                    font-size: 9px;
+                    display: block;
+                    margin: 4px 0;
+                    line-height: 1.1;
+                }
+                
+                .dept-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 4px 0;
+                    font-size: 8px;
+                    line-height: 1.1;
+                }
+                
+                .dept-table th,
+                .dept-table td {
+                    border: 1px solid #000;
+                    padding: 3px 4px;
+                    text-align: left;
+                    vertical-align: top;
+                }
+                
+                .dept-table th {
+                    background-color: #f5f5f5;
+                    font-weight: bold;
+                    font-size: 8px;
+                }
+                
+                .dept-table td {
+                    height: auto;
+                    min-height: 18px;
+                }
+                
+                .approved-signature {
+                    color: #28a745;
+                    font-weight: bold;
+                    font-size: 8px;
+                }
+                
+                .disapproved-signature {
+                    color: #dc3545;
+                    font-weight: bold;
+                    font-size: 8px;
+                }
+                
+                .pending-signature {
+                    color: #6c757d;
+                    font-style: italic;
+                    font-size: 8px;
+                }
+                
+                .signatory-reminder {
+                    font-size: 7px;
+                    margin: 3px 0;
+                    text-align: center;
+                    line-height: 1.1;
+                }
+                
+                .purpose {
+                    font-size: 9px;
+                    font-weight: bold;
+                    margin: 3px 0 0 0;
+                    line-height: 1.1;
+                }
+                
+                @media print {
+                    body {
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+                    
+                    .clearance-form {
+                        break-inside: avoid !important;
+                        page-break-inside: avoid !important;
+                        page-break-before: auto !important;
+                        page-break-after: avoid !important;
+                    }
+                    
+                    .page-break {
+                        display: none !important;
+                    }
+                    
+                    /* Prevent any internal breaks */
+                    .copy-container {
+                        break-inside: avoid !important;
+                        page-break-inside: avoid !important;
+                    }
+                    
+                    .dept-table {
+                        break-inside: avoid !important;
+                        page-break-inside: avoid !important;
+                    }
+                    
+                    .dept-table tr {
+                        break-inside: avoid !important;
+                        page-break-inside: avoid !important;
+                    }
+                }
+            </style>
+        `;
+        
+        const fullHTML = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Clearance Forms</title>
+                ${printCSS}
+            </head>
+            <body>
+                ${htmlContent}
+            </body>
+            </html>
+        `;
+        
+        // Set iframe content and handle print
+        iframe.onload = function() {
+            setTimeout(() => {
+                try {
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+                    
+                    // Clean up iframe after printing
+                    setTimeout(() => {
+                        if (iframe.parentNode) {
+                            document.body.removeChild(iframe);
+                        }
+                    }, 1000);
+                } catch (e) {
+                    console.error('Print error:', e);
+                    showNotification('Print failed. Please try again.', 'error');
+                    if (iframe.parentNode) {
+                        document.body.removeChild(iframe);
+                    }
+                }
+            }, 100);
+        };
+        
+        // Set iframe content
+        iframe.srcdoc = fullHTML;
+    }
+
+    function openPreviewModal(clearanceIds) {
+        // Verify modal elements exist
+        const spinnerEl = document.getElementById('previewLoadingSpinner');
+        const contentEl = document.getElementById('previewContent');
+        const modalEl = document.getElementById('previewPrintModal');
+        
+        if (!spinnerEl || !contentEl || !modalEl) {
+            console.error('Modal elements not found');
+            showNotification('Modal elements not found. Please refresh the page.', 'error');
+            return;
+        }
+        
+        // Cancel any existing request
+        if (currentPreviewController) {
+            currentPreviewController.abort();
+            currentPreviewController = null;
+        }
+        
+        // Reset modal state and show loading
+        resetPreviewModal();
+        showPreviewLoader();
+        
+        // Show modal
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+        
+        // Update modal title based on count
+        const title = clearanceIds.length === 1 ? 
+            'Preview & Print Clearance Form' : 
+            `Preview & Print ${clearanceIds.length} Clearance Forms`;
+        const titleEl = document.getElementById('previewPrintModalLabel');
+        if (titleEl) {
+            titleEl.innerHTML = `<i class="bi bi-printer me-2"></i>${title}`;
+        }
+        
+        // Fetch preview content with timeout
+        const url = `/registrar/clearance/preview-print/?ids=${clearanceIds.join(',')}`;
+        
+        // Create AbortController for timeout and cancellation
+        currentPreviewController = new AbortController();
+        const timeoutId = setTimeout(() => currentPreviewController.abort(), 15000); // 15 second timeout
+        
+        fetch(url, {
+            signal: currentPreviewController.signal,
+            headers: {
+                'X-CSRFToken': CSRF_TOKEN,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => {
+                clearTimeout(timeoutId);
+                
+                // Log response for debugging
+                console.log('Preview response status:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Preview response error:', text);
+                        throw new Error(`Server error: ${response.status} - ${text}`);
+                    });
+                }
+                return response.text();
+            })
+            .then(html => {
+                console.log('Preview HTML length:', html ? html.length : 0);
+                
+                // Check if response is empty
+                if (!html || html.trim().length === 0) {
+                    throw new Error('Empty response received from server');
+                }
+                
+                // Show content
+                contentEl.innerHTML = html;
+                contentEl.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error loading preview:', error);
+                clearTimeout(timeoutId);
+                
+                // Show error in content area
+                let errorMessage = 'Failed to load preview. Please try again.';
+                if (error.name === 'AbortError') {
+                    errorMessage = 'Request timed out after 15 seconds. Please try again.';
+                } else if (error.message.includes('Server error:')) {
+                    errorMessage = error.message;
+                }
+                
+                contentEl.innerHTML = `<div class="alert alert-danger m-3">${errorMessage}</div>`;
+                contentEl.style.display = 'block';
+                showNotification(errorMessage, 'error');
+            })
+            .finally(() => {
+                // Always hide loader regardless of success/error
+                hidePreviewLoader();
+                currentPreviewController = null;
+            });
+    }
+
+    // Print button handler and modal event handlers
+    document.addEventListener('DOMContentLoaded', function() {
+        const printBtn = document.getElementById('printPreviewBtn');
+        const modalEl = document.getElementById('previewPrintModal');
+        
+        if (printBtn) {
+            printBtn.addEventListener('click', function() {
+                printPreviewContent();
+            });
+        }
+        
+        // Reset modal state when closed
+        if (modalEl) {
+            modalEl.addEventListener('hidden.bs.modal', function() {
+                // Cancel any ongoing request
+                if (currentPreviewController) {
+                    currentPreviewController.abort();
+                    currentPreviewController = null;
+                }
+                // Reset modal state
+                resetPreviewModal();
+            });
+            
+            // Show loader when opening modal
+            modalEl.addEventListener('show.bs.modal', function() {
+                showPreviewLoader();
+            });
+        }
+    });
+
+    // Fallback notification function if not defined
+    if (typeof showNotification !== 'function') {
+        function showNotification(message, type) {
+            console.log(`${type.toUpperCase()}: ${message}`);
+            alert(message);
+        }
+    }
+  </script>
+{% endblock %} 

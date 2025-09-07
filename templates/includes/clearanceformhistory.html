@@ -1,0 +1,80 @@
+{% load static %}
+<section class="container">
+  <h1 class="fw-bold mt-3 mb-3">Clearance Forms</h1>
+  <p class="fst-italic">Submit your clearance documents here.</p>
+
+  <!-- New-form trigger -->
+  {% if can_submit_new_clearance %}
+    <button class="text-white fw-bold rounded mb-3 custom-btn"
+            onclick="openClearanceModal()">
+      <i class="bi bi-plus-lg"></i> Fill out new form
+    </button>
+  {% else %}
+    <button class="text-white fw-bold rounded mb-3 custom-btn"
+            onclick="Swal.fire('Not Allowed', 'You still have an ongoing clearance. Please complete it first.', 'warning')">
+      <i class="bi bi-plus-lg"></i> Fill out new form
+    </button>
+  {% endif %}
+
+  <div class="custom-table-wrapper">
+    <h4 class="fw-bold text-start">Clearance Forms History</h4>
+  
+    <!-- Responsive wrapper -->
+    <div class="table-responsive">
+      <table class="custom-table table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 20%;">Date Submitted</th>
+<th style="width: 35%;">Purpose</th>
+<th style="width: 20%;">Status</th>
+<th style="width: 25%;" class="text-center">Actions</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for form in clearance_forms %}
+            <tr
+              data-id="{{ form.id }}"
+              data-status="{{ form.status }}"
+              data-clearance-type="{{ form.clearance_type }}"
+              data-semester="{{ form.semester }}"
+            >
+            <td>{{ form.submitted_at|date:"M d, Y – h:i A" }}</td> 
+            <td class="fw-bold">{{ form.clearance_type|title }}</td>
+            <td>
+              <span class="
+                fw-semibold
+                {% if form.status|title == 'Pending' %}text-warning
+                {% elif form.status|title == 'Released' %}text-success
+                {% elif form.status|title == 'Draft' %}text-secondary
+                {% else %}text-dark
+                {% endif %}
+              ">
+                {{ form.status|title }}
+              </span>
+            </td>
+              <td class="text-center">
+                <button class="btn btn-outline-secondary btn-sm"
+                        onclick="viewClearance('{{ form.id }}')">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <!-- Optional delete if needed -->
+                <!--
+                <button class="btn btn-sm btn-outline-danger" data-id="{{ form.id }}">
+                  <i class="bi bi-trash"></i>
+                </button>
+                -->
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="text-center text-muted">No clearance forms yet</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+</section>
+

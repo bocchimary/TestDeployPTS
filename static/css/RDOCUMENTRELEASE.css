@@ -1,0 +1,551 @@
+/* Document Release Tab Styles - Professional and Clean Design */
+
+/* Body and Layout */
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #f1f1f198;
+}
+
+/* Sidebar Styles */
+.registrar_sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #183a53;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.registrar_sidebar.collapsed {
+    width: 60px;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.registrar_sidebar .registrar_sidebar-title {
+    white-space: nowrap;
+}
+
+.registrar_sidebar.collapsed .registrar_sidebar-title,
+.registrar_sidebar.collapsed .registrar_sidebar_link-text {
+    display: none;
+}
+
+.registrar_sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.registrar_sidebar a:hover {
+    background-color: #14507d;
+    color: white;
+}
+
+.registrar_sidebar a i {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.registrar_sidebar a:hover i {
+    color: white;
+}
+
+/* Active state for current page */
+.registrar_sidebar a.active {
+    background-color: #14507d;
+    color: white;
+}
+
+.registrar_sidebar a.active i {
+    color: white;
+}
+
+.registrar_sidebar.collapsed a {
+    justify-content: center;
+}
+
+/* Top Bar Styles */
+.registrar_sidebar_top-bar {
+    position: fixed;
+    left: 250px;
+    right: 0;
+    top: 0;
+    height: 90px;
+    background-color: #183a53;
+    color: white;
+    z-index: 1035;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    transition: left 0.3s ease;
+}
+
+.registrar_sidebar.collapsed ~ .registrar_sidebar_top-bar {
+    left: 60px;
+}
+
+.registrar_sidebar_top-bar .registrar_sidebar_user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.registrar_sidebar_top-bar .registrar_sidebar_user-info i {
+    font-size: 2.5rem;
+}
+
+.registrar_sidebar_logo-img {
+    height: 60px;
+    width: auto;
+}
+
+/* Sidebar Backdrop */
+#registrar_sidebar_sidebarBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+}
+
+#registrar_sidebar_sidebarBackdrop.active {
+    display: block;
+}
+
+/* Toggle Buttons */
+.registrar_sidebar_toggle-button,
+.registrar_sidebar_desktopToggle-button,
+.registrar_sidebar_topbarToggle-button {
+    background-color: #183a53;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.registrar_sidebar_toggle-button i,
+.registrar_sidebar_desktopToggle-button i,
+.registrar_sidebar_topbarToggle-button i {
+    color: white;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.registrar_sidebar_toggle-button:hover,
+.registrar_sidebar_desktopToggle-button:hover,
+.registrar_sidebar_topbarToggle-button:hover {
+    background-color: #14507d;
+}
+
+.registrar_sidebar_toggle-button:hover i,
+.registrar_sidebar_desktopToggle-button:hover i,
+.registrar_sidebar_topbarToggle-button:hover i {
+    color: #d8d8d8;
+}
+
+/* Main Content Layout */
+.registrar_docu_release_main-content {
+    margin-left: 250px;
+    padding: 1.5rem;
+    padding-top: 6.2rem;
+    transition: margin-left 0.3s ease;
+    background-color: #f8f9fa;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.registrar_sidebar.collapsed ~ .registrar_docu_release_main-content {
+    margin-left: 60px;
+}
+
+.registrar_docu_release_main-content h1 {
+    color: #183a53;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.registrar_docu_release_main-content .text-end {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* Filter and Search Styles */
+.filter-group {
+    margin-bottom: 0;
+}
+
+.registrar_docu_release_search-bar {
+    margin-bottom: 0;
+}
+
+.registrar_docu_release_search-bar .form-control {
+    border-radius: 0.375rem 0 0 0.375rem;
+    border-right: none;
+}
+
+.registrar_docu_release_search-bar .input-group-text {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+
+/* Table Container */
+.registrar_docu_release_table-fixed-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 20px;
+    height: calc(100vh - 320px); /* Increased bottom margin for breathing room */
+    display: flex;
+    flex-direction: column;
+}
+
+.registrar_docu_release_table-scroll-wrapper {
+    overflow: auto;
+    flex: 1;
+    max-width: 100%;
+}
+
+/* Table Styles */
+.registrar_docu_release_table {
+    margin-bottom: 0;
+    font-size: 0.875rem;
+    width: 100%;
+}
+
+.registrar_docu_release_table th {
+    background-color: #343a40;
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 12px 8px;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.registrar_docu_release_table td {
+    padding: 12px 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+    background-color: white;
+}
+
+.registrar_docu_release_table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Action Buttons Container */
+.registrar_docu_release_table-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    min-width: 120px;
+}
+
+.registrar_docu_release_table-icons .btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    white-space: nowrap;
+    min-width: 80px;
+    line-height: 1.2;
+    border-radius: 0.375rem;
+}
+
+.registrar_docu_release_table-icons .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Status Badges */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+.badge.bg-info {
+    background-color: #0dcaf0 !important;
+    color: #000 !important;
+}
+
+.badge.bg-success {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
+
+.badge.bg-secondary {
+    background-color: #6c757d !important;
+    color: #fff !important;
+}
+
+/* Release Date Input and Display */
+.registrar_docu_release_table input[type="date"] {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    width: 100%;
+    max-width: 150px;
+}
+
+.release-date-display {
+    font-size: 0.875rem;
+    color: #198754;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    border: 1px solid #dee2e6;
+}
+
+/* Button Styles */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+}
+
+.btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+/* Bulk Actions */
+#registrar_docu_release_bulk_actions {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 12px 16px;
+}
+
+#registrar_docu_release_bulk_actions .btn {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+}
+
+/* Checkbox Styles */
+.registrar_docu_release_table input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+/* Alert Styles */
+.alert {
+    border-radius: 0.375rem;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Loading and Empty States */
+.registrar_docu_release_table tbody tr.loading {
+    opacity: 0.6;
+}
+
+.registrar_docu_release_table tbody tr.empty-state {
+    text-align: center;
+    color: #6c757d;
+}
+
+.registrar_docu_release_table tbody tr.empty-state td {
+    padding: 40px 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .registrar_sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+        left: 0;
+    }
+
+    .registrar_sidebar.show {
+        transform: translateX(0%);
+    }
+
+    .registrar_sidebar.collapsed {
+        transform: translateX(-100%) !important;
+    }
+
+    .registrar_docu_release_main-content {
+        margin-left: 0 !important;
+        padding-top: 6.1rem !important;
+        padding: 10px;
+        height: 100vh;
+    }
+    
+    .registrar_docu_release_table-fixed-container {
+        height: calc(100vh - 290px);
+    }
+
+    .registrar_sidebar_top-bar,
+    .registrar_sidebar.collapsed ~ .registrar_sidebar_top-bar {
+        left: 0 !important;
+    }
+
+    .registrar_sidebar_top-bar .registrar_sidebar_system-title,
+    .registrar_sidebar_top-bar .registrar_sidebar_user-info span {
+        display: none;
+    }
+    
+    .registrar_docu_release_table {
+        font-size: 0.8rem;
+    }
+    
+    .registrar_docu_release_table th,
+    .registrar_docu_release_table td {
+        padding: 8px 4px;
+    }
+    
+    .registrar_docu_release_table-icons {
+        flex-direction: column;
+        gap: 2px;
+    }
+    
+    .registrar_docu_release_table-icons .btn {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+        min-width: 60px;
+    }
+}
+
+/* Utility Classes */
+.text-start {
+    text-align: left !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-end {
+    text-align: right !important;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.gap-2 {
+    gap: 0.5rem !important;
+}
+
+.gap-3 {
+    gap: 1rem !important;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+.mt-2 {
+    margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.py-4 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+}
+
+.fs-1 {
+    font-size: 2.5rem !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+}
+
+.fw-500 {
+    font-weight: 500 !important;
+}
+
+.small {
+    font-size: 0.875em;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* Form Control Focus States */
+.form-control:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}

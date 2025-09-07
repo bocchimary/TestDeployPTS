@@ -1,0 +1,588 @@
+/* ===== LOGIN PAGE SPECIFIC STYLES ===== */
+
+/* Background and page title */
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+
+.page-title {
+    background: rgba(24, 58, 83, 0.8);
+    padding: 3rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: fixed;
+   
+
+}
+
+.page-title h1 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-title h2 {
+    color: #e0e0e0;
+    font-weight: 400;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.fade-in-left {
+    opacity: 0;
+    margin-left: 20px;
+    position: relative;
+    z-index: 2;
+    animation: fadeInLeft 1s ease-out forwards;
+}
+
+/* ===== AUTHENTICATION BOXES ===== */
+.auth-box {
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.login-box {
+    
+    width: 350px;
+    height: auto;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: none;
+}
+
+.login-box.active {
+    display: block;
+}
+
+.login-title {
+    margin-bottom: 1.5rem;
+    color: #183A53;
+    font-weight: 600;
+}
+
+.login-btn {
+    background-color: #183A53 !important;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.signup-box-student {
+    margin: 1rem;
+    max-width: 800px;
+    /* set a max-height to trigger scrolling when content is tall */
+    max-height: 80vh;
+    height: auto;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+
+    overflow-y: auto;
+
+  
+}
+.signup-box.active {
+    display: block;
+}
+
+.signup-box-alumni {
+    margin: 1rem;
+    max-width: 40rem;
+    max-height: 80vh;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    overflow-y: auto;
+}
+
+.signup-title {
+    margin-bottom: 0.5rem;
+    color: #183A53;
+    font-weight: 600;
+}
+
+.signup-btn {
+    background-color: #2E5978 !important;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* ===== SIGNUP SECTION ===== */
+
+.section-up {
+    margin-top: -50px;
+}
+
+.section-signup {
+    margin-top: 1px;
+}
+
+/* ===== FORM STYLING ===== */
+.form-control, .form-select {
+    border: 2px solid #e0e0e0;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #2E5978;
+    box-shadow: 0 0 0 0.2rem rgba(46, 89, 120, 0.15);
+    background-color: #ffffff;
+}
+
+.form-label {
+    color: #183A53;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (min-width: 768px) {
+    .auth-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* ===== FORM VALIDATION FEEDBACK ===== */
+
+
+/* Override Bootstrap's validation icons for form controls */
+.form-control.is-valid,
+.form-select.is-valid,
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #e0e0e0 !important; /* same as your default */
+    background-image: none !important;
+    background-position: unset !important;
+    background-size: 0 !important;
+    padding-right: 0.5rem !important;
+    box-shadow: none !important; /* removes glowing border */
+}
+
+
+
+/* Show invalid feedback when input is invalid */
+input.is-invalid ~ .invalid-feedback,
+select.is-invalid ~ .invalid-feedback,
+textarea.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+/* Focus states */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #2E5978;
+    box-shadow: 0 0 0 0.2rem rgba(46, 89, 120, 0.15);
+}
+
+/* ===== GOOGLE LOGIN BUTTON STYLES ===== */
+.google-login-btn {
+    background-color: #ffffff !important;
+    border: 2px solid #e0e0e0 !important;
+    color: #757575 !important;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-btn:hover {
+    background-color: #f8f9fa !important;
+    border-color: #2E5978 !important;
+    color: #2E5978 !important;
+    box-shadow: 0 4px 12px rgba(46, 89, 120, 0.15);
+    transform: translateY(-1px);
+}
+
+.google-login-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(46, 89, 120, 0.15);
+    border-color: #2E5978 !important;
+}
+
+/* ===== BUTTON HOVER STATES ===== */
+.login-btn:hover, .signup-btn:hover {
+    background-color: #14507a !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(24, 58, 83, 0.3);
+    transform: translateY(-1px);
+}
+
+.login-btn:active, .signup-btn:active {
+    transform: translateY(0);
+}
+
+/* ===== FILE INPUT ===== */
+input[type="file"] {
+    border: 2px solid #e0e0e0;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+input[type="file"]:focus {
+    border-color: #2E5978;
+    box-shadow: 0 0 0 0.2rem rgba(46, 89, 120, 0.15);
+}
+
+.form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* ===== MODAL STYLING ===== */
+.modal-content {
+    border-radius: 1rem;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f8f9fa;
+    border-radius: 1rem 1rem 0 0;
+}
+
+.modal-title {
+    color: #183A53;
+    font-weight: 600;
+}
+
+.users-btn {
+    background-color: #183A53 !important;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.users-btn:hover {
+    background-color: #14507a !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(24, 58, 83, 0.3);
+}
+
+/* ===== FOOTER STYLING ===== */
+footer {
+    background-color: #183A53 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.signup-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.signup-box::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.signup-box::-webkit-scrollbar-thumb {
+    background: #2E5978;
+    border-radius: 4px;
+}
+
+.signup-box::-webkit-scrollbar-thumb:hover {
+    background: #183A53;
+}
+
+/* ===== LOADING STATES ===== */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in-left {
+        animation: none;
+        opacity: 1;
+    }
+    
+    .login-btn:hover, .signup-btn:hover, .users-btn:hover {
+        transform: none;
+    }
+}
+
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+  }
+
+   /* Custom scrollbar styles */
+   .forms-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  }
+  
+  .forms-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .forms-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .forms-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  
+  .forms-container:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  
+  /* Ensure scrollbar container is always present */
+  .forms-container {
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+
+/* ===== Responsive and Accessibility Styles (moved from login.html) ===== */
+
+/* ===== GOOGLE LOGIN RESPONSIVE STYLES ===== */
+@media (max-width: 768px) {
+  .google-login-btn {
+    width: 100% !important;
+    font-size: 0.9rem !important;
+    padding: 0.65rem 1rem !important;
+  }
+  .google-login-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .google-login-btn {
+    font-size: 0.85rem !important;
+    padding: 0.6rem 0.8rem !important;
+  }
+  .google-login-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  .page-title h1 {
+    font-size: 1.5rem !important;
+  }
+  .page-title h2 {
+    font-size: 0.9rem !important;
+  }
+  .login-title, .signup-title {
+    font-size: 1.3rem !important;
+  }
+  .forms-container {
+    width: 95% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+  }
+  .login-box, .signup-box-student, .signup-box-alumni {
+    padding: 1.5rem !important;
+    margin: 0.5rem !important;
+  }
+  .form-control, .form-select {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+  .btn {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+  .d-flex.gap-1 {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+  .d-flex.gap-1 .flex-fill,
+  .d-flex.gap-1 .w-25 {
+    width: 100% !important;
+  }
+  .row .col-md-6 {
+    margin-bottom: 0.5rem !important;
+  }
+  .w-75 {
+    width: 100% !important;
+  }
+  .w-50 {
+    width: 100% !important;
+  }
+  .w-25 {
+    width: 100% !important;
+  }
+  .text-end {
+    text-align: center !important;
+  }
+  .modal-dialog {
+    margin: 1rem !important;
+  }
+  .modal-body .btn {
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+  }
+  /* Improve touch targets */
+  input, select, button {
+    min-height: 44px !important;
+  }
+  /* Better spacing for mobile */
+  .form-group {
+    margin-bottom: 1rem !important;
+  }
+  .mb-2 {
+    margin-bottom: 0.75rem !important;
+  }
+  .mb-3 {
+    margin-bottom: 1rem !important;
+  }
+  .mb-4 {
+    margin-bottom: 1.5rem !important;
+  }
+  /* Stack name fields vertically on mobile */
+  .name-fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .name-fields-container .flex-fill,
+  .name-fields-container .w-25 {
+    width: 100% !important;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .page-title h1 {
+    font-size: 2rem !important;
+  }
+  .page-title h2 {
+    font-size: 1.1rem !important;
+  }
+  .forms-container {
+    width: 90% !important;
+    max-width: 500px !important;
+  }
+  .w-75 {
+    width: 85% !important;
+  }
+  .w-50 {
+    width: 60% !important;
+  }
+  .w-25 {
+    width: 30% !important;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .container-fluid {
+    padding: 0.5rem !important;
+  }
+  .page-title h1 {
+    font-size: 1.3rem !important;
+  }
+  .page-title h2 {
+    font-size: 0.8rem !important;
+  }
+  .login-box, .signup-box-student, .signup-box-alumni {
+    padding: 1rem !important;
+    margin: 0.25rem !important;
+  }
+  .forms-container {
+    width: 100% !important;
+    padding: 0 0.5rem !important;
+  }
+  .btn {
+    font-size: 0.85rem !important;
+    padding: 0.4rem 0.8rem !important;
+  }
+  .form-label {
+    font-size: 0.9rem !important;
+  }
+  .form-text {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .min-vh-100 {
+    min-height: auto !important;
+  }
+  .page-title {
+    margin-bottom: 1rem !important;
+  }
+  .forms-container {
+    margin-top: 1rem !important;
+  }
+}
+
+/* Ensure proper spacing on all devices */
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+  border-color: #80bdff !important;
+}
+
+/* Improve accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

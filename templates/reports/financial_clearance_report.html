@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ report_title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; color: #333; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #183a53; padding-bottom: 20px; }
+        .school-name { font-size: 24px; font-weight: bold; color: #183a53; margin-bottom: 5px; }
+        .report-title { font-size: 20px; font-weight: bold; margin: 20px 0; text-align: center; color: #183a53; }
+        .report-info { margin-bottom: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }
+        .financial-summary { margin: 20px 0; padding: 15px; background-color: #e9f3ff; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="school-name">Educational Institution</div>
+        <div class="report-title">{{ report_title }}</div>
+    </div>
+    <div class="report-info">
+        <strong>Period:</strong> {{ period_start }} to {{ period_end }}<br>
+        <strong>Generated:</strong> {{ generated_at|date:"F j, Y g:i A" }}
+    </div>
+    <div class="financial-summary">
+        <h3>Financial Clearance Statistics</h3>
+        <p><strong>Total Processed:</strong> {{ financial_stats.total_clearances_processed }}</p>
+        <p><strong>Approved by Business:</strong> {{ financial_stats.approved_by_business }}</p>
+        <p><strong>Disapproved by Business:</strong> {{ financial_stats.disapproved_by_business }}</p>
+        <p><strong>Pending Business Review:</strong> {{ financial_stats.pending_business }}</p>
+        
+        {% if disapproval_reasons %}
+        <h4>Common Disapproval Reasons:</h4>
+        <ul>
+            {% for reason, count in disapproval_reasons.items %}
+            <li>{{ reason }}: {{ count }} cases</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</body>
+</html>

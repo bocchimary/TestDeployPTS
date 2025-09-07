@@ -1,0 +1,10 @@
+Django==5.1.2
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+PyMySQL==1.1.1
+Pillow==11.0.0
+requests==2.32.3
+reportlab==4.2.5
+qrcode==8.0
+xhtml2pdf==0.2.16
+weasyprint==66.0

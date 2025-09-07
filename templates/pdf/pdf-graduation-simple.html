@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graduation Form</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.4;
+        font-size: 12px;
+        margin: 0.5in;
+      }
+
+      .title-main {
+        font-size: 24px;
+        font-weight: bold;
+        color: #003399;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        color: rgb(0, 0, 0);
+        margin-bottom: 15px;
+      }
+
+      .subtitle {
+        text-align: center;
+        font-size: 10px;
+        color: #003399;
+        font-weight: bold;
+        margin: 2px 0;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #003399;
+        padding-bottom: 10px;
+      }
+
+      .logo-placeholder {
+        width: 60px;
+        height: 60px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        display: inline-block;
+        text-align: center;
+        line-height: 60px;
+        font-size: 10px;
+        margin-bottom: 10px;
+      }
+
+      .motto {
+        font-size: 12px;
+        color: #ffffff;
+        background-color: #003399;
+        text-align: center;
+        padding: 5px 0;
+        margin: 10px 0;
+      }
+
+      .section-title {
+        font-weight: bold;
+        font-size: 12px;
+        color: #003399;
+        margin: 15px 0 8px 0;
+      }
+
+      .row {
+        display: table;
+        width: 100%;
+        margin-bottom: 8px;
+      }
+
+      .row-item {
+        display: table-cell;
+        width: 50%;
+        padding-right: 20px;
+        vertical-align: top;
+      }
+
+      .full-width {
+        width: 100%;
+        margin-bottom: 8px;
+      }
+
+      .underline {
+        border-bottom: 1px solid #000;
+        display: inline-block;
+        min-width: 200px;
+        height: 16px;
+        padding: 0 5px;
+        font-weight: bold;
+      }
+
+      .name-section {
+        margin: 10px 0;
+      }
+
+      .name-row {
+        display: table;
+        width: 100%;
+        margin-bottom: 5px;
+      }
+
+      .name-field {
+        display: table-cell;
+        width: 33%;
+        text-align: center;
+        padding: 0 10px;
+      }
+
+      .name-value {
+        font-weight: bold;
+        font-size: 13px;
+        border-bottom: 1px solid #000;
+        min-height: 20px;
+        padding: 2px;
+        margin-bottom: 3px;
+      }
+
+      .name-label {
+        font-size: 8px;
+        color: #666;
+      }
+
+      .subjects-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+      }
+
+      .subjects-table th {
+        border: 1px solid #000;
+        padding: 8px 4px;
+        font-weight: bold;
+        font-size: 10px;
+        text-align: center;
+        background-color: #f0f0f0;
+      }
+
+      .subjects-table td {
+        border: 1px solid #000;
+        padding: 8px 4px;
+        font-size: 10px;
+        min-height: 20px;
+      }
+
+      .signature-section {
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      .signature-line {
+        border-bottom: 1px solid #000;
+        display: inline-block;
+        min-width: 300px;
+        height: 20px;
+        margin-bottom: 5px;
+        font-weight: bold;
+        text-align: center;
+        padding-top: 10px;
+      }
+
+      .signature-label {
+        font-size: 9px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .footer-signatures {
+        margin-top: 30px;
+        display: table;
+        width: 100%;
+      }
+
+      .footer-sig {
+        display: table-cell;
+        width: 33%;
+        text-align: center;
+        vertical-align: top;
+        padding: 0 10px;
+      }
+
+      .footer-sig-line {
+        border-bottom: 1px solid #000;
+        height: 20px;
+        margin-bottom: 5px;
+        font-weight: bold;
+        padding-top: 10px;
+        font-size: 10px;
+      }
+
+      .footer-sig-label {
+        font-size: 8px;
+        margin-bottom: 5px;
+      }
+
+      .footer-sig-date {
+        font-size: 7px;
+        color: #666;
+        font-style: italic;
+      }
+
+      .hr-thick {
+        border: none;
+        border-top: 3px solid #000;
+        margin: 20px 0;
+      }
+
+      .indent-text {
+        text-indent: 25px;
+        margin: 10px 0;
+        text-align: justify;
+      }
+
+      @page {
+        margin: 0.5in;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% if graduation_forms %}
+        {% for form_data in graduation_forms %}
+            {% if not forloop.first %}<div style="page-break-before: always;"></div>{% endif %}
+            {% with graduation=form_data.graduation user=form_data.student profile=form_data.profile %}
+
+    <div class="header">
+      <div class="logo-placeholder">PTS<br>LOGO</div>
+      <div class="title-main">PTS COLLEGE & ADVANCED STUDIES</div>
+      <div class="subtitle">
+        Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite, Philippines
+      </div>
+      <div class="subtitle">
+        Contact Nos.: 0917 146 6759 (046) 476 0597 | Email: info@ptscas.edu.ph
+      </div>
+      <div class="subtitle">
+        Website: ptscas.edu.ph • FB: facebook.com/ptscas
+      </div>
+    </div>
+
+    <div class="motto">Spirituality and Academic Excellence</div>
+
+    <div class="title">APPLICATION FOR GRADUATION FORM</div>
+    
+    <div class="row">
+      <div class="row-item">
+        Date: <strong>{{ today|default:graduation.grad_date|date:"m-d-Y" }}</strong>
+      </div>
+      <div class="row-item">
+        Application Number: <strong>{{ graduation.grad_appno|default:"" }}</strong>
+      </div>
+    </div>
+    
+    <div class="section-title">INSTRUCTIONS:</div>
+    <div>1. Complete all information as requested.</div>
+    <div>2. Print all information legibly.</div>
+    
+    <div class="section-title">PERSONAL INFORMATION:</div>
+    
+    <div class="name-section">
+      <div style="margin-bottom: 10px;">
+        <strong>Name:</strong>
+      </div>
+      <div class="name-row">
+        <div class="name-field">
+          <div class="name-value">{{ graduation.last_name|upper|default:"" }}</div>
+          <div class="name-label">(LAST NAME)</div>
+        </div>
+        <div class="name-field">
+          <div class="name-value">{{ graduation.first_name|upper|default:"" }}</div>
+          <div class="name-label">(FIRST NAME)</div>
+        </div>
+        <div class="name-field">
+          <div class="name-value">{{ graduation.middle_name|upper|default:"" }}</div>
+          <div class="name-label">(MIDDLE NAME)</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-item">
+        Sex: <strong>{{ profile.gender|default:"" }}</strong>
+      </div>
+      <div class="row-item">
+        Phone no.: <strong>{{ user.contact_number|default:"" }}</strong>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="row-item">
+        Date of Birth: <strong>{{ profile.birthdate|date:"m-d-Y"|default:"" }}</strong>
+      </div>
+      <div class="row-item">
+        <!-- Empty cell for alignment -->
+      </div>
+    </div>
+    
+    <div class="full-width">
+      Place of Birth: <strong>{{ graduation.place_of_birth|default:"" }}</strong>
+    </div>
+    <div class="full-width">
+      Present Address: <strong>{{ graduation.present_address|default:profile.address|default:"" }}</strong>
+    </div>
+    <div class="full-width">
+      Permanent Address: <strong>{{ graduation.permanent_address|default:profile.address|default:"" }}</strong>
+    </div>
+    <div class="full-width">
+      Email Address: <strong>{{ user.email|default:"" }}</strong>
+    </div>
+    
+    <div class="section-title">ACADEMIC INFORMATION:</div>
+    
+    <div class="full-width">
+      Degree/Program: <strong>{{ profile.program|default:"" }}</strong>
+    </div>
+    <div class="full-width">
+      Major (if applicable): <strong>{{ graduation.major|default:"" }}</strong>
+    </div>
+    <div class="full-width">
+      Thesis Title (if applicable): <strong>{{ graduation.thesis_title|default:"" }}</strong>
+    </div>
+    
+    <div style="margin: 15px 0;">
+      <strong>Subjects Currently Enrolled:</strong>
+    </div>
+
+    <table class="subjects-table">
+      <thead>
+        <tr>
+          <th style="width: 20%;">Course No.</th>
+          <th style="width: 40%;">Course Title</th>
+          <th style="width: 15%;">Units</th>
+          <th style="width: 25%;">Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if graduation.subjects %}
+          {% for subject in graduation.subjects %}
+          <tr>
+            <td>{{ subject.course_no|default:"" }}</td>
+            <td>{{ subject.title|default:"" }}</td>
+            <td style="text-align: center;">{{ subject.units|default:"" }}</td>
+            <td>{{ subject.remarks|default:"" }}</td>
+          </tr>
+          {% endfor %}
+        {% endif %}
+        {% for i in "1234" %}
+          {% if forloop.counter > graduation.subjects|length %}
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="hr-thick"></div>
+    
+    <div class="indent-text">
+      I have the honor to apply for graduation in the course leading to the
+      degree of <span class="underline">{{ profile.program|default:"" }}</span> Major in
+      <span class="underline">{{ graduation.major|default:"" }}</span> this Graduation 20<span class="underline">{{ graduation.grad_date.year|default:"" }}</span>.
+    </div>
+    
+    <div class="indent-text">
+      It is understood that I shall be entitled to a diploma / certificate if
+      and after I have satisfactorily completed all the requirements for
+      graduation including but not limited to the submission of my bound
+      manuscript/ special problem/ narrative reports and clearance for my
+      graduation in this University.
+    </div>
+    
+    <div class="signature-section">
+      <div class="signature-line">{{ user.full_name|upper|default:"" }}</div>
+      <div class="signature-label">Printed name and Signature of Applicant</div>
+    </div>
+    
+    <div class="footer-signatures">
+      <div class="footer-sig">
+        <div class="footer-sig-label">Evaluated by:</div>
+        <div class="footer-sig-line">
+          {% for signatory in graduation.signatories.all %}
+            {% if signatory.role == 'registrar' and signatory.status == 'approved' %}
+              {{ signatory.signatory.full_name|upper }}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="footer-sig-date">
+          {% for signatory in graduation.signatories.all %}
+            {% if signatory.role == 'registrar' and signatory.status == 'approved' %}
+              ({{ signatory.updated_at|date:"M d, Y g:i A" }})
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      
+      <div class="footer-sig">
+        <div class="footer-sig-label">Approved by:</div>
+        <div class="footer-sig-line">
+          {% for signatory in graduation.signatories.all %}
+            {% if signatory.role == 'president' and signatory.status == 'approved' %}
+              {{ signatory.signatory.full_name|upper }}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="footer-sig-date">
+          {% for signatory in graduation.signatories.all %}
+            {% if signatory.role == 'president' and signatory.status == 'approved' %}
+              ({{ signatory.updated_at|date:"M d, Y g:i A" }})
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      
+      <div class="footer-sig">
+        <div class="footer-sig-label">Noted by:</div>
+        <div class="footer-sig-line">
+          {% for signatory in graduation.signatories.all %}
+            {% if signatory.role == 'dean' and signatory.status == 'approved' %}
+              {{ signatory.signatory.full_name|upper }}
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="footer-sig-date">
+          {% for signatory in graduation.signatories.all %}
+            {% if signatory.role == 'dean' and signatory.status == 'approved' %}
+              ({{ signatory.updated_at|date:"M d, Y g:i A" }})
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+            {% endwith %}
+        {% endfor %}
+    {% endif %}
+
+  </body>
+</html>

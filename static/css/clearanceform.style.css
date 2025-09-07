@@ -1,0 +1,279 @@
+/* ===== FORM MODAL STYLES ===== */
+#clearanceModal .modal-header {
+  border-bottom: none !important;
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+  background-color: #3B6A84!important;
+  color: white !important;
+}
+
+#clearanceModal .modal-header h5,
+#clearanceModal .modal-header .modal-title {
+  color: white !important;
+  background-color: transparent !important;
+}
+
+#viewClearanceModal .modal-header {
+  background-color: #3B6A84!important;
+  border-bottom: none !important;
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+  color: white !important;
+  padding: 1rem 1.5rem;
+  min-height: 56px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#viewClearanceModal .modal-title {
+  color: white !important;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 0;
+  color: white !important;
+  background-color: transparent !important;
+}
+
+#viewClearanceModal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 1;
+}
+
+#clearanceModal .modal-sub-header {
+  border-radius: 0.375rem;
+  background-color: #3B6A84!important;
+  color: white !important;
+}
+
+#viewClearanceModal .modal-sub-header {
+  border-radius: 0.375rem;
+  background-color: #3B6A84!important;
+  color: white !important;
+}
+
+#clearanceModal .modal-content {
+  border: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+
+
+.modal#clearanceModal .modal-header * {
+  color: white !important;
+}
+
+
+#clearanceModal .form-label {
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+#clearanceModal .form-control:focus,
+#clearanceModal .form-select:focus {
+  border-color: #183A53;
+  box-shadow: 0 0 0 0.2rem rgba(24, 58, 83, 0.25);
+}
+
+#clearanceModal .form-control.is-invalid,
+#clearanceModal .form-select.is-invalid {
+  border-color: #dc3545;
+}
+
+#clearanceModal .form-control.is-valid,
+#clearanceModal .form-select.is-valid {
+  border-color: #198754;
+}
+
+#clearanceModal .invalid-feedback {
+  font-size: 0.875rem;
+  color: #dc3545;
+}
+
+#clearanceModal .valid-feedback {
+  font-size: 0.875rem;
+  color: #198754;
+}
+
+#clearanceModal .alert {
+  border-radius: 0.375rem;
+  border: none;
+  padding: 1rem;
+}
+
+#clearanceModal .alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+#clearanceModal .alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+#clearanceModal .btn {
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  padding: 0.5rem 1rem;
+}
+
+#clearanceModal .btn-submit {
+  background-color: #506A87;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+#clearanceModal .btn-submit:hover {
+  background-color: #3B4F66;
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+#clearanceModal .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+#clearanceModal .btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Responsive adjustments for the modal */
+@media (max-width: 768px) {
+  #clearanceModal .modal-dialog {
+    margin: 0.5rem;
+  }
+  
+  #clearanceModal .col-md-3,
+  #clearanceModal .col-md-6,
+  #clearanceModal .col-md-8,
+  #clearanceModal .col-md-4 {
+    margin-bottom: 1rem;
+  }
+  
+  #clearanceModal .d-flex.justify-content-end {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  #clearanceModal .btn {
+    width: 100%;
+  }
+}
+
+/* Animation for form sections */
+#clearanceModal .mb-4 {
+  animation: fadeInUp 0.7s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar for modal body */
+#clearanceModal .modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: #2F3F53 #f8f9fa;
+}
+
+#clearanceModal .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#clearanceModal .modal-body::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 3px;
+}
+
+#clearanceModal .modal-body::-webkit-scrollbar-thumb {
+  background: #2F3F53;
+  border-radius: 3px;
+}
+
+#clearanceModal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #36536E;
+}
+
+/* Badge styling for clearance modal */
+#viewClearanceModal .badge {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+#viewClearanceModal .list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+}
+
+#viewClearanceModal .list-group-item:not(:last-child) {
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Ensure proper spacing between signatory name and badge */
+#viewClearanceModal .list-group-item > span:first-child {
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+#viewClearanceModal .list-group-item .badge {
+  flex-shrink: 0;
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Responsive badge sizing */
+@media (max-width: 768px) {
+  #viewClearanceModal .badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.4rem;
+    max-width: 150px;
+  }
+  
+  #viewClearanceModal .list-group-item {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+.modal-backdrop {
+  background-color: #000000 !important;
+  opacity: 0.05 !important;
+}
+@media (max-width: 576px) {
+  .custom-table-wrapper h4 {
+    font-size: 1.1rem;
+  }
+
+  .custom-table th,
+  .custom-table td {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+
+  .custom-table td .btn {
+    padding: 0.25rem 0.5rem;
+  }
+}

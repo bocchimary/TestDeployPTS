@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Enrollment Forms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .enrollment-form {
+            page-break-after: always;
+            margin-bottom: 30px;
+        }
+        
+        .enrollment-form:last-child {
+            page-break-after: avoid;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .school-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #003399;
+            margin-bottom: 5px;
+        }
+        
+        .form-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .form-section {
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            font-size: 14px;
+            color: #003399;
+            margin-bottom: 8px;
+        }
+        
+        .form-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        
+        .form-field {
+            flex: 1;
+            margin-right: 20px;
+        }
+        
+        .form-label {
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .form-value {
+            border-bottom: 1px solid #000;
+            min-height: 20px;
+            padding: 2px 5px;
+            font-size: 12px;
+        }
+        
+        .signature-section {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .signature-box {
+            text-align: center;
+            width: 200px;
+        }
+        
+        .signature-line {
+            border-bottom: 1px solid #000;
+            height: 30px;
+            margin-bottom: 5px;
+        }
+        
+        .signature-label {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        @media print {
+            .enrollment-form {
+                page-break-after: always;
+            }
+            
+            .enrollment-form:last-child {
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% for enrollment in enrollment_forms %}
+    <div class="enrollment-form">
+        <div class="header">
+            <div class="school-name">PTS COLLEGE & ADVANCED STUDIES</div>
+            <div style="font-size: 12px; color: #666;">
+                Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite, Philippines
+            </div>
+        </div>
+        
+        <div class="form-title">ENROLLMENT FORM</div>
+        
+        <div class="form-section">
+            <div class="section-title">STUDENT INFORMATION</div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Student Name:</div>
+                    <div class="form-value">{{ enrollment.user.full_name|default:"" }}</div>
+                </div>
+                <div class="form-field">
+                    <div class="form-label">Student ID:</div>
+                    <div class="form-value">{{ enrollment.user.profile.student_number|default:"" }}</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Course/Program:</div>
+                    <div class="form-value">{{ enrollment.user.profile.program|default:"" }}</div>
+                </div>
+                <div class="form-field">
+                    <div class="form-label">Year Level:</div>
+                    <div class="form-value">{{ enrollment.user.profile.year_level|default:"" }}</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Section:</div>
+                    <div class="form-value">{{ enrollment.user.profile.section|default:"" }}</div>
+                </div>
+                <div class="form-field">
+                    <div class="form-label">Date Submitted:</div>
+                    <div class="form-value">{{ enrollment.created_at|date:"m-d-Y" }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="section-title">CONTACT INFORMATION</div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Email Address:</div>
+                    <div class="form-value">{{ enrollment.user.email|default:"" }}</div>
+                </div>
+                <div class="form-field">
+                    <div class="form-label">Contact Number:</div>
+                    <div class="form-value">{{ enrollment.user.contact_number|default:"" }}</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Address:</div>
+                    <div class="form-value">{{ enrollment.user.profile.address|default:"" }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="section-title">ENROLLMENT DETAILS</div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Academic Year:</div>
+                    <div class="form-value">{{ enrollment.academic_year|default:"" }}</div>
+                </div>
+                <div class="form-field">
+                    <div class="form-label">Semester:</div>
+                    <div class="form-value">{{ enrollment.semester|default:"" }}</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Units Enrolled:</div>
+                    <div class="form-value">{{ enrollment.units_enrolled|default:"" }}</div>
+                </div>
+                <div class="form-field">
+                    <div class="form-label">Total Units:</div>
+                    <div class="form-value">{{ enrollment.total_units|default:"" }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="section-title">APPROVAL STATUS</div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Dean Status:</div>
+                    <div class="form-value">
+                        {% for signatory in enrollment.signatories.all %}
+                            {% if signatory.role == 'dean' %}
+                                {{ signatory.status|title }}
+                                {% if signatory.status != 'pending' %}
+                                    ({{ signatory.updated_at|date:"m-d-Y" }})
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-field">
+                    <div class="form-label">Business Manager Status:</div>
+                    <div class="form-value">
+                        {% for signatory in enrollment.signatories.all %}
+                            {% if signatory.role == 'business_manager' %}
+                                {{ signatory.status|title }}
+                                {% if signatory.status != 'pending' %}
+                                    ({{ signatory.updated_at|date:"m-d-Y" }})
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field">
+                    <div class="form-label">Registrar Status:</div>
+                    <div class="form-value">
+                        {% for signatory in enrollment.signatories.all %}
+                            {% if signatory.role == 'registrar' %}
+                                {{ signatory.status|title }}
+                                {% if signatory.status != 'pending' %}
+                                    ({{ signatory.updated_at|date:"m-d-Y" }})
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="signature-section">
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <div class="signature-label">Dean Signature</div>
+            </div>
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <div class="signature-label">Business Manager Signature</div>
+            </div>
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <div class="signature-label">Registrar Signature</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>
+</body>
+</html> 

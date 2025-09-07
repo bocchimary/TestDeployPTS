@@ -1,0 +1,453 @@
+
+  <!-- View Course Modal -->
+  <div class="modal fade" id="viewCourseModal" tabindex="-1" aria-labelledby="viewCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="viewCourseModalLabel">
+            <i class="bi bi-eye me-2"></i>Course Overview
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Course Name Emphasized -->
+  <div class="mb-2 text-center">
+    <h4 class="fw-bold text-dark" id="viewCourseName">
+      Bachelor of Arts in Theology
+    </h4>
+  </div>
+  <div class="mb-4 text-center border-bottom pb-3"> </div>
+  <!-- Course Info -->
+  <div class="mb-3">
+    <label class="fw-bold">Program</label>
+    <p id="viewProgram" class="form-control-plaintext text-muted">Undergraduate Program</p>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-12">
+      <label class="fw-bold">Course Code</label>
+      <p id="viewCourseCode" class="form-control-plaintext text-muted">ABTh101</p>
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <label class="fw-bold">Course Description</label>
+    <p id="viewCourseDescription" class="form-control-plaintext text-muted">
+      This program focuses on theology and biblical studies...
+    </p>
+  </div>
+          <!-- Year Levels & Semesters -->
+          <div class="mt-4">
+            <label class="fw-bold">Year Levels & Semesters</label>
+          </div>
+          <div class="container my-4">
+  <!-- ================= FIRST YEAR ================= -->
+<div class="card w-100 mb-3">
+  <div class="card-header-first bg-primary text-white" id="firstYearHeader">
+    <h5 class="mb-0">
+      <button class="btn text-decoration-none w-100 text-white text-start d-flex justify-content-between align-items-center p-3" 
+              type="button" data-bs-toggle="collapse" data-bs-target="#firstYearCollapse" 
+              aria-expanded="true" aria-controls="firstYearCollapse">
+        First Year
+        <i class="bi bi-chevron-down collapse-icon transition"></i>
+      </button>
+    </h5>
+  </div>
+  <div id="firstYearCollapse" class="collapse show" aria-labelledby="firstYearHeader">
+    <div class="card-body p-3">
+
+      <div class="accordion" id="accordion-firstYear">
+        <!-- First Semester -->
+        <div class="card mb-2">
+          <div class="card-header bg-muted text-dark p-0" id="firstYear-firstSemesterHeader">
+            <h6 class="mb-0">
+              <button class="btn text-decoration-none w-100 text-dark text-start d-flex justify-content-between align-items-center p-2" 
+                      type="button" data-bs-toggle="collapse" data-bs-target="#firstYear-firstSemesterCollapse" 
+                      aria-expanded="true" aria-controls="firstYear-firstSemesterCollapse">
+                First Semester
+                <i class="bi bi-chevron-down collapse-icon transition"></i>
+              </button>
+            </h6>
+          </div>
+          <div id="firstYear-firstSemesterCollapse" class="collapse show" aria-labelledby="firstYear-firstSemesterHeader" data-bs-parent="#accordion-firstYear">
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 15%">Code</th>
+                      <th style="width: 45%">Subject Title</th>
+                      <th style="width: 20%">Professor</th>
+                      <th style="width: 10%">Units</th>
+                      <th style="width: 10%"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-firstYear-firstSemester"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Second Semester -->
+        <div class="card mb-2">
+          <div class="card-header bg-muted text-dark p-0" id="firstYear-secondSemesterHeader">
+            <h6 class="mb-0">
+              <button class="btn text-decoration-none w-100 text-dark text-start d-flex justify-content-between align-items-center p-2" 
+                      type="button" data-bs-toggle="collapse" data-bs-target="#firstYear-secondSemesterCollapse" 
+                      aria-expanded="false" aria-controls="firstYear-secondSemesterCollapse">
+                Second Semester
+                <i class="bi bi-chevron-down collapse-icon transition"></i>
+              </button>
+            </h6>
+          </div>
+          <div id="firstYear-secondSemesterCollapse" class="collapse" aria-labelledby="firstYear-secondSemesterHeader" data-bs-parent="#accordion-firstYear">
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 15%">Code</th>
+                      <th style="width: 45%">Subject Title</th>
+                      <th style="width: 20%">Professor</th>
+                      <th style="width: 10%">Units</th>
+                      <th style="width: 10%"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-firstYear-secondSemester"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div> <!-- end accordion-firstYear -->
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= SECOND YEAR ================= -->
+<div class="card w-100 mb-3">
+  <div class="card-header-first bg-primary text-white" id="secondYearHeader">
+    <h5 class="mb-0">
+      <button class="btn text-decoration-none w-100 text-white text-start d-flex justify-content-between align-items-center p-3" 
+              type="button" data-bs-toggle="collapse" data-bs-target="#secondYearCollapse" 
+              aria-expanded="false" aria-controls="secondYearCollapse">
+        Second Year
+        <i class="bi bi-chevron-down collapse-icon transition"></i>
+      </button>
+    </h5>
+  </div>
+  <div id="secondYearCollapse" class="collapse" aria-labelledby="secondYearHeader">
+    <div class="card-body p-3">
+
+      <div class="accordion" id="accordion-secondYear">
+        <!-- First Semester -->
+        <div class="card mb-2">
+          <div class="card-header bg-muted text-dark p-0" id="secondYear-firstSemesterHeader">
+            <h6 class="mb-0">
+              <button class="btn text-decoration-none w-100 text-dark text-start d-flex justify-content-between align-items-center p-2" 
+                      type="button" data-bs-toggle="collapse" data-bs-target="#secondYear-firstSemesterCollapse" 
+                      aria-expanded="false" aria-controls="secondYear-firstSemesterCollapse">
+                First Semester
+                <i class="bi bi-chevron-down collapse-icon transition"></i>
+              </button>
+            </h6>
+          </div>
+          <div id="secondYear-firstSemesterCollapse" class="collapse" aria-labelledby="secondYear-firstSemesterHeader" data-bs-parent="#accordion-secondYear">
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 15%">Code</th>
+                      <th style="width: 45%">Subject Title</th>
+                      <th style="width: 20%">Professor</th>
+                      <th style="width: 10%">Units</th>
+                      <th style="width: 10%"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-secondYear-firstSemester"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Second Semester -->
+        <div class="card mb-2">
+          <div class="card-header bg-muted text-white p-0" id="secondYear-secondSemesterHeader">
+            <h6 class="mb-0">
+              <button class="btn text-decoration-none w-100 text-dark text-start d-flex justify-content-between align-items-center p-2" 
+                      type="button" data-bs-toggle="collapse" data-bs-target="#secondYear-secondSemesterCollapse" 
+                      aria-expanded="false" aria-controls="secondYear-secondSemesterCollapse">
+                Second Semester
+                <i class="bi bi-chevron-down collapse-icon transition"></i>
+              </button>
+            </h6>
+          </div>
+          <div id="secondYear-secondSemesterCollapse" class="collapse" aria-labelledby="secondYear-secondSemesterHeader" data-bs-parent="#accordion-secondYear">
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 15%">Code</th>
+                      <th style="width: 45%">Subject Title</th>
+                      <th style="width: 20%">Professor</th>
+                      <th style="width: 10%">Units</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-secondYear-secondSemester">
+                    <tr>
+                      <td>CS201</td>
+                      <td>Data Structures and Algorithms</td>
+                      <td>Dr. Santos</td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
+                      <td>MATH204</td>
+                      <td>Probability and Statistics</td>
+                      <td>Prof. Dela Cruz</td>
+                      <td>3</td> 
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div> <!-- end accordion-secondYear -->
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= THIRD YEAR ================= -->
+<div class="card w-100 mb-3">
+  <div class="card-header-first bg-primary text-white" id="thirdYearHeader">
+    <h5 class="mb-0">
+      <button class="btn text-decoration-none w-100 text-white text-start d-flex justify-content-between align-items-center p-3" 
+              type="button" data-bs-toggle="collapse" data-bs-target="#thirdYearCollapse" 
+              aria-expanded="false" aria-controls="thirdYearCollapse">
+        Third Year
+        <i class="bi bi-chevron-down collapse-icon transition"></i>
+      </button>
+    </h5>
+  </div>
+  <div id="thirdYearCollapse" class="collapse" aria-labelledby="thirdYearHeader">
+    <div class="card-body p-3">
+
+      <div class="accordion" id="accordion-thirdYear">
+        <!-- First Semester -->
+        <div class="card mb-2">
+          <div class="card-header bg-muted text-dark p-0" id="thirdYear-firstSemesterHeader">
+            <h6 class="mb-0">
+              <button class="btn text-decoration-none w-100 text-dark text-start d-flex justify-content-between align-items-center p-2" 
+                      type="button" data-bs-toggle="collapse" data-bs-target="#thirdYear-firstSemesterCollapse" 
+                      aria-expanded="false" aria-controls="thirdYear-firstSemesterCollapse">
+                First Semester
+                <i class="bi bi-chevron-down collapse-icon transition"></i>
+              </button>
+            </h6>
+          </div>
+          <div id="thirdYear-firstSemesterCollapse" class="collapse" aria-labelledby="thirdYear-firstSemesterHeader" data-bs-parent="#accordion-thirdYear">
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 15%">Code</th>
+                      <th style="width: 45%">Subject Title</th>
+                      <th style="width: 20%">Professor</th>
+                      <th style="width: 10%">Units</th>
+                      <th style="width: 10%"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-thirdYear-firstSemester"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Second Semester -->
+        <div class="card mb-2">
+          <div class="card-header bg-muted text-dark p-0" id="thirdYear-secondSemesterHeader">
+            <h6 class="mb-0">
+              <button class="btn text-decoration-none w-100 text-dark text-start d-flex justify-content-between align-items-center p-2" 
+                      type="button" data-bs-toggle="collapse" data-bs-target="#thirdYear-secondSemesterCollapse" 
+                      aria-expanded="false" aria-controls="thirdYear-secondSemesterCollapse">
+                Second Semester
+                <i class="bi bi-chevron-down collapse-icon transition"></i>
+              </button>
+            </h6>
+          </div>
+          <div id="thirdYear-secondSemesterCollapse" class="collapse" aria-labelledby="thirdYear-secondSemesterHeader" data-bs-parent="#accordion-thirdYear">
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 15%">Code</th>
+                      <th style="width: 45%">Subject Title</th>
+                      <th style="width: 20%">Professor</th>
+                      <th style="width: 10%">Units</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-thirdYear-secondSemester">
+                    <tr>
+                      <td>CS201</td>
+                      <td>Data Structures and Algorithms</td>
+                      <td>Dr. Santos</td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
+                      <td>MATH204</td>
+                      <td>Probability and Statistics</td>
+                      <td>Prof. Dela Cruz</td>
+                      <td>3</td> 
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= FOURTH YEAR ================= -->
+<div class="card w-100 mb-3">
+  <div class="card-header-first bg-primary text-white" id="fourthYearHeader">
+    <h5 class="mb-0">
+      <button class="btn text-decoration-none w-100 text-white text-start d-flex justify-content-between align-items-center p-3" 
+              type="button" data-bs-toggle="collapse" data-bs-target="#fourthYearCollapse" 
+              aria-expanded="false" aria-controls="fourthYearCollapse">
+        Fourth Year
+        <i class="bi bi-chevron-down collapse-icon transition"></i>
+      </button>
+    </h5>
+  </div>
+  <div id="fourthYearCollapse" class="collapse" aria-labelledby="fourthYearHeader">
+    <div class="card-body p-3">
+
+      <div class="accordion" id="accordion-fourthYear">
+        <!-- First Semester -->
+        <div class="card mb-2">
+          <div class="card-header bg-muted text-dark p-0" id="fourthYear-firstSemesterHeader">
+            <h6 class="mb-0">
+              <button class="btn text-decoration-none w-100 text-dark text-start d-flex justify-content-between align-items-center p-2" 
+                      type="button" data-bs-toggle="collapse" data-bs-target="#fourthYear-firstSemesterCollapse" 
+                      aria-expanded="false" aria-controls="fourthYear-firstSemesterCollapse">
+                First Semester
+                <i class="bi bi-chevron-down collapse-icon transition"></i>
+              </button>
+            </h6>
+          </div>
+          <div id="fourthYear-firstSemesterCollapse" class="collapse" aria-labelledby="fourthYear-firstSemesterHeader" data-bs-parent="#accordion-fourthYear">
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 15%">Code</th>
+                      <th style="width: 45%">Subject Title</th>
+                      <th style="width: 20%">Professor</th>
+                      <th style="width: 10%">Units</th>
+                      <th style="width: 10%"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-fourthYear-firstSemester"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Second Semester -->
+        <div class="card mb-2">
+          <div class="card-header bg-muted text-dark p-0" id="fourthYear-secondSemesterHeader">
+            <h6 class="mb-0">
+              <button class="btn text-decoration-none w-100 text-dark text-start d-flex justify-content-between align-items-center p-2" 
+                      type="button" data-bs-toggle="collapse" data-bs-target="#fourthYear-secondSemesterCollapse" 
+                      aria-expanded="false" aria-controls="fourthYear-secondSemesterCollapse">
+                Second Semester
+                <i class="bi bi-chevron-down collapse-icon transition"></i>
+              </button>
+            </h6>
+          </div>
+          <div id="fourthYear-secondSemesterCollapse" class="collapse" aria-labelledby="fourthYear-secondSemesterHeader" data-bs-parent="#accordion-fourthYear">
+            <div class="card-body p-2">
+              <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width: 15%">Code</th>
+                      <th style="width: 45%">Subject Title</th>
+                      <th style="width: 20%">Professor</th>
+                      <th style="width: 10%">Units</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-fourthYear-secondSemester">
+                    <tr>
+                      <td>CS201</td>
+                      <td>Data Structures and Algorithms</td>
+                      <td>Dr. Santos</td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
+                      <td>MATH204</td>
+                      <td>Probability and Statistics</td>
+                      <td>Prof. Dela Cruz</td>
+                      <td>3</td> 
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" id="editCourseBtn">
+            <i class="bi bi-pencil-square me-1"></i> Edit
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+
+
+<script>
+    const icons = document.querySelectorAll('.collapse-icon');
+  
+    icons.forEach(icon => {
+      const collapseElement = icon.closest('button').dataset.bsTarget;
+      const collapseTarget = document.querySelector(collapseElement);
+  
+      collapseTarget.addEventListener('show.bs.collapse', () => {
+        icon.style.transform = 'rotate(180deg)';
+      });
+  
+      collapseTarget.addEventListener('hide.bs.collapse', () => {
+        icon.style.transform = 'rotate(0deg)';
+      });
+    });
+  </script>
+  

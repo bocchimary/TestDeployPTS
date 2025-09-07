@@ -1,0 +1,261 @@
+/* ===== FORM MODAL STYLES ===== */
+/* Only style the inside of the modal, not the modal container itself */
+#enrollmentModal .modal-header {
+    border-bottom: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+    background-color:#254B70 !important
+}
+#enrollmentModal .modal-sub-header {
+    border-bottom: none;
+    border-radius: 0.375rem;
+    background-color:#254B70;
+}
+#viewEnrollmentModal .modal-header {
+    background-color: #254B70 !important;
+    border-bottom: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+    color: #fff;
+    padding: 1rem 1.5rem;
+    min-height: 56px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#viewEnrollmentModal .modal-title {
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin: 0;
+}
+#viewEnrollmentModal .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+    opacity: 1;
+}
+
+#viewEnrollmentModal .modal-header {
+    background-color: #254B70 !important;
+    border-bottom: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+    color: #fff;
+    padding: 1rem 1.5rem;
+    min-height: 56px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#viewEnrollement Modal .modal-title {
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+
+
+.modal-sub-header {
+    background-color:#254B70;
+    border-radius: 5px;
+}
+
+#enrollmentModal .modal-content {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 0.375rem;
+
+}
+
+#enrollmentModal .form-label {
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+#enrollmentModal .form-control:focus,
+#enrollmentModal .form-select:focus {
+    border-color: #183A53;
+    box-shadow: 0 0 0 0.2rem rgba(24, 58, 83, 0.25);
+}
+
+#enrollmentModal .form-control.is-invalid,
+#enrollmentModal .form-select.is-invalid {
+    border-color: #dc3545;
+}
+
+#enrollmentModal .form-control.is-valid,
+#enrollmentModal .form-select.is-valid {
+    border-color: #198754;
+}
+
+#enrollmentModal .invalid-feedback {
+    font-size: 0.875rem;
+    color: #dc3545;
+}
+
+#enrollmentModal .valid-feedback {
+    font-size: 0.875rem;
+    color: #198754;
+}
+
+#enrollmentModal .alert {
+    border-radius: 0.375rem;
+    border: none;
+}
+
+#enrollmentModal .alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+#enrollmentModal .alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left: 4px solid #17a2b8;
+}
+
+#enrollmentModal .btn {
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+#enrollmentModal .btn-submit {
+    background-color:#254B70;
+}
+#enrollmentModal .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+#enrollmentModal .btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Responsive adjustments for the modal */
+@media (max-width: 768px) {
+    #enrollmentModal .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    #enrollmentModal .col-md-3,
+    #enrollmentModal .col-md-6,
+    #enrollmentModal .col-md-8,
+    #enrollmentModal .col-md-4 {
+        margin-bottom: 1rem;
+    }
+
+    #enrollmentModal .d-flex.justify-content-end {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    #enrollmentModal .btn {
+        width: 100%;
+    }
+}
+
+/* Animation for form sections */
+#enrollmentModal .mb-4 {
+    animation: fadeInUp 0.2s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Custom scrollbar for modal body */
+#enrollmentModal .modal-body {
+    scrollbar-width: thin;
+    scrollbar-color: #183A53 #f8f9fa;
+}
+
+#enrollmentModal .modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+#enrollmentModal .modal-body::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 3px;
+}
+
+#enrollmentModal .modal-body::-webkit-scrollbar-thumb {
+    background: #183A53;
+    border-radius: 3px;
+}
+
+#enrollmentModal .modal-body::-webkit-scrollbar-thumb:hover {
+    background: #14507d;
+}
+
+table th {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Ensure enrollment subjects table displays all columns properly */
+#enrollmentSubjectsTable {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#enrollmentSubjectsTable th,
+#enrollmentSubjectsTable td {
+    width: 25%; /* Equal width for all 4 columns */
+    min-width: 120px;
+    overflow: visible;
+}
+
+#enrollmentSubjectsTable th:first-child,
+#enrollmentSubjectsTable td:first-child {
+    width: 20%; /* Slightly smaller for code column */
+    min-width: 100px;
+}
+
+#enrollmentSubjectsTable input.form-control {
+    width: 100%;
+    min-width: 90px;
+}
+
+.card {
+    border-radius: .5rem;
+}
+
+.underline-input {
+    border: none;
+    border-bottom: 1px solid #000;
+    background: transparent;
+    outline: none;
+    width: 12rem;
+    display: inline-block;
+    text-align: center;
+}
+
+.underline-input-year {
+    border: none;
+    border-bottom: 1px solid #000;
+    background: transparent;
+    outline: none;
+    width: 5rem;
+    display: inline-block;
+    text-align: center;
+}
+
+
+#enrollmentModal .btn-outline-primary{
+    background-color:#254B70;
+    color: white;
+    border: 1px solid#254B70;
+    border-radius: 0.375rem;
+    font-weight: 500;
+   
+  }

@@ -1,0 +1,393 @@
+{% extends 'main-registrar.html' %}
+{% load static %}
+
+{% block title %}REGISTRAR USER MANAGEMENT{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/RUSERMANAGEMENT.css' %}">
+{% endblock %}
+
+{% block main_content %}
+
+  <!-- Main Content -->
+  <div class="registrar_user_manager_main-content">
+    <form id="registrar_user_manager_form">
+      <div class="text-end text-muted mb-2 small"><strong>Date:</strong> <span id="registrar_user_manager_dateToday"></span></div>
+      <h1 class="fw-bold">User Management</h1>
+
+      <!-- Filter + Search Row -->
+      <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+          <select class="form-select form-select-sm" style="width: auto;" id="registrar_user_manager_userType">
+            <option value="">All Roles</option>
+            {% for user_type in user_types %}
+            <option value="{{ user_type }}">{{ user_type|title }}</option>
+            {% endfor %}
+          </select>
+          <select class="form-select form-select-sm" style="width: auto;" id="registrar_user_manager_course">
+            <option value="">All Courses</option>
+            {% for course in courses %}
+            <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+          </select>
+          <select class="form-select form-select-sm" style="width: auto;" id="registrar_user_manager_year">
+            <option value="">All Years</option>
+            {% for year in years %}
+            <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+          </select>
+          <select class="form-select form-select-sm" style="width: auto;" id="registrar_user_manager_status">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+    
+          <!-- Search input right next to filters -->
+          <div class="registrar_user_manager_search-bar input-group">
+            <input type="text" class="form-control" placeholder="Search by name, email, or username" id="registrar_user_manager_search_input">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+          </div>
+
+          <!-- Reset Filters Button -->
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="registrar_user_manager_resetFilters">
+            <i class="bi bi-arrow-clockwise"></i> Reset Filters
+          </button>
+
+          <div class="table-actions" id="registrar_user_manager_tableActions">
+            <button type="button" class="btn btn-primary add-user-btn" data-bs-toggle="modal" data-bs-target="#registrar_user_manager_addUserModal">
+              <i class="bi bi-person-plus-fill"></i> Add User
+            </button>
+          </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="registrar_user_manager_loading" class="text-center py-4" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading users...</p>
+      </div>
+
+      <div class="registrar_user_manager_table-fixed-container">
+        <div class="registrar_user_manager_table-scroll-wrapper">
+          <table class="table registrar_user_manager_table align-middle" id="registrar_user_manager_userTable">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Email</th>
+                <th>Created</th>
+                <th>Last Login</th>
+              </tr>
+            </thead>
+            <tbody id="registrar_user_manager_tableBody">
+              <!-- User rows will be populated by JavaScript -->
+            </tbody>
+          </table>
+      
+          <!-- Backdrop overlay -->
+          <div class="user-panel-backdrop" id="registrar_user_manager_backdrop"></div>
+      
+          <!-- Admin Panel -->
+          <div class="user-panel" id="registrar_user_manager_adminPanel">
+            <button type="button" class="btn-close" onclick="hideUser()" aria-label="Close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="text-center mt-4">
+              <img src="" alt="Profile" class="user-img mb-3" id="registrar_user_manager_adminImg">
+              <h5 id="registrar_user_manager_adminName">Name</h5>
+              <p class="text-muted mb-1"><i class="bi bi-envelope"></i> <span id="registrar_user_manager_adminEmail"></span></p>
+              <p><span id="registrar_user_manager_adminStatus" class="user-status"></span></p>
+            </div>
+            <hr>
+            <div class="px-3">
+              <p><strong>Role:</strong> <span id="registrar_user_manager_adminRole">-</span></p>
+              <p><strong>Username:</strong> <span id="registrar_user_manager_adminUsername">-</span></p>
+              <p><strong>Last Login:</strong> <span id="registrar_user_manager_adminLastLogin">-</span></p>
+              <p><strong>Phone:</strong> <span id="registrar_user_manager_adminPhone">-</span></p>
+              <p><strong>Email:</strong> <span id="registrar_user_manager_adminEmailDetail">-</span></p>
+              <p><strong>Created:</strong> <span id="registrar_user_manager_adminCreated">-</span></p>
+              <div class="bg-light p-3 rounded mt-3">
+                <p class="mb-1"><strong>Notes:</strong></p>
+                <p id="registrar_user_manager_adminNotes" class="mb-0 small">-</p>
+              </div>
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-outline-danger w-100" onclick="deleteUser()">Delete User</button>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Student Panel -->
+          <div class="user-panel" id="registrar_user_manager_studentPanel">
+            <button type="button" class="btn-close" onclick="hideUser()" aria-label="Close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="text-center mt-4">
+              <img src="" alt="Profile" class="user-img mb-3" id="registrar_user_manager_studentImg">
+              <h5 id="registrar_user_manager_studentName">Name</h5>
+              <p class="text-muted mb-1"><i class="bi bi-envelope"></i> <span id="registrar_user_manager_studentEmail"></span></p>
+              <p><span id="registrar_user_manager_studentStatus" class="user-status"></span></p>
+            </div>
+            <hr>
+            <div class="px-3">
+              <p><strong>Role:</strong> <span id="registrar_user_manager_studentRole">-</span></p>
+              <p><strong>Username:</strong> <span id="registrar_user_manager_studentUsername">-</span></p>
+              <p><strong>Course:</strong> <span id="registrar_user_manager_studentCourse">-</span></p>
+              <p><strong>Year:</strong> <span id="registrar_user_manager_studentYear">-</span></p>
+              <p><strong>Last Login:</strong> <span id="registrar_user_manager_studentLastLogin">-</span></p>
+              <p><strong>Phone:</strong> <span id="registrar_user_manager_studentPhone">-</span></p>
+              <p><strong>Email:</strong> <span id="registrar_user_manager_studentEmailDetail">-</span></p>
+              <p><strong>Address:</strong> <span id="registrar_user_manager_studentAddress">-</span></p>
+              <p><strong>Gender:</strong> <span id="registrar_user_manager_studentGender">-</span></p>
+              <p><strong>Birthdate:</strong> <span id="registrar_user_manager_studentBirthdate">-</span></p>
+              <p><strong>Created:</strong> <span id="registrar_user_manager_studentCreated">-</span></p>
+              <div class="bg-light p-3 rounded mt-3">
+                <p class="mb-1"><strong>Notes:</strong></p>
+                <p id="registrar_user_manager_studentNotes" class="mb-0 small">-</p>
+              </div>
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-outline-danger w-100" onclick="deleteUser()">Delete User</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Add User Modal -->
+  <div class="modal fade" id="registrar_user_manager_addUserModal" tabindex="-1" aria-labelledby="registrar_user_manager_addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registrar_user_manager_addUserModalLabel">Add New User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-light">
+          <form id="registrar_user_manager_addUserForm">
+            <!-- Section: Basic Info -->
+            <h6 class="mt-3 mb-2">Basic Information</h6>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Email Address *</label>
+                <input type="email" class="form-control" id="registrar_user_manager_username" required placeholder="Enter email address">
+                <small class="form-text text-muted">A secure password will be auto-generated and sent to this email</small>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">User Type *</label>
+                <select class="form-select" id="registrar_user_manager_userTypeSelect" required>
+                  <option selected disabled>Select User Type</option>
+                  <option value="student">Student</option>
+                  <option value="alumni">Alumni</option>
+                  <option value="signatory">Signatory</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="registrar_user_manager_isActive">
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Section: Personal Info -->
+            <h6 class="mt-4 mb-2">Personal Information</h6>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label class="form-label">Last Name *</label>
+                <input type="text" class="form-control" id="registrar_user_manager_lastName" required>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">First Name *</label>
+                <input type="text" class="form-control" id="registrar_user_manager_firstName" required>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Middle Name</label>
+                <input type="text" class="form-control" id="registrar_user_manager_middleName">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Suffix</label>
+                <input type="text" class="form-control" id="registrar_user_manager_suffix">
+              </div>
+            </div>
+    
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label class="form-label">Birth Date</label>
+                <input type="date" class="form-control" id="registrar_user_manager_birthDate">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Gender</label>
+                <select class="form-select" id="registrar_user_manager_gender">
+                  <option selected disabled>Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" class="form-control" id="registrar_user_manager_contactNumber" 
+                       placeholder="+639XXXXXXXXX" 
+                       pattern="^\+63[0-9]{10}$"
+                       maxlength="13"
+                       aria-label="Contact Number">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control" id="registrar_user_manager_address">
+              </div>
+            </div>
+
+            <!-- Section: Student/Alumni Specific Info -->
+            <div id="registrar_user_manager_studentFields" style="display: none;">
+              <h6 class="mt-4 mb-2">Student Information</h6>
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Student Number</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_studentNumber">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Program/Course</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_program">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Year Level</label>
+                  <select class="form-select" id="registrar_user_manager_yearLevel">
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="registrar_user_manager_isGraduating">
+                    <label class="form-check-label" for="registrar_user_manager_isGraduating">
+                      Is Graduating
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="registrar_user_manager_alumniFields" style="display: none;">
+              <h6 class="mt-4 mb-2">Alumni Information</h6>
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Alumni ID</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_alumniId">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Course Graduated</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_courseGraduated">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Year Graduated</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_yearGraduated" placeholder="YYYY">
+                </div>
+              </div>
+            </div>
+
+            <div id="registrar_user_manager_signatoryFields" style="display: none;">
+              <h6 class="mt-4 mb-2">Signatory Information</h6>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Signatory Type *</label>
+                  <select class="form-select" id="registrar_user_manager_signatoryType" required>
+                    <option selected disabled>Select Signatory Type</option>
+                    <option value="dorm_supervisor">Dorm Supervisor</option>
+                    <option value="canteen_concessionaire">Canteen Concessionaire</option>
+                    <option value="library_director">Library Director</option>
+                    <option value="scholarship_director">Scholarship Director</option>
+                    <option value="it_director">IT Director</option>
+                    <option value="student_affairs">Student Affairs</option>
+                    <option value="cashier">Cashier</option>
+                    <option value="business_manager">Business Manager</option>
+                    <option value="registrar">Registrar</option>
+                    <option value="academic_dean">Academic Dean</option>
+                    <option value="president">President</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Department</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_signatoryDepartment" placeholder="e.g., IT Department">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <label class="form-label">Signatory Notes</label>
+                  <textarea class="form-control" id="registrar_user_manager_signatoryNotes" rows="3" placeholder="Additional notes about this signatory's role and responsibilities"></textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="registrar_user_manager_saveBtn">Save User</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="registrar_user_manager_cancelBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete User Confirmation Modal -->
+  <div class="modal fade" id="registrar_user_manager_deleteModal" tabindex="-1" aria-labelledby="registrar_user_manager_deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="registrar_user_manager_deleteModalLabel">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Delete User
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-3">
+            <i class="bi bi-person-x-fill text-danger" style="font-size: 3rem;"></i>
+          </div>
+          <h6 class="text-center mb-3">Are you sure you want to delete this user?</h6>
+          <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Warning:</strong> This action cannot be undone. All user data, including:
+            <ul class="mb-0 mt-2">
+              <li>User profile and settings</li>
+              <li>Associated forms and records</li>
+              <li>Login history and permissions</li>
+            </ul>
+          </div>
+          <div class="user-delete-info p-3 bg-light rounded">
+            <p class="mb-1"><strong>User:</strong> <span id="registrar_user_manager_deleteUserName">-</span></p>
+            <p class="mb-1"><strong>Role:</strong> <span id="registrar_user_manager_deleteUserRole">-</span></p>
+            <p class="mb-0"><strong>Email:</strong> <span id="registrar_user_manager_deleteUserEmail">-</span></p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i> Cancel
+          </button>
+          <button type="button" class="btn btn-danger" id="registrar_user_manager_confirmDeleteBtn">
+            <i class="bi bi-trash me-1"></i> Delete User
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/RUSERMANAGEMENT.js' %}?v=3.9"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+{% endblock %}

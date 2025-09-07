@@ -1,0 +1,128 @@
+{% extends 'main-registrar.html' %}
+{% load static %}
+
+{% block title %}REGISTRAR DOCUMENT RELEASE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/RDOCUMENTRELEASE.css' %}?v=1.3">
+{% endblock %}
+
+{% block main_content %}
+<div class="registrar_docu_release_main-content">
+  <script>
+    // Mark the document release link as active
+    document.addEventListener('DOMContentLoaded', function() {
+      const documentReleaseLink = document.querySelector('a[href="{% url "registrar_document_release" %}"]');
+      if (documentReleaseLink) {
+        documentReleaseLink.classList.add('active');
+      }
+    });
+  </script>
+  
+  <form id="registrar_docu_release_form">
+    <div class="text-end text-muted mb-2 small">
+      <strong>Date:</strong> <span id="registrar_docu_release_dateToday"></span>
+    </div>
+    <h1 class="fw-bold">Document Release and Scheduling</h1>
+
+    <!-- Filter + Search Row -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <!-- Filters Row -->
+        <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+          <div class="filter-group">
+            <select class="form-select form-select-sm" style="min-width: 180px;" id="registrar_docu_release_filter_course">
+              <option selected disabled>Filter by Course</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select class="form-select form-select-sm" style="min-width: 150px;" id="registrar_docu_release_filter_year">
+              <option selected disabled>Filter by Year</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select class="form-select form-select-sm" style="min-width: 160px;" id="registrar_docu_release_filter_section">
+              <option selected disabled>Filter by Section</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select class="form-select form-select-sm" style="min-width: 160px;" id="registrar_docu_release_filter_status">
+              <option selected disabled>Filter by Status</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="ready">Ready</option>
+              <option value="released">Released</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="registrar_docu_release_reset_filters">
+              <i class="bi bi-arrow-clockwise me-1"></i>Reset Filters
+            </button>
+          </div>
+        </div>
+        
+        <!-- Search Row -->
+        <div class="d-flex align-items-center">
+          <div class="registrar_docu_release_search-bar input-group" style="max-width: 400px;">
+            <input type="text" class="form-control" placeholder="Search by name or ID number..." id="registrar_docu_release_search_input">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bulk Actions Section -->
+    <div class="row mb-3" id="registrar_docu_release_bulk_actions" style="display: none;">
+      <div class="col-12">
+        <div class="d-flex gap-2 align-items-center">
+          <span class="text-muted small" id="registrar_docu_release_selected_count">0 selected</span>
+          <button type="button" class="btn btn-danger btn-sm" onclick="bulkDeleteDocumentRelease()">
+            <i class="bi bi-trash me-1"></i>Bulk Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="registrar_docu_release_table-fixed-container">
+      <div class="registrar_docu_release_table-scroll-wrapper">
+        <table class="table registrar_docu_release_table text-center align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 50px; min-width: 50px;">
+                <input type="checkbox" id="registrar_docu_release_select_all" title="Select All">
+              </th>
+              <th style="width: 200px; min-width: 200px;">Student Name</th>
+              <th style="width: 120px; min-width: 120px;">Course</th>
+              <th style="width: 80px; min-width: 80px;">Year</th>
+              <th style="width: 100px; min-width: 100px;">Section</th>
+              <th style="width: 120px; min-width: 120px;">ID Number</th>
+              <th style="width: 140px; min-width: 140px;">Date Submitted</th>
+              <th style="width: 150px; min-width: 150px;">Document Type</th>
+              <th style="width: 150px; min-width: 150px;">Purpose</th>
+              <th style="width: 140px; min-width: 140px;">Business Manager</th>
+              <th style="width: 120px; min-width: 120px;">Status</th>
+              <th style="width: 160px; min-width: 160px;">Release Date</th>
+              <th style="width: 200px; min-width: 200px;">Select Release Date</th>
+              <th style="width: 150px; min-width: 150px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="registrar_docu_release_table_body">
+            <!-- Dynamic content will be loaded here by JavaScript -->
+            <tr>
+              <td colspan="14" class="text-center text-muted py-4">
+                <i class="bi bi-hourglass-split fs-1"></i><br>
+                Loading document release data...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>  
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/RDOCUMENTRELEASE.js' %}?v=1.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+{% endblock %}

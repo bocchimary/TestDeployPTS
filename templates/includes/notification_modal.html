@@ -1,0 +1,171 @@
+<!-- Simple Notification Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title text-dark" id="notificationModalLabel">
+                    <i class="fas fa-bell me-2"></i>Notifications
+                </h5>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge bg-danger rounded-pill px-2 ms-2" id="notificationCount">0</span>    
+                </div>
+            </div>
+            <div class="modal-body p-0">
+                <!-- Simple Filters -->
+                <div class="px-4 py-3 bg-light">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-auto">
+                            <select class="form-select form-select-sm" id="notificationTypeFilter">
+                                <option value="">All Types</option>
+                                <option value="form_approved">Approved</option>
+                                <option value="form_disapproved">Disapproved</option>
+                                <option value="document_ready">Document Ready</option>
+                                <option value="clearance_completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="unreadOnlyFilter">
+                                <label class="form-check-label small" for="unreadOnlyFilter">
+                                    Unread only
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col ms-auto">
+                            <button class="btn btn-sm btn-outline-secondary" id="refreshNotificationsBtn">
+                                <i class="fas fa-sync me-1"></i>Refresh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="px-4 py-2 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-sm btn-primary" id="markAllReadBtn">
+                            <i class="fas fa-check me-1"></i>Mark All Read
+                        </button>
+                        <small class="text-muted" id="notificationsInfo">Loading...</small>
+                    </div>
+                </div>
+
+                <!-- Notifications List -->
+                <div id="notificationsList" class="notifications-list">
+                    <!-- Loading state -->
+                    <div class="text-center p-4" id="notificationsLoading">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 mb-0">Loading notifications...</p>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div class="text-center p-4 d-none" id="notificationsEmpty">
+                        <i class="fas fa-bell-slash text-muted fa-3x mb-3"></i>
+                        <h5 class="text-muted">No Notifications</h5>
+                        <p class="text-muted mb-0">You're all caught up! No new notifications at this time.</p>
+                    </div>
+
+                    <!-- Error state -->
+                    <div class="text-center p-4 d-none" id="notificationsError">
+                        <i class="fas fa-exclamation-triangle text-danger fa-3x mb-3"></i>
+                        <h5 class="text-danger">Error Loading Notifications</h5>
+                        <p class="text-muted mb-3">Something went wrong while loading your notifications.</p>
+                        <button class="btn btn-primary" onclick="loadNotifications()">Try Again</button>
+                    </div>
+
+                    <!-- Notifications content will be loaded here -->
+                    <div id="notificationsContent"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary btn-sm" id="loadMoreNotifications" style="display: none;">
+                    Load More
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Simple Notification Item Template -->
+<template id="notificationItemTemplate">
+    <div class="notification-item p-3 border-bottom" data-notification-id="">
+        <div class="d-flex align-items-start">
+            <div class="notification-icon me-3">
+                <i class="fas fa-bell text-primary"></i>
+            </div>
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h6 class="notification-title mb-0"></h6>
+                    <span class="notification-time text-muted small"></span>
+                </div>
+                <p class="notification-message mb-1 text-muted small"></p>
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="notification-type badge bg-light text-dark"></span>
+                    <span class="action-required-badge badge bg-danger text-white" style="display: none;">
+                        Action Required
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style>
+/* Simple Notification Styles */
+.notifications-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+    background-color: #f8f9fa;
+}
+
+.notification-item.unread {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+}
+
+.notification-item.unread .notification-title {
+    font-weight: bold;
+}
+
+.notification-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.notification-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.notification-message {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.notification-time {
+    font-size: 0.75rem;
+    margin-right: 10px;
+}
+
+.notification-type {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+</style>

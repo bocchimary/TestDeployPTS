@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clearance Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+
+        line-height: 1.6;
+      }
+
+      .title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        color: rgb(0, 0, 0);
+      }
+      .subtitle {
+        margin-top: -20px;
+        text-align: center;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .clearance {
+        margin-top: -15px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .year {
+        margin-top: -12px;
+        text-align: center;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .name {
+        font-weight: bold;
+        text-align: left;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .course {
+        font-weight: bold;
+        text-align: left;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .desc {
+        text-align: left;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .print-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+      }
+
+      .print-button:hover {
+        background-color: #2980b9;
+      }
+
+      .print-button:active {
+        transform: translateY(1px);
+      }
+
+      @media print {
+        .print-button {
+          display: none;
+        }
+
+        body {
+          margin: 20px;
+        }
+        .watermark {
+          display: block !important;
+        }
+      }
+      .row-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: -5px;
+      }
+
+      .row-item {
+        margin-right: 35px; /* adjust spacing as needed */
+      }
+
+      .row-item p {
+        margin: 0;
+      }
+      .row-line-1 {
+        display: inline-block;
+        border-bottom: 0.3px solid #000;
+        min-width: 75px;
+        height: 1em;
+        vertical-align: bottom;
+      }
+      .row-line {
+        display: inline-block;
+        border-bottom: 0.3px solid #000;
+        min-width: 250px;
+        height: 1em;
+        vertical-align: bottom;
+      }
+
+      .dept-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+        font-size: 12px;
+      }
+
+      .dept-table th,
+      .dept-table td {
+        border: 0.5px solid #000;
+        padding: 4px;
+        height: 12px;
+      }
+
+      .dept-text {
+        background-color: #f0f0f0;
+        font-weight: bold;
+        text-align: left;
+      }
+      .dept-sign {
+        background-color: #f0f0f0;
+        font-weight: bold;
+        text-align: center;
+      }
+      .watermark {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 16px;
+        color: rgba(0, 0, 0, 0.4);
+        font-weight: bold;
+        z-index: 1;
+        pointer-events: none;
+        user-select: none;
+      }
+      .copy-container {
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="copy-container">
+      <button class="print-button" onclick="printPage()">Print PDF</button>
+      <div class="watermark">Student's Copy</div>
+      <p class="title">PTS COLLEGE & ADVANCED STUDIES</p>
+      <p class="subtitle">Salitran IV, City of Dasmariñas, Cavite</p>
+      <p class="clearance">Clearance</p>
+      <p class="year">
+        <span class="row-line-1"></span>Semester A.Y.
+        <span class="row-line-1"></span>
+      </p>
+      <div class="row-container">
+        <div class="row-item">
+          <p class="name">NAME: <span class="row-line"></span></p>
+        </div>
+        <div class="row-item">
+          <p class="course">COURSE: <span class="row-line"></span></p>
+        </div>
+      </div>
+      <i class="desc"
+        >This certifies that the person named above has been cleared of all
+        obligations as follows:</i
+      >
+
+      <table class="dept-table">
+        <thead>
+          <tr>
+            <th class="dept-text">DEPARTMENT</th>
+            <th class="dept-sign">SIGNATURE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dorm Supervisor</td>            <td></td></tr>
+          <tr><td>Canteen Concessionaire</td>     <td></td></tr>
+          <tr><td>Director of Library & Info.</td><td></td></tr>
+          <tr><td>Director of Scholarship</td>    <td></td></tr>
+          <tr><td>Information Technology</td>     <td></td></tr>
+          <tr><td>Dean of Student Affairs</td>    <td></td></tr>
+          <tr><td>Cashier</td>                    <td></td></tr>
+          <tr><td>Business Manager</td>           <td></td></tr>
+          <tr><td>Registrar</td>                  <td></td></tr>
+          <tr><td>Academic Dean</td>              <td></td></tr>
+        </tbody>
+      </table>
+      <hr style="border: none; border-top: 3px solid black; margin-top: 20px" />
+    </div>
+    <div class="copy-container">
+      <div class="watermark">Registrar's Copy</div>
+      <p class="title">PTS COLLEGE & ADVANCED STUDIES</p>
+      <p class="subtitle">Salitran IV, City of Dasmariñas, Cavite</p>
+      <p class="clearance">Clearance</p>
+      <p class="year">
+        <span class="row-line-1"></span>Semester A.Y.
+        <span class="row-line-1"></span>
+      </p>
+      <div class="row-container">
+        <div class="row-item">
+          <p class="name">NAME: <span class="row-line"></span></p>
+        </div>
+        <div class="row-item">
+          <p class="course">COURSE: <span class="row-line"></span></p>
+        </div>
+      </div>
+      <i class="desc"
+        >This certifies that the person named above has been cleared of all
+        obligations as follows:</i
+      >
+
+      <table class="dept-table">
+        <thead>
+          <tr>
+            <th class="dept-text">DEPARTMENT</th>
+            <th class="dept-sign">SIGNATURE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dorm Supervisor</td>            <td></td></tr>
+          <tr><td>Canteen Concessionaire</td>     <td></td></tr>
+          <tr><td>Director of Library & Info.</td><td></td></tr>
+          <tr><td>Director of Scholarship</td>    <td></td></tr>
+          <tr><td>Information Technology</td>     <td></td></tr>
+          <tr><td>Dean of Student Affairs</td>    <td></td></tr>
+          <tr><td>Cashier</td>                    <td></td></tr>
+          <tr><td>Business Manager</td>           <td></td></tr>
+          <tr><td>Registrar</td>                  <td></td></tr>
+          <tr><td>Academic Dean</td>              <td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <script>
+      function printPage() {
+        window.print();
+      }
+    </script>
+  </body>
+</html>

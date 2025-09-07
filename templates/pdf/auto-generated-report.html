@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Generated Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #183a53;
+            padding-bottom: 20px;
+        }
+        
+        .school-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #183a53;
+            margin-bottom: 5px;
+        }
+        
+        .school-address {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .report-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+            color: #183a53;
+        }
+        
+        .report-info {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #183a53;
+        }
+        
+        .info-value {
+            color: #666;
+        }
+        
+        .summary-section {
+            margin-bottom: 30px;
+        }
+        
+        .summary-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #183a53;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #183a53;
+            padding-bottom: 5px;
+        }
+        
+        .summary-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 15px;
+            background-color: #183a53;
+            color: white;
+            border-radius: 5px;
+            min-width: 120px;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .table-container {
+            margin-bottom: 30px;
+        }
+        
+        .table-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #183a53;
+            margin-bottom: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #183a53;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-disapproved {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            color: #666;
+        }
+        
+        .signature-section {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .signature-box {
+            text-align: center;
+            width: 200px;
+        }
+        
+        .signature-line {
+            border-bottom: 1px solid #000;
+            height: 30px;
+            margin-bottom: 5px;
+        }
+        
+        .signature-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        @media print {
+            body {
+                margin: 0;
+                padding: 15px;
+            }
+            
+            .header {
+                margin-bottom: 20px;
+            }
+            
+            .summary-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-box {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="school-name">PTS COLLEGE & ADVANCED STUDIES</div>
+        <div class="school-address">
+            Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite, Philippines
+        </div>
+        <div style="font-size: 12px; color: #666;">
+            Contact Nos.: 0917 146 6759 (046) 476 0597 | Email: info@ptscas.edu.ph
+        </div>
+    </div>
+    
+    <div class="report-title">
+        AUTO-GENERATED SIGNATORY ACTIVITY REPORT
+    </div>
+    
+    <div class="report-info">
+        <div class="info-row">
+            <span class="info-label">Signatory Name:</span>
+            <span class="info-value">{{ signatory.full_name }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Report Type:</span>
+            <span class="info-value">{{ report_type|title }} Forms</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Period:</span>
+            <span class="info-value">{{ period_type|title }} ({{ start_date }} to {{ end_date }})</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Generated On:</span>
+            <span class="info-value">{{ "now"|date:"F d, Y \a\t g:i A" }}</span>
+        </div>
+    </div>
+    
+    <div class="summary-section">
+        <div class="summary-title">Activity Summary</div>
+        <div class="summary-stats">
+            <div class="stat-box">
+                <div class="stat-number">{{ total_count }}</div>
+                <div class="stat-label">Total Activities</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ activity_logs|length }}</div>
+                <div class="stat-label">Records in Report</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ start_date|date:"M d" }}</div>
+                <div class="stat-label">Start Date</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ end_date|date:"M d" }}</div>
+                <div class="stat-label">End Date</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="table-container">
+        <div class="table-title">Detailed Activity Log</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Student Name</th>
+                    <th>Form Type</th>
+                    <th>Action</th>
+                    <th>IP Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in activity_logs %}
+                <tr>
+                    <td>{{ log.created_at|date:"M d, Y g:i A" }}</td>
+                    <td>{{ log.student_name }}</td>
+                    <td>{{ log.form_type|title }}</td>
+                    <td>
+                        <span class="status-badge status-{{ log.action_type }}">
+                            {{ log.action_type|title }}
+                        </span>
+                    </td>
+                    <td>{{ log.ip_address|default:"N/A" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #666; font-style: italic;">
+                        No activities found for the selected period and criteria.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="footer">
+        <p><strong>Note:</strong> This report was automatically generated by the PTS College & Advanced Studies system.</p>
+        <p>For any discrepancies or questions, please contact the system administrator.</p>
+    </div>
+    
+    <div class="signature-section">
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <div class="signature-label">Generated By</div>
+        </div>
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <div class="signature-label">Date</div>
+        </div>
+    </div>
+</body>
+</html> 

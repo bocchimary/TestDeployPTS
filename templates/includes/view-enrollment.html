@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>View Enrollment Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="{% static 'css/enrollmentform.style.css' %}" />
+</head>
+<body>
+  <div class="modal fade" id="viewEnrollmentModal" tabindex="-1" aria-labelledby="viewEnrollmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content shadow-lg border-0">
+        
+        <!-- Header -->
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fw-semibold" id="viewEnrollmentModalLabel">
+            <i class="bi bi-file-earmark-person-fill me-2"></i> Temporary Enrollment Form
+          </h5>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body p-3" id="enrollmentPrintArea">
+          <!-- FORM START -->
+          <form id="viewEnrollmentForm" method="GET" action="/enrollment/" novalidate>
+            {% csrf_token %}
+            
+            <!-- Personal Information Card -->
+            <div class="card mb-3 shadow-sm">
+              <div class="card-header bg-light fw-semibold">
+                <i class="bi bi-person-fill me-2"></i> Personal Information
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Full Name:</label>
+                    <span class="form-control-plaintext fw-bold fs-6 text-dark" id="ve_full_name"></span>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Student No:</label>
+                    <span class="form-control-plaintext fw-bold fs-6 text-dark" id="ve_student_number"></span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Date of Birth:</label>
+                    <span class="form-control-plaintext fw-bold fs-6 text-dark" id="ve_birthdate">-</span>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Contact Number:</label>
+                    <span class="form-control-plaintext fw-bold fs-6 text-dark" id="ve_contact_number">-</span>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Email:</label>
+                    <span class="form-control-plaintext fw-bold fs-6 text-dark" id="ve_email">-</span>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label class="form-label fw-semibold">Current Address:</label>
+                    <span class="form-control-plaintext fw-bold fs-6 text-dark" id="ve_address">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Academic Program Card -->
+            <div class="card mb-3 shadow-sm">
+              <div class="card-header bg-light fw-semibold">
+                <i class="bi bi-journal-bookmark-fill me-2"></i> Academic Program & Enrollment Details
+              </div>
+              <div class="card-body">
+                <p><strong>Date of Enrollment:</strong> <span id="ve_enrollment_date"></span></p>
+                <p><strong>Academic Year:</strong> <span id="ve_academic_year"></span></p>
+                <p><strong>Degree/Program:</strong> <span id="ve_program"></span></p>
+                <p><strong>Year:</strong> <span id="ve_year_level"></span></p>
+                <p><strong>Semester:</strong> <span id="ve_semester"></span></p>
+                <p><strong>Section:</strong> <span id="ve_section2"></span></p>
+              </div>
+            </div>
+
+            <!-- Courses Card -->
+            <div class="card mb-3 shadow-sm">
+              <div class="card-header bg-light fw-semibold">
+                <i class="bi bi-list-check me-2"></i> Courses / Subjects
+              </div>
+              <div class="card-body">
+                <div class="text-secondary fw-bold mb-2">
+                  These are the subjects you are set to enroll in for the current semester.
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-bordered mb-0" id="enrollmentSubjectsTable">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col">Code</th>
+                        <th scope="col">Subjects</th>
+                        <th scope="col">Professor</th>
+                        <th scope="col">Units</th>
+                      </tr>
+                    </thead>
+                    <tbody id="viewEnrollmentSubjectsTableBody">
+                      <tr id="noSubjectsRow">
+                        <td colspan="4" class="text-center text-muted">No subjects added</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div id="table-loader" style="display:none; text-align:center; padding:10px;">
+                    <span class="spinner-border spinner-border-sm"></span> Loading subjects...
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-md-2 fs-6 fw-semibold">Total Units:</div>
+                  <span class="col-md-2 fs-6 fw-bold" id="totalUnits">0</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Signatory Status Card -->
+            <div class="card mb-3 shadow-sm">
+              <div class="card-header bg-light fw-semibold">
+                <i class="bi bi-person-check me-2"></i> Signatory Status
+              </div>
+              <div class="card-body">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Academic Dean</span>
+                    <span id="ve_status_dean" class="badge bg-warning text-dark">Pending</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Business Manager</span>
+                    <span id="ve_status_business_manager" class="badge bg-warning text-dark">Pending</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Registrar</span>
+                    <span id="ve_status_registrar" class="badge bg-warning text-dark">Pending</span>
+                  </li>
+                </ul>
+                <div class="form-control fs-6 mt-3">
+                  Status:
+                  <span class="text-success fw-bold">Enrolled</span> /
+                  <span class="text-warning fw-bold">Pending</span> /
+                  <span class="text-danger fw-bold">Not Approved</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notice Card -->
+            <div class="card mb-3 shadow-sm">
+              <div class="card-body alert alert-info small shadow-sm mb-0">
+                <i class="bi bi-clock me-2"></i>
+                <strong>Office Hours Notice:</strong> The Office of the Campus Registrar processes forms on weekdays from 8:00 AM to 4:00 PM. Requests submitted outside these hours will be processed on the next business day.
+              </div>
+            </div>
+          
+            <div class="modal-footer d-flex justify-content-between">
+              <!-- Left side -->
+              <button type="button" class="btn btn-outline-dark btn-sm" id="btnEnrollmentPrintPdf">
+                <i class="bi bi-printer me-1"></i> Print / Save PDF
+              </button>
+            
+              <!-- Right side -->
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </form>
+          <!-- FORM END -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

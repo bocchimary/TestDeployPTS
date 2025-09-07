@@ -1,0 +1,228 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #f1f1f198;
+  }
+  
+  /* Chat Container */
+  .chat-container {
+    height: 77vh;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    border-radius: 15px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    background-color: white;
+  }
+  
+  /* Sidebar */
+  .chat-sidebar {
+    width: 80px;
+    border-right: 1px solid #dee2e6;
+    background-color: #fff;
+    padding: 1rem 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  @media (min-width: 768px) {
+    .chat-sidebar {
+      width: 300px;
+      padding: 1rem;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .chat-sidebar {
+      width: 400px;
+    }
+  }
+  
+  /* Chat Main */
+  .chat-main {
+    flex: 1;
+    background-color: #f1f3f5;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  /* Chat Header */
+  .chat-header {
+    background-color: white;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  /* Chat Body */
+  .chat-body {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Messages */
+  .chat-message {
+    margin-bottom: 1rem;
+    max-width: 70%;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    display: inline-block;
+  }
+  
+  .chat-message.sent {
+    background-color: #d1e7dd;
+    align-self: flex-end;
+  }
+  
+  .chat-message.received {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    align-self: flex-start;
+  }
+  
+  /* Chat Footer */
+  .chat-footer {
+    background-color: white;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  /* Input inside footer */
+  .chat-footer input {
+    flex: 1;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+  }
+  
+  /* Profile Sidebar */
+  .chat-profile {
+    position: absolute;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    background-color: #fff;
+    border-left: 1px solid #dee2e6;
+    z-index: 10;
+    transition: right 0.3s ease;
+    padding: 1rem;
+  }
+  
+  .chat-profile.show {
+    right: 0;
+  }
+  
+  .chat-profile .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+  }
+  
+  /* Responsive for Tablets & Phones */
+  @media (max-width: 767.98px) {
+    .chat-sidebar {
+      width: 100%;
+      border-right: none;
+      padding: 0.5rem;
+      order: 1;
+    }
+  
+    .chat-main {
+      display: none;
+    }
+  
+    .chat-main.show {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 1000;
+      background-color: white;
+    }
+  
+    .chat-profile {
+      display: none;
+    }
+  
+    .chat-profile.show {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 1001;
+      background-color: white;
+      padding-top: 60px;
+    }
+  
+    .chat-header .btn-back {
+      display: inline !important;
+    }
+  
+    .chat-footer {
+      flex-wrap: wrap;
+    }
+  
+    .chat-footer input {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+  
+    /* Hide sidebar system info for mobile */
+    .student_sidebar {
+      transform: translateX(-100%);
+      width: 250px;
+      left: 0;
+    }
+  
+    .student_sidebar.show {
+      transform: translateX(0%);
+    }
+  
+    .student_sidebar.collapsed {
+      transform: translateX(-100%) !important;
+    }
+  
+    .student_messages_main-content {
+      margin-left: 0 !important;
+      padding-top: 6.1rem !important;
+    }
+  
+    .student_sidebar_top-bar,
+    .student_sidebar.collapsed ~ .student_sidebar_top-bar {
+      left: 0 !important;
+    }
+  
+    .student_sidebar_top-bar .student_sidebar_system-title,
+    .student_sidebar_top-bar .student_sidebar_user-info span {
+      display: none;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .chat-sidebar span {
+      display: inline !important;
+    }
+  
+    .chat-sidebar .list-group-item {
+      justify-content: start !important;
+    }
+  
+    .chat-profile {
+      display: block;
+    }
+  }
+  

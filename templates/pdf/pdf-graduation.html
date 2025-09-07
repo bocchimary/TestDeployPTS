@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graduation Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,800;1,800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.4;
+        font-size: 12px;
+      }
+
+      .open-sans-title {
+        font-family: "Open Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 800;
+        font-style: normal;
+        font-variation-settings: "wdth" 100;
+        font-size: 24px;
+        color: #003399;
+      }
+      .title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+        margin-top: -5px;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        margin-top: -12px;
+        text-align: center;
+        font-size: 10px;
+        color: #003399;
+        font-weight: bold;
+      }
+
+      .print-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+      }
+
+      .print-button:hover {
+        background-color: #2980b9;
+      }
+
+      .print-button:active {
+        transform: translateY(1px);
+      }
+
+      @page {
+        margin: 0.25in;
+      }
+      @media print {
+        .print-button {
+          display: none;
+        }
+
+        body {
+          margin: 0.1in;
+        }
+        .watermark {
+          display: block !important;
+        }
+
+        .motto {
+          background-color: #003399 !important; /* ensure it applies in print */
+          color: #ffffff !important; /* optional: improve contrast for printing */
+          -webkit-print-color-adjust: exact; /* for Safari/Chrome */
+          print-color-adjust: exact; /* for Firefox */
+        }
+      }
+      .header {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+      .row-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        align-items: baseline;
+      }
+      .row-container-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+      }
+      .row-item {
+        margin-right: 50px;
+        flex: 1;
+      }
+      .row-item-name {
+        margin-right: 20px;
+        flex: 2;
+      }
+      .row-item-default {
+        margin-right: 10px;
+      }
+
+      .row-item p {
+        margin: 0;
+        line-height: 1.5;
+      }
+      .row-line-1 {
+        display: inline-block;
+        border-bottom: 1px solid #000;
+        min-width: 70px;
+        height: 1em;
+        vertical-align: bottom;
+        margin-left: 5px;
+      }
+      .row-line {
+        display: inline-block;
+        border-bottom: 1px solid #000;
+        min-width: 180px;
+        height: 1em;
+        vertical-align: bottom;
+        margin-left: 5px;
+      }
+      .footer-line {
+        display: inline-block;
+        border-bottom: 1px solid #000;
+        min-width: 100px;
+        height: 1em;
+        vertical-align: bottom;
+        margin-left: 5px;
+      }
+      .name-line {
+        display: inline-block;
+        border-bottom: 1px solid #000;
+        width: 400px;
+        height: 1em;
+        vertical-align: bottom;
+        margin-left: 5px;
+      }
+
+      .name-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 400px;
+        font-size: 0.8em;
+        margin-top: 2px;
+        margin-left: 30px;
+        color: #666;
+      }
+
+      .label {
+        text-align: center;
+        flex: 1;
+      }
+
+      .pts {
+        width: 80px;
+        height: 80px;
+        margin-right: 30px;
+      }
+      .text-container {
+        display: flex;
+        flex-direction: column;
+        margin-top: -20px;
+      }
+      .info {
+        margin-top: -15px;
+      }
+      .motto {
+        font-family: "Segoe Script", cursive;
+        font-size: 14px;
+        color: #ffffff;
+        background-color: #003399 !important;
+        width: 100%;
+        text-align: center;
+        margin-top: -5px;
+        padding: 3px 0;
+      }
+
+      .instruction {
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 12px;
+        color: #003399;
+      }
+      .instruction,
+      .desc {
+        margin: 0;
+        line-height: 1.4;
+      }
+      .p-info {
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 12px;
+        color: #003399;
+        margin-bottom: 5px;
+      }
+      .m-0 {
+        margin: 0;
+        line-height: 1.5;
+      }
+      .table-blank {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        margin-bottom: 10px;
+      }
+
+      .table-blank th {
+        text-align: left;
+        padding: 6px 6px;
+        font-weight: bold;
+        font-size: 11px;
+        border-bottom: 2px solid #000;
+      }
+
+      .table-blank td {
+        padding: 5px;
+        vertical-align: top;
+      }
+
+      .underline {
+        display: inline-block;
+        width: 95%;
+        border-bottom: 1px solid black;
+        height: 1.4em;
+        vertical-align: bottom;
+      }
+      .form-content {
+        font-size: 11px;
+        margin-left: 0.4in;
+        margin-right: 0.4in;
+        line-height: 1.4;
+      }
+
+      .sign {
+        text-align: right;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .indented {
+        text-indent: 25px;
+        line-height: 1.4;
+        margin-bottom: 8px;
+      }
+      
+      .printname {
+        font-size: 10px;
+        margin-top: 3px;
+        color: #666;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button class="print-button" id="printPageBtn">Print PDF</button>
+    
+    {% if graduation_forms %}
+        {% for form_data in graduation_forms %}
+            {% if not forloop.first %}<div style="page-break-before: always;"></div>{% endif %}
+            {% with graduation=form_data.graduation user=form_data.student profile=form_data.profile %}
+    
+    <div class="header">
+      <img
+        src="https://ptscas.edu.ph/wp-content/uploads/2019/09/logo-blue-1.png"
+        alt="ptslogo"
+        class="pts"
+      />
+      <!-- New column container -->
+      <div class="text-container">
+        <p class="open-sans-title">PTS COLLEGE & ADVANCED STUDIES</p>
+        <div class="info">
+          <p class="subtitle">
+            Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite,
+            Philippines
+          </p>
+          <p class="subtitle">
+            Contact Nos.: 0917 146 6759 (046) 476 0597 | Email:
+            info@ptscas.edu.ph
+          </p>
+          <p class="subtitle">
+            Website: ptscas.edu.ph • FB: facebook.com/ptscas
+          </p>
+        </div>
+      </div>
+    </div>
+    <p class="motto">Spirituality and Academic Excellence</p>
+
+    <div class="form-content">
+      <div class="title">APPLICATION FOR GRADUATION FORM</div>
+      
+      <div class="row-container">
+        <div class="row-item">
+          <p>Date: {{ today|default:graduation.grad_date|date:"m-d-Y" }}</p>
+        </div>
+        <div class="row-item">
+          <p>Application Number: <strong style="font-size: 14px;">{{ graduation.grad_appno|default:"" }}</strong></p>
+        </div>
+      </div>
+      
+      <div class="instruction">INSTRUCTIONS:</div>
+      <p class="desc">1. Complete all information as requested.</p>
+      <p class="desc">2. Print all information legibly.</p>
+      
+      <div class="p-info">PERSONAL INFORMATION:</div>
+      
+      <div class="row-container">
+        <div class="row-item-name">
+          <div style="display: flex; align-items: baseline;">
+            <p style="margin-right: 10px;">Name:</p>
+            <div style="display: flex; justify-content: flex-start; width: 400px; gap: 30px;">
+              <div style="text-align: center;">
+                <div style="font-size: 13px; font-weight: bold; color: black; margin-bottom: 5px; min-height: 20px;">
+                  {{ graduation.last_name|upper|default:"" }}
+                </div>
+                <div style="font-size: 8px; color: #666;">(LAST NAME)</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 13px; font-weight: bold; color: black; margin-bottom: 5px; min-height: 20px;">
+                  {{ graduation.first_name|upper|default:"" }}
+                </div>
+                <div style="font-size: 8px; color: #666;">(FIRST NAME)</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 13px; font-weight: bold; color: black; margin-bottom: 5px; min-height: 20px;">
+                  {{ graduation.middle_name|upper|default:"" }}
+                </div>
+                <div style="font-size: 8px; color: #666;">(MIDDLE NAME)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row-item">
+          <p>Sex: <strong>{{ profile.gender|default:"" }}</strong></p>
+        </div>
+      </div>
+      
+      <div class="row-container">
+        <div class="row-item">
+          <p>Date of Birth: <strong>{{ profile.birthdate|date:"m-d-Y"|default:"" }}</strong></p>
+        </div>
+        <div class="row-item">
+          <p>Phone no.: <strong>{{ user.contact_number|default:"" }}</strong></p>
+        </div>
+      </div>
+      
+      <p class="m-0">Place of Birth: <strong>{{ graduation.place_of_birth|default:"" }}</strong></p>
+      <p class="m-0">Present Address: <strong>{{ graduation.present_address|default:profile.address|default:"" }}</strong></p>
+      <p class="m-0">Permanent Address: <strong>{{ graduation.permanent_address|default:profile.address|default:"" }}</strong></p>
+      <p class="m-0">Email Address: <strong>{{ user.email|default:"" }}</strong></p>
+      
+      <div class="p-info">ACADEMIC INFORMATION:</div>
+      
+      <p class="m-0">Degree/Program: <strong>{{ profile.program|default:"" }}</strong></p>
+      <p class="m-0">Major (if applicable): <strong>{{ graduation.major|default:"" }}</strong></p>
+      <p class="m-0">Thesis Title (if applicable): <strong>{{ graduation.thesis_title|default:"" }}</strong></p>
+      
+      <p class="m-0">Subjects Currently Enrolled:</p>
+       <table class="table-blank">
+         <thead>
+           <tr>
+             <th>Course No.</th>
+             <th>Course Title</th>
+             <th>Units</th>
+             <th>Remarks</th>
+           </tr>
+         </thead>
+         <tbody>
+           {% if graduation.subjects %}
+             {% for subject in graduation.subjects %}
+             <tr>
+               <td><span class="underline">{{ subject.course_no|default:"" }}</span></td>
+               <td><span class="underline">{{ subject.title|default:"" }}</span></td>
+               <td><span class="underline">{{ subject.units|default:"" }}</span></td>
+               <td><span class="underline">{{ subject.remarks|default:"" }}</span></td>
+             </tr>
+             {% endfor %}
+           {% endif %}
+                       {% for i in "1234" %}
+              {% if forloop.counter > graduation.subjects|length %}
+              <tr>
+                <td><span class="underline"></span></td>
+                <td><span class="underline"></span></td>
+                <td><span class="underline"></span></td>
+                <td><span class="underline"></span></td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+         </tbody>
+       </table>
+             <hr style="border: none; border-top: 3px solid black; margin-top: 15px; margin-bottom: 15px;" />
+      
+      <p class="desc indented">
+        I have the honor to apply for graduation in the course leading to the
+        degree of <span class="row-line">{{ profile.program|default:"" }}</span> Major in
+        <span class="footer-line">{{ graduation.major|default:"" }}</span> this Graduation 20
+        <span class="row-line-1">{{ graduation.grad_date.year|default:"" }}</span>.
+      </p>
+      
+      <p class="desc indented">
+        It is understood that I shall be entitled to a diploma / certificate if
+        and after I have satisfactorily completed all the requirements for
+        graduation including but not limited to the submission of my bound
+        manuscript/ special problem/ narrative reports and clearance for my
+        graduation in this University.
+      </p>
+      
+      <div class="sign">
+        <span class="row-line"><strong>{{ user.full_name|upper|default:"" }}</strong></span>
+        <div class="printname">Printed name and Signature of Applicant</div>
+      </div>
+      
+      
+      <div class="row-container-footer" style="margin-top: 20px; margin-bottom: 30px;">
+        <div class="row-item" style="text-align: center;">
+          <p class="m-0">Evaluated by: 
+            {% for signatory in graduation.signatories.all %}
+              {% if signatory.role == 'registrar' and signatory.status == 'approved' %}
+                <strong>{{ signatory.signatory.full_name|upper }}</strong><br>
+                <span style="font-size: 9px; color: #666; font-style: italic;">({{ signatory.updated_at|date:"M d, Y g:i A" }})</span>
+              {% endif %}
+            {% endfor %}
+          </p>
+        </div>
+        <div class="row-item" style="text-align: center;">
+          <p class="m-0">Approved by: 
+            {% for signatory in graduation.signatories.all %}
+              {% if signatory.role == 'president' and signatory.status == 'approved' %}
+                <strong>{{ signatory.signatory.full_name|upper }}</strong><br>
+                <span style="font-size: 9px; color: #666; font-style: italic;">({{ signatory.updated_at|date:"M d, Y g:i A" }})</span>
+              {% endif %}
+            {% endfor %}
+          </p>
+        </div>
+        <div class="row-item" style="text-align: center;">
+          <p class="m-0">Noted by: 
+            {% for signatory in graduation.signatories.all %}
+              {% if signatory.role == 'dean' and signatory.status == 'approved' %}
+                <strong>{{ signatory.signatory.full_name|upper }}</strong><br>
+                <span style="font-size: 9px; color: #666; font-style: italic;">({{ signatory.updated_at|date:"M d, Y g:i A" }})</span>
+              {% endif %}
+            {% endfor %}
+          </p>
+        </div>
+      </div>
+    </div>
+
+            {% endwith %}
+        {% endfor %}
+    {% endif %}
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const printBtn = document.getElementById('printPageBtn');
+        if (printBtn) {
+          printBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.print();
+          });
+        }
+        
+        // Auto-print when loaded directly (not in iframe)
+        // Disable auto-print when loaded in iframe - let parent JavaScript handle it
+        if (window.self === window.top) {
+          // This is loaded directly, not in iframe, so auto-print
+          setTimeout(function() {
+            window.print();
+          }, 500);
+        }
+      });
+    </script>
+  </body>
+</html>

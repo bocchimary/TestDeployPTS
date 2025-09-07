@@ -1,0 +1,373 @@
+{% extends 'main-registrar.html' %}
+{% load static %}
+
+{% block title %}REGISTRAR ENROLLMENT{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/RENROLLMENT.css' %}?v=1.1">
+<style>
+/* Preview & Print Modal Styles - minimal to avoid interference */
+.preview-print-content {
+  background: white;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+/* Modal preview only - preserve original template designs */
+</style>
+{% endblock %}
+
+{% block main_content %}
+ 
+  <div class="registrar_enrollment_main-content">
+    <script>
+      // Mark the enrollment link as active
+      document.addEventListener('DOMContentLoaded', function() {
+        const enrollmentLink = document.querySelector('a[href="{% url "registrar_enrollment" %}"]');
+        if (enrollmentLink) {
+          enrollmentLink.classList.add('active');
+        }
+      });
+    </script>
+    <form id="registrar_enrollment_form">
+      <div class="text-end text-muted mb-2 small"><strong>Date:</strong> <span id="registrar_enrollment_dateToday"></span></div>
+      <h1 class="fw-bold">List of Enrollment Forms</h1>
+
+                           <!-- Filter + Search Row -->
+        <div class="row mb-3">
+          <div class="col-12">
+            <!-- Filters Row -->
+            <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+              <div class="filter-group">
+                <select class="form-select form-select-sm" style="min-width: 180px;" id="registrar_enrollment_filter_course">
+                  <option selected disabled>Filter by Course</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <select class="form-select form-select-sm" style="min-width: 150px;" id="registrar_enrollment_filter_year">
+                  <option selected disabled>Filter by Year</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <select class="form-select form-select-sm" style="min-width: 160px;" id="registrar_enrollment_filter_section">
+                  <option selected disabled>Filter by Section</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <select class="form-select form-select-sm" style="min-width: 160px;" id="registrar_enrollment_filter_status">
+                  <option selected disabled>Filter by Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="registrar_enrollment_reset_filters">
+                  <i class="bi bi-arrow-clockwise me-1"></i>Reset Filters
+                </button>
+              </div>
+            </div>
+            
+            <!-- Search Row -->
+            <div class="d-flex align-items-center">
+              <div class="registrar_enrollment_search-bar input-group" style="max-width: 400px;">
+                <input type="text" class="form-control" placeholder="Search by name or ID number..." id="registrar_enrollment_search_input">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bulk Actions Section -->
+        <div class="row mb-3" id="registrar_enrollment_bulk_actions" style="display: none;">
+          <div class="col-12">
+            <div class="d-flex gap-2 align-items-center">
+              <span class="text-muted small" id="registrar_enrollment_selected_count">0 selected</span>
+              <button type="button" class="btn btn-primary btn-sm" onclick="bulkApproveEnrollment()">
+                <i class="bi bi-check-circle me-1"></i>Bulk Approve
+              </button>
+              <button type="button" class="btn btn-warning btn-sm" onclick="bulkDisapproveEnrollment()">
+                <i class="bi bi-x-circle me-1"></i>Bulk Disapprove
+              </button>
+              <button type="button" class="btn btn-success btn-sm" onclick="bulkPrintEnrollment()">
+                <i class="bi bi-printer me-1"></i>Bulk Print
+              </button>
+              <button type="button" class="btn btn-danger btn-sm enrollment-bulk-delete-btn">
+                <i class="bi bi-trash me-1"></i>Bulk Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      
+      <div class="registrar_enrollment_table-fixed-container">
+        <div class="registrar_enrollment_table-scroll-wrapper">
+          <table class="table registrar_enrollment_table text-center align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th style="width: 50px; min-width: 50px;">
+                  <input type="checkbox" id="registrar_enrollment_select_all" title="Select All">
+                </th>
+                <th style="width: 200px; min-width: 200px;">Student Name</th>
+                <th style="width: 120px; min-width: 120px;">Course</th>
+                <th style="width: 80px; min-width: 80px;">Year</th>
+                <th style="width: 100px; min-width: 100px;">Section</th>
+                <th style="width: 120px; min-width: 120px;">ID Number</th>
+                <th style="width: 140px; min-width: 140px;">Date Submitted</th>
+                <th style="width: 140px; min-width: 140px;">PDF File</th>
+                <th style="width: 140px; min-width: 140px;">Dean</th>
+                <th style="width: 140px; min-width: 140px;">Business Manager</th>
+                <th style="width: 140px; min-width: 140px;">Registrar</th>
+                <th style="width: 120px; min-width: 120px;">Status</th>
+                <th style="width: 100px; min-width: 100px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="registrar_enrollment_table_body">
+              <!-- Dynamic content will be loaded here by JavaScript -->
+              <tr>
+                <td colspan="13" class="text-center text-muted py-4">
+                  <i class="bi bi-hourglass-split fs-1"></i><br>
+                  Loading enrollment data...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- OTP SIDEBAR -->
+          <div id="registrar_enrollment_otpSidebar" class="registrar_enrollment_otp-sidebar">
+            <div class="registrar_enrollment_otp-header d-flex justify-content-between align-items-start">
+              <h4 class="mb-0 fw-bold" id="registrar_enrollment_approve_title">APPROVAL PIN</h4>
+              <button type="button" class="btn-close enrollment-close-otp-btn" aria-label="Close"></button>
+            </div>
+            <div class="registrar_enrollment_otp-body d-flex flex-column align-items-center justify-content-center text-center">
+              <p class="text-muted mb-3 w-100 text-start">Input Pincode to Proceed:</p>
+              <div class="d-flex justify-content-center gap-2 mb-3">
+                <input type="text" class="form-control text-center" maxlength="8" placeholder="Enter PIN" id="registrar_enrollment_otpinput">
+              </div>
+              <div class="mb-3 w-100">
+                <label for="registrar_enrollment_otpComment" class="form-label text-muted">Comment (optional):</label>
+                <textarea class="form-control" rows="2" id="registrar_enrollment_otpComment" placeholder="Add a comment..."></textarea>
+              </div>
+              <div class="text-center">
+                <button type="button" class="btn btn-dark registrar_enrollment_approve-btn" id="registrar_enrollment_verifyOtpBtn">APPROVE</button>
+              </div>
+              <div class="text-danger mt-2" id="registrar_enrollment_otpError" style="display: none;">Incorrect PIN</div>
+            </div>
+          </div>
+
+          <!-- DISAPPROVE SIDEBAR -->
+          <div id="registrar_enrollment_disapproveSidebar" class="registrar_enrollment_otp-sidebar">
+            <div class="registrar_enrollment_otp-header d-flex justify-content-between align-items-start">
+              <h4 class="mb-0 fw-bold" id="registrar_enrollment_disapprove_title">DISAPPROVE REASON</h4>
+              <button type="button" class="btn-close enrollment-close-disapprove-btn" aria-label="Close"></button>
+            </div>
+
+            <!-- WRAPPER for body steps -->
+            <div class="registrar_enrollment_otp-body">
+
+              <!-- STEP 1: PIN -->
+              <div id="registrar_enrollment_disapprove_pin_step">
+                <p class="text-muted mb-3 w-100 text-start">Input Pincode to Proceed:</p>
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                  <input type="text" class="form-control text-center" maxlength="8" placeholder="Enter PIN" id="registrar_enrollment_disapprove_pin_input">
+                </div>
+                <div class="text-center mb-2">
+                  <button type="button" class="btn btn-dark" id="registrar_enrollment_disapprove_pin_submit_btn">VERIFY</button>
+                </div>
+                <div class="text-danger mt-2" id="registrar_enrollment_disapprove_pin_error" style="display: none;">Incorrect PIN</div>
+              </div>
+
+              <!-- STEP 2: Reason (Initially hidden) -->
+              <div id="registrar_enrollment_disapprove_reason_step" style="display: none;">
+                <p class="text-muted mb-3 w-100 text-start">Please select a reason:</p>
+
+                <!-- REASONS -->
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Unpaid fees" id="registrar_enrollment_reason1">
+                  <label class="form-check-label" for="registrar_enrollment_reason1">Unpaid fees</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Damage to school property" id="registrar_enrollment_reason2">
+                  <label class="form-check-label" for="registrar_enrollment_reason2">Damage to school property</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Violation of rules" id="registrar_enrollment_reason3">
+                  <label class="form-check-label" for="registrar_enrollment_reason3">Violation of rules</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Unreturned school property" id="registrar_enrollment_reason4">
+                  <label class="form-check-label" for="registrar_enrollment_reason4">Unreturned school property</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Incomplete Requirements/Documents" id="registrar_enrollment_reason5">
+                  <label class="form-check-label" for="registrar_enrollment_reason5">Incomplete Requirements/Documents</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Incomplete course requirements" id="registrar_enrollment_reason6">
+                  <label class="form-check-label" for="registrar_enrollment_reason6">Incomplete course requirements</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Unsettled promissory note" id="registrar_enrollment_reason7">
+                  <label class="form-check-label" for="registrar_enrollment_reason7">Unsettled promissory note</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" value="Incomplete academic units" id="registrar_enrollment_reason8">
+                  <label class="form-check-label" for="registrar_enrollment_reason8">Incomplete academic units</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input enrollment-reason-other" type="checkbox" value="Other" id="registrar_enrollment_reasonOther">
+                  <label class="form-check-label" for="registrar_enrollment_reasonOther">Other</label>
+                </div>
+                
+                <div class="mb-2" id="registrar_enrollment_otherReasonContainer" style="display: none;">
+                  <input type="text" id="registrar_enrollment_otherReasonInput" class="form-control" placeholder="Enter other reason">
+                </div>
+
+                <!-- Comment -->
+                <div class="mb-3 w-100">
+                  <label for="registrar_enrollment_disapproveComment" class="form-label text-muted">Comment (optional):</label>
+                  <textarea class="form-control" rows="2" id="registrar_enrollment_disapproveComment" placeholder="Add a comment..."></textarea>
+                </div>
+
+                <!-- Appointment -->
+                <div id="registrar_enrollment_appointmentContainer" class="mt-4">
+                  <label for="registrar_enrollment_appointmentDate" class="form-label text-muted">Set Appointment Date:</label>
+                  <input type="date" id="registrar_enrollment_appointmentDate" class="form-control mb-2">
+                  <button type="button" class="btn btn-primary btn-sm w-100" id="registrar_enrollment_submit_Appointment_Disapproval_Btn">Submit Disapproval and Appointment</button>
+
+                  <div class="text-danger mt-2" id="registrar_enrollment_disapproveError" style="display: none;">Please select a reason</div>
+                  <div class="text-danger mt-1" id="registrar_enrollment_appointmentError" style="display: none;">Please select an appointment date</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+
+    <!-- PREVIEW & PRINT MODAL -->
+    <div class="modal fade" id="previewPrintModal" tabindex="-1" aria-labelledby="previewPrintModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="previewPrintModalLabel">
+              <i class="bi bi-printer me-2"></i>Preview & Print Enrollment Forms
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-0">
+            <!-- Loading spinner -->
+            <div id="previewLoadingSpinner" class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading preview...</span>
+              </div>
+              <span class="ms-2">Loading preview...</span>
+            </div>
+            
+            <!-- Preview content container -->
+            <div id="previewContent" class="preview-print-content" style="display: none;">
+              <!-- Content will be loaded here -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle me-1"></i>Close
+            </button>
+            <button type="button" class="btn btn-primary" id="printPreviewBtn">
+              <i class="bi bi-printer me-1"></i>Print
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF PREVIEW MODAL -->
+  <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pdfPreviewModalLabel">
+            <i class="bi bi-file-pdf me-2"></i>Enrollment Form Preview
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Loading indicator -->
+          <div id="pdfPreviewLoading" class="d-flex justify-content-center align-items-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <span class="ms-2">Loading form preview...</span>
+          </div>
+          
+          <!-- PDF content container -->
+          <div id="pdfPreviewContent" class="pdf-preview-content" style="display: none;">
+            <!-- Content will be loaded here -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i>Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <style>
+    /* Scope PDF template CSS to only apply within modal */
+    .pdf-modal-content {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: white;
+      padding: 20px;
+    }
+    
+    /* Hide print buttons in modal */
+    .pdf-modal-content .print-button {
+      display: none !important;
+    }
+    
+    /* Ensure modal content doesn't inherit page styles */
+    .pdf-modal-content * {
+      box-sizing: border-box;
+    }
+  </style>
+  
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/RENROLLMENT.js' %}?v=1.3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  
+  <script>
+    // Get CSRF token from Django template 
+    const CSRF_TOKEN = '{{ csrf_token }}';
+    
+    // Note: currentPreviewController is now managed by EnrollmentPrint namespace
+    
+    // Modal event handlers - print button handler moved to EnrollmentPrint namespace
+    document.addEventListener('DOMContentLoaded', function() {
+        // Modal close handler only - other handlers managed by EnrollmentPrint namespace
+        const modalEl = document.getElementById('previewPrintModal');
+        if (modalEl) {
+            modalEl.addEventListener('hidden.bs.modal', function() {
+                // Reset handled by EnrollmentPrint namespace
+            });
+        }
+    });
+
+    // Print functions removed - handled by EnrollmentPrint namespace
+
+    // Fallback notification function if not defined
+    if (typeof showNotification !== 'function') {
+        function showNotification(message, type) {
+            console.log(`${type.toUpperCase()}: ${message}`);
+            showAlert(message, type);
+        }
+    }
+  </script>
+{% endblock %} 

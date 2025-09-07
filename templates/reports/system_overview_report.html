@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ report_title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #183a53 0%, #2c5282 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .school-logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .school-name {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .school-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .report-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .report-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #183a53;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .report-info h4 {
+            color: #183a53;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-item i {
+            color: #183a53;
+            font-size: 18px;
+        }
+        
+        .stats-section {
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stats-header {
+            background: linear-gradient(135deg, #183a53 0%, #2c5282 100%);
+            color: white;
+            padding: 20px 25px;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .stats-grid {
+            background: white;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #183a53;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #183a53;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .table-container {
+            background: white;
+            overflow-x: auto;
+            border-radius: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+        
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #183a53;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .metric-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            text-align: center;
+            min-width: 40px;
+            display: inline-block;
+        }
+        
+        .metric-total {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .metric-clearance {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .metric-enrollment {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .metric-graduation {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+            color: #6c757d;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            color: #183a53;
+            margin-bottom: 10px;
+        }
+        
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; border-radius: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .content { padding: 20px 15px; }
+            .header { padding: 30px 20px; }
+            .school-name { font-size: 24px; }
+            .report-title { font-size: 20px; }
+            .stats-grid { grid-template-columns: 1fr; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="school-logo">
+                <i class="bi bi-bank2" style="font-size: 40px; color: white;"></i>
+            </div>
+            <div class="school-name">Panpacific University</div>
+            <div class="school-subtitle">Educational Institution Clearance System</div>
+            <div class="report-title">{{ report_title }}</div>
+        </div>
+
+        <div class="content">
+            <div class="report-info">
+                <h4><i class="bi bi-info-circle"></i> Report Information</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <i class="bi bi-calendar-range"></i>
+                        <div>
+                            <strong>Period:</strong><br>
+                            {{ period_start|date:"F j, Y" }} to {{ period_end|date:"F j, Y" }}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="bi bi-clock"></i>
+                        <div>
+                            <strong>Generated:</strong><br>
+                            {{ generated_at|date:"F j, Y g:i A" }}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="bi bi-graph-up"></i>
+                        <div>
+                            <strong>Report Type:</strong><br>
+                            System Overview Analysis
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h3 class="stats-header">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    System Activity Overview
+                </h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ system_stats.total_activities|default:0 }}</div>
+                        <div class="stat-label">Total Activities</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ system_stats.total_approvals|default:0 }}</div>
+                        <div class="stat-label">Total Approvals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ system_stats.total_disapprovals|default:0 }}</div>
+                        <div class="stat-label">Total Disapprovals</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h3 class="stats-header">
+                    <i class="bi bi-file-earmark-plus me-2"></i>
+                    New Form Submissions
+                </h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><i class="bi bi-file-text"></i> Form Type</th>
+                                <th><i class="bi bi-hash"></i> Count</th>
+                                <th><i class="bi bi-percent"></i> Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <i class="bi bi-shield-check me-2"></i>
+                                    <strong>Clearance Forms</strong>
+                                </td>
+                                <td>
+                                    <span class="metric-badge metric-clearance">{{ system_stats.new_submissions.clearance|default:0 }}</span>
+                                </td>
+                                <td>
+                                    {% widthratio system_stats.new_submissions.clearance system_stats.new_submissions.total 100 %}%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="bi bi-journal-plus me-2"></i>
+                                    <strong>Enrollment Forms</strong>
+                                </td>
+                                <td>
+                                    <span class="metric-badge metric-enrollment">{{ system_stats.new_submissions.enrollment|default:0 }}</span>
+                                </td>
+                                <td>
+                                    {% widthratio system_stats.new_submissions.enrollment system_stats.new_submissions.total 100 %}%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="bi bi-mortarboard me-2"></i>
+                                    <strong>Graduation Forms</strong>
+                                </td>
+                                <td>
+                                    <span class="metric-badge metric-graduation">{{ system_stats.new_submissions.graduation|default:0 }}</span>
+                                </td>
+                                <td>
+                                    {% widthratio system_stats.new_submissions.graduation system_stats.new_submissions.total 100 %}%
+                                </td>
+                            </tr>
+                            <tr style="background-color: #f8f9fa; font-weight: 600;">
+                                <td>
+                                    <i class="bi bi-collection me-2"></i>
+                                    <strong>Total Submissions</strong>
+                                </td>
+                                <td>
+                                    <span class="metric-badge metric-total">{{ system_stats.new_submissions.total|default:0 }}</span>
+                                </td>
+                                <td>100%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-logo">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <p class="mb-1">Generated automatically by the Panpacific University Clearance System</p>
+            <p class="mb-0 small">Confidential - For institutional use only</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

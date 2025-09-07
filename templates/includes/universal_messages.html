@@ -1,0 +1,890 @@
+<!-- Universal Enhanced Messaging System -->
+<!-- Connection Status Indicator -->
+<div class="connection-status online d-none" id="connection_status">
+  <i class="bi bi-wifi me-1"></i>
+  <span id="connection_text">Connected</span>
+</div>
+
+<div class="enhanced-messaging-main" id="enhanced_messaging_main">
+  <div class="messaging-header">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h1 class="messaging-title">
+          <i class="bi bi-envelope me-2"></i>
+          Institutional Messages
+        </h1>
+      </div>
+      <div class="col-md-6 text-end">
+        <div class="messaging-date">
+          <i class="bi bi-calendar3 me-1"></i>
+          <span id="enhanced_messages_date">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="enhanced-messaging-container" id="enhanced_messaging_container">
+    <!-- Conversations Sidebar -->
+    <div class="enhanced-conversations-sidebar" id="enhanced_conversations_sidebar">
+      <div class="sidebar-header">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="sidebar-title">
+            <i class="bi bi-chat-text me-2"></i>
+            Communications
+          </h5>
+          {% if user.user_type == 'business_manager' or user.user_type == 'admin' or user.user_type == 'signatory' %}
+          <button type="button" class="btn btn-primary btn-sm new-conversation-btn" id="enhanced_new_conversation_btn" onclick="showNewConversationModal()">
+            <i class="bi bi-plus-lg me-1"></i>
+            New
+          </button>
+          {% endif %}
+        </div>
+        
+        <div class="search-container">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="text" class="form-control search-input" placeholder="Search communications..." id="enhanced_conversations_search" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversations List -->
+      <div class="conversations-list" id="enhanced_conversations_list">
+        <div class="no-conversations" id="enhanced_no_conversations">
+          <div class="text-center py-5">
+            <div class="no-conversations-icon">
+              <i class="bi bi-chat-text"></i>
+            </div>
+            <h6 class="text-muted mb-2">No communications yet</h6>
+            <p class="text-muted small">Your institutional communications will appear here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="enhanced-chat-area" id="enhanced_chat_area">
+      <!-- No Chat Selected -->
+      <div class="no-chat-selected" id="enhanced_no_chat_selected">
+        <div class="text-center py-5">
+          <div class="no-chat-icon">
+            <i class="bi bi-chat-square-dots"></i>
+          </div>
+          <h5 class="text-muted mb-3">Select a communication</h5>
+          <p class="text-muted">Choose a communication from the sidebar to start messaging</p>
+        </div>
+      </div>
+
+      <!-- Active Chat -->
+      <div class="enhanced-active-chat d-none" id="enhanced_active_chat">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="d-flex align-items-center gap-3">
+            <button type="button" class="btn btn-sm btn-outline-secondary mobile-back-btn d-md-none" onclick="closeChatMobile()">
+              <i class="bi bi-arrow-left"></i>
+            </button>
+            <div class="chat-avatar-container">
+              <img src="/static/images/default-profile.png" class="chat-avatar" id="enhanced_chat_partner_avatar" alt="Profile">
+              <div class="online-indicator" id="enhanced_online_indicator"></div>
+            </div>
+            <div class="chat-partner-info">
+              <h6 class="chat-partner-name mb-0" id="enhanced_chat_partner_name">Chat Partner</h6>
+              <small class="chat-partner-type" id="enhanced_chat_partner_type">User Type</small>
+            </div>
+          </div>
+          <div class="chat-actions">
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="refreshChat()" title="Refresh">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleChatInfo()" title="Chat Info">
+              <i class="bi bi-info-circle"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div class="enhanced-messages-area" id="enhanced_messages_area">
+          <!-- Messages will be loaded here -->
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator d-none" id="enhanced_typing_indicator">
+          <div class="typing-animation">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="typing-text">Someone is typing...</span>
+        </div>
+
+        <!-- Message Input Area -->
+        <div class="enhanced-message-input-area">
+          <form id="enhanced_message_form" enctype="multipart/form-data">
+            <div class="message-input-container">
+              <div class="input-actions">
+                <button type="button" class="btn btn-outline-secondary" id="enhanced_attach_file_btn" title="Attach File">
+                  <i class="bi bi-paperclip"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="enhanced_emoji_btn" title="Emoji">
+                  <i class="bi bi-emoji-smile"></i>
+                </button>
+              </div>
+              
+              <input type="file" id="enhanced_file_input" style="display: none;" accept="*/*">
+              <textarea class="form-control message-input" placeholder="Type a message..." id="enhanced_message_input" rows="1" maxlength="1000"></textarea>
+              
+              <button type="submit" class="btn btn-primary send-btn" id="enhanced_send_message_btn">
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </div>
+            
+            <!-- File Preview -->
+            <div class="file-preview d-none" id="enhanced_file_preview">
+              <div class="file-preview-item">
+                <div class="file-icon">
+                  <i class="bi bi-file-earmark"></i>
+                </div>
+                <div class="file-info">
+                  <span class="file-name" id="enhanced_file_preview_name">filename.pdf</span>
+                  <span class="file-size" id="enhanced_file_preview_size">1.2 MB</span>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeFilePreview()">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Info Sidebar -->
+    <div class="enhanced-chat-info d-none" id="enhanced_chat_info">
+      <div class="chat-info-header">
+        <h6 class="mb-0">Chat Information</h6>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleChatInfo()">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+      
+      <div class="chat-info-content">
+        <div class="participant-info text-center mb-4">
+          <img src="/static/images/default-profile.png" class="participant-avatar" id="enhanced_info_avatar" alt="Profile">
+          <h6 class="participant-name mt-2 mb-1" id="enhanced_info_name">Chat Partner</h6>
+          <small class="participant-type" id="enhanced_info_type">User Type</small>
+        </div>
+        
+        <div class="shared-files">
+          <h6 class="files-title">
+            <i class="bi bi-file-earmark me-2"></i>
+            Shared Files
+          </h6>
+          <div class="files-list" id="enhanced_shared_files">
+            <p class="text-muted small text-center">No shared files yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Conversation Modal - Only for staff roles -->
+{% if user.user_type == 'business_manager' or user.user_type == 'admin' or user.user_type == 'signatory' %}
+<div class="modal fade" id="enhancedNewConversationModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-envelope-plus me-2"></i>
+          Start New Communication
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="search-users mb-3">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="text" class="form-control" placeholder="Search users..." id="enhanced_user_search">
+          </div>
+        </div>
+        <div class="users-list" id="enhanced_users_list">
+          <!-- Users will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<script>
+let currentConversationId = null;
+let currentUser = null;
+let conversations = [];
+let messagesPollingInterval = null;
+let chatInfoVisible = false;
+let isOnline = navigator.onLine;
+let lastPingTime = Date.now();
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Only initialize messaging if we're on a messaging page
+  if (document.getElementById('enhanced_messaging_main')) {
+    initializeEnhancedMessaging();
+    setupConnectionMonitoring();
+  }
+});
+
+function initializeEnhancedMessaging() {
+  // Update current date
+  document.getElementById('enhanced_messages_date').textContent = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  // Load conversations
+  loadConversations();
+  
+  // Setup event listeners
+  setupEnhancedEventListeners();
+  
+  // Check if user can start conversations
+  checkCanStartConversations();
+  
+  // Setup auto-refresh
+  setInterval(loadConversations, 10000); // Refresh every 10 seconds
+}
+
+function setupEnhancedEventListeners() {
+  // Message form submission
+  document.getElementById('enhanced_message_form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    sendMessage();
+  });
+  
+  // File attachment
+  document.getElementById('enhanced_attach_file_btn').addEventListener('click', function() {
+    document.getElementById('enhanced_file_input').click();
+  });
+  
+  document.getElementById('enhanced_file_input').addEventListener('change', function(e) {
+    if (e.target.files.length > 0) {
+      showFilePreview(e.target.files[0]);
+    }
+  });
+  
+  // Search functionality
+  document.getElementById('enhanced_conversations_search').addEventListener('input', function() {
+    filterConversations(this.value);
+  });
+  
+  // Message input auto-resize
+  const messageInput = document.getElementById('enhanced_message_input');
+  messageInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+  
+  // Enter key to send message
+  messageInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+}
+
+function checkCanStartConversations() {
+  // Only check for staff roles (business_manager, registrar, signatory)
+  const newConversationBtn = document.getElementById('enhanced_new_conversation_btn');
+  if (!newConversationBtn) {
+    // Button doesn't exist for students/alumni, skip check
+    return;
+  }
+  
+  fetch('/api/users-for-conversation/')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success && data.can_initiate) {
+        newConversationBtn.style.display = 'block';
+      }
+    })
+    .catch(error => {
+      console.error('Error checking conversation permissions:', error);
+    });
+}
+
+function loadConversations() {
+  return fetch('/api/conversations/')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        conversations = data.conversations;
+        renderEnhancedConversations();
+        return data.conversations;
+      }
+      throw new Error('Failed to load conversations');
+    })
+    .catch(error => {
+      console.error('Error loading conversations:', error);
+      throw error;
+    });
+}
+
+function renderEnhancedConversations() {
+  const conversationsList = document.getElementById('enhanced_conversations_list');
+  const noConversations = document.getElementById('enhanced_no_conversations');
+  
+  // Check if elements exist (they might not on non-messaging pages)
+  if (!conversationsList || !noConversations) {
+    console.log('Messaging elements not found - probably not on messaging page');
+    return;
+  }
+  
+  if (conversations.length === 0) {
+    noConversations.style.display = 'block';
+    return;
+  }
+  
+  noConversations.style.display = 'none';
+  
+  let html = '';
+  conversations.forEach(conv => {
+    const lastMessage = conv.last_message;
+    const unreadBadge = conv.unread_count > 0 ? 
+      `<div class="unread-badge">${conv.unread_count}</div>` : '';
+    
+    const messagePreview = lastMessage ? 
+      (lastMessage.is_own_message ? 'You: ' : '') + 
+      (lastMessage.message_type === 'file' ? '📎 File' : 
+       lastMessage.message_type === 'image' ? '🖼️ Image' : 
+       lastMessage.content) : 'No messages yet';
+    
+    const isActive = currentConversationId === conv.id ? 'active' : '';
+    
+    html += `
+      <div class="conversation-item ${isActive}" onclick="openEnhancedConversation('${conv.id}')">
+        <img src="${conv.other_user.profile_picture}" class="conversation-avatar" alt="Profile">
+        <div class="conversation-info">
+          <div class="conversation-name">${conv.other_user.name}</div>
+          <div class="conversation-preview">${messagePreview}</div>
+        </div>
+        <div class="conversation-meta">
+          ${unreadBadge}
+          <div class="text-muted" style="font-size: 0.75rem;">
+            ${formatMessageTime(lastMessage ? lastMessage.sent_at : conv.updated_at)}
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  
+  conversationsList.innerHTML = html;
+}
+
+function openEnhancedConversation(conversationId) {
+  currentConversationId = conversationId;
+  
+  // Update UI
+  document.getElementById('enhanced_no_chat_selected').style.display = 'none';
+  document.getElementById('enhanced_active_chat').classList.remove('d-none');
+  
+  // Update active conversation in sidebar
+  document.querySelectorAll('.conversation-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  
+  // Find the conversation item by conversation ID and mark it active
+  const conversationItems = document.querySelectorAll('.conversation-item');
+  conversationItems.forEach(item => {
+    if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(conversationId)) {
+      item.classList.add('active');
+    }
+  });
+  
+  // Load conversation details
+  loadConversationMessages(conversationId);
+  
+  // Hide sidebar on mobile
+  if (window.innerWidth <= 768) {
+    document.getElementById('enhanced_conversations_sidebar').classList.add('d-none');
+  }
+}
+
+function loadConversationMessages(conversationId) {
+  return fetch(`/api/conversations/${conversationId}/messages/`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        currentUser = data.conversation.other_user;
+        
+        // Update chat header
+        document.getElementById('enhanced_chat_partner_name').textContent = currentUser.name;
+        document.getElementById('enhanced_chat_partner_type').textContent = currentUser.user_type;
+        document.getElementById('enhanced_chat_partner_avatar').src = currentUser.profile_picture;
+        
+        // Update chat info
+        document.getElementById('enhanced_info_avatar').src = currentUser.profile_picture;
+        document.getElementById('enhanced_info_name').textContent = currentUser.name;
+        document.getElementById('enhanced_info_type').textContent = currentUser.user_type;
+        
+        // Render messages
+        renderEnhancedMessages(data.messages);
+        
+        // Update shared files in chat info
+        updateSharedFiles(data.messages);
+        
+        // Scroll to bottom
+        scrollToBottom();
+        
+        return data;
+      }
+    })
+    .catch(error => {
+      console.error('Error loading messages:', error);
+    });
+}
+
+function renderEnhancedMessages(messages) {
+  const messagesArea = document.getElementById('enhanced_messages_area');
+  
+  let html = '';
+  messages.forEach(msg => {
+    const bubbleClass = msg.is_own_message ? 'own' : 'other';
+    const timeStr = formatMessageTime(msg.sent_at);
+    
+    let content = '';
+    if (msg.message_type === 'text') {
+      content = msg.content;
+    } else if (msg.message_type === 'image') {
+      content = `
+        <img src="${msg.file_attachment}" alt="Image" style="max-width: 250px; border-radius: 12px;">
+        ${msg.content ? `<div style="margin-top: 0.75rem;">${msg.content}</div>` : ''}
+      `;
+    } else if (msg.message_type === 'file') {
+      content = `
+        <div class="file-message">
+          <div class="file-icon">
+            <i class="bi bi-file-earmark"></i>
+          </div>
+          <div>
+            <a href="${msg.file_attachment}" download="${msg.file_name}" style="color: inherit; text-decoration: none;">
+              ${msg.file_name}
+            </a>
+            <div style="font-size: 0.75rem; opacity: 0.8;">${msg.file_size_formatted}</div>
+          </div>
+        </div>
+        ${msg.content ? `<div style="margin-top: 0.75rem;">${msg.content}</div>` : ''}
+      `;
+    }
+    
+    html += `
+      <div class="message-bubble ${bubbleClass}">
+        <div class="message-content">
+          ${content}
+        </div>
+        <div class="message-meta">
+          ${timeStr} ${msg.is_own_message && msg.is_read ? '✓✓' : msg.is_own_message ? '✓' : ''}
+        </div>
+      </div>
+    `;
+  });
+  
+  messagesArea.innerHTML = html;
+}
+
+function sendMessage() {
+  const messageInput = document.getElementById('enhanced_message_input');
+  const fileInput = document.getElementById('enhanced_file_input');
+  const content = messageInput.value.trim();
+  const file = fileInput.files[0];
+  
+  if (!content && !file) return;
+  if (!currentConversationId) return;
+  
+  const formData = new FormData();
+  formData.append('conversation_id', currentConversationId);
+  formData.append('content', content);
+  if (file) {
+    formData.append('file_attachment', file);
+  }
+  
+  // Add CSRF token
+  formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+  
+  // Clear input immediately for better UX
+  messageInput.value = '';
+  messageInput.style.height = 'auto';
+  removeFilePreview();
+  
+  fetch('/api/send-message/', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Reload messages first, then conversations
+      loadConversationMessages(currentConversationId).then(() => {
+        // Reload conversations to update preview after messages are loaded
+        loadConversations();
+      });
+    } else {
+      alert('Failed to send message: ' + data.message);
+      // Restore input on error
+      messageInput.value = content;
+      if (file) {
+        showFilePreview(file);
+      }
+    }
+  })
+  .catch(error => {
+    console.error('Error sending message:', error);
+    alert('Failed to send message');
+    // Restore input on error
+    messageInput.value = content;
+    if (file) {
+      showFilePreview(file);
+    }
+  });
+}
+
+function showFilePreview(file) {
+  const filePreview = document.getElementById('enhanced_file_preview');
+  const fileName = document.getElementById('enhanced_file_preview_name');
+  const fileSize = document.getElementById('enhanced_file_preview_size');
+  
+  fileName.textContent = file.name;
+  fileSize.textContent = formatFileSize(file.size);
+  filePreview.classList.remove('d-none');
+}
+
+function removeFilePreview() {
+  const filePreview = document.getElementById('enhanced_file_preview');
+  const fileInput = document.getElementById('enhanced_file_input');
+  
+  filePreview.classList.add('d-none');
+  fileInput.value = '';
+}
+
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+function setupConnectionMonitoring() {
+  const connectionStatus = document.getElementById('connection_status');
+  const connectionText = document.getElementById('connection_text');
+  
+  // Monitor online/offline status
+  window.addEventListener('online', function() {
+    isOnline = true;
+    updateConnectionStatus('online', 'Connected');
+  });
+  
+  window.addEventListener('offline', function() {
+    isOnline = false;
+    updateConnectionStatus('offline', 'Disconnected');
+  });
+  
+  // Periodic connection check
+  setInterval(function() {
+    if (isOnline) {
+      // Ping server to check actual connectivity
+      fetch('/api/conversations/', { method: 'HEAD' })
+        .then(response => {
+          if (response.ok) {
+            lastPingTime = Date.now();
+            updateConnectionStatus('online', 'Connected');
+          } else {
+            updateConnectionStatus('reconnecting', 'Reconnecting...');
+          }
+        })
+        .catch(() => {
+          updateConnectionStatus('offline', 'Connection Lost');
+        });
+    }
+  }, 30000); // Check every 30 seconds
+}
+
+function updateConnectionStatus(status, text) {
+  const connectionStatus = document.getElementById('connection_status');
+  const connectionText = document.getElementById('connection_text');
+  
+  if (connectionStatus && connectionText) {
+    connectionStatus.className = `connection-status ${status}`;
+    connectionText.textContent = text;
+    
+    // Show status temporarily
+    connectionStatus.classList.remove('d-none');
+    
+    // Hide after 3 seconds if online
+    if (status === 'online') {
+      setTimeout(() => {
+        connectionStatus.classList.add('d-none');
+      }, 3000);
+    }
+  }
+}
+
+function playNotificationSound() {
+  // Create a simple notification sound
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.5);
+  } catch (error) {
+    console.log('Audio notification not supported');
+  }
+}
+
+function updateSharedFiles(messages) {
+  const sharedFilesList = document.getElementById('enhanced_shared_files');
+  if (!sharedFilesList) return;
+  
+  // Filter messages that have file attachments
+  const fileMessages = messages.filter(msg => 
+    msg.message_type === 'file' || msg.message_type === 'image'
+  );
+  
+  if (fileMessages.length === 0) {
+    sharedFilesList.innerHTML = '<p class="text-muted small text-center">No shared files yet</p>';
+    return;
+  }
+  
+  let html = '';
+  fileMessages.forEach(msg => {
+    const fileIcon = msg.message_type === 'image' ? 'bi-image' : 'bi-file-earmark';
+    const fileName = msg.file_name || 'Unknown file';
+    const fileSize = msg.file_size_formatted || '';
+    
+    html += `
+      <div class="file-item">
+        <div class="file-icon">
+          <i class="bi ${fileIcon}"></i>
+        </div>
+        <div class="file-info">
+          <div class="file-name">${fileName}</div>
+          <div class="file-size">${fileSize}</div>
+        </div>
+        <a href="${msg.file_attachment}" download="${fileName}" class="btn btn-sm btn-outline-primary">
+          <i class="bi bi-download"></i>
+        </a>
+      </div>
+    `;
+  });
+  
+  sharedFilesList.innerHTML = html;
+}
+
+function scrollToBottom() {
+  const messagesArea = document.getElementById('enhanced_messages_area');
+  messagesArea.scrollTop = messagesArea.scrollHeight;
+}
+
+function formatMessageTime(timeStr) {
+  const date = new Date(timeStr);
+  const now = new Date();
+  const diffInDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+  
+  if (diffInDays === 0) {
+    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  } else if (diffInDays === 1) {
+    return 'Yesterday';
+  } else if (diffInDays < 7) {
+    return date.toLocaleDateString([], {weekday: 'short'});
+  } else {
+    return date.toLocaleDateString([], {month: 'short', day: 'numeric'});
+  }
+}
+
+function filterConversations(searchTerm) {
+  const items = document.querySelectorAll('.conversation-item');
+  items.forEach(item => {
+    const name = item.querySelector('.conversation-name').textContent.toLowerCase();
+    if (name.includes(searchTerm.toLowerCase())) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+function closeChatMobile() {
+  document.getElementById('enhanced_conversations_sidebar').classList.remove('d-none');
+  document.getElementById('enhanced_no_chat_selected').style.display = 'flex';
+  document.getElementById('enhanced_active_chat').classList.add('d-none');
+  currentConversationId = null;
+}
+
+function refreshChat() {
+  if (currentConversationId) {
+    loadConversationMessages(currentConversationId);
+  }
+}
+
+function toggleChatInfo() {
+  const chatInfo = document.getElementById('enhanced_chat_info');
+  chatInfoVisible = !chatInfoVisible;
+  
+  if (chatInfoVisible) {
+    chatInfo.classList.remove('d-none');
+  } else {
+    chatInfo.classList.add('d-none');
+  }
+}
+
+function showNewConversationModal() {
+  // Check if modal exists (only for staff roles)
+  const modal = document.getElementById('enhancedNewConversationModal');
+  if (!modal) {
+    console.log('New conversation modal not available for this user type');
+    return;
+  }
+  
+  // Load users
+  fetch('/api/users-for-conversation/')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        renderEnhancedUsersList(data.users);
+        new bootstrap.Modal(modal).show();
+      }
+    })
+    .catch(error => {
+      console.error('Error loading users:', error);
+    });
+}
+
+function renderEnhancedUsersList(users) {
+  const usersList = document.getElementById('enhanced_users_list');
+  
+  // Store users globally for search functionality
+  window.allUsers = users;
+  
+  let html = '';
+  users.forEach(user => {
+    html += `
+      <div class="user-list-item" onclick="startConversationWith('${user.id}')">
+        <img src="${user.profile_picture}" class="user-avatar" alt="Profile">
+        <div class="user-info">
+          <div class="user-name">${user.name}</div>
+          <div class="user-type">${user.user_type}</div>
+        </div>
+      </div>
+    `;
+  });
+  
+  usersList.innerHTML = html;
+  
+  // Add search functionality
+  const searchInput = document.getElementById('enhanced_user_search');
+  if (searchInput) {
+    searchInput.removeEventListener('input', filterUsers); // Remove existing listener
+    searchInput.addEventListener('input', filterUsers);
+  }
+}
+
+function filterUsers() {
+  const searchTerm = document.getElementById('enhanced_user_search').value.toLowerCase();
+  const usersList = document.getElementById('enhanced_users_list');
+  
+  if (!window.allUsers) return;
+  
+  const filteredUsers = window.allUsers.filter(user => 
+    user.name.toLowerCase().includes(searchTerm) || 
+    user.user_type.toLowerCase().includes(searchTerm)
+  );
+  
+  let html = '';
+  filteredUsers.forEach(user => {
+    html += `
+      <div class="user-list-item" onclick="startConversationWith('${user.id}')">
+        <img src="${user.profile_picture}" class="user-avatar" alt="Profile">
+        <div class="user-info">
+          <div class="user-name">${user.name}</div>
+          <div class="user-type">${user.user_type}</div>
+        </div>
+      </div>
+    `;
+  });
+  
+  usersList.innerHTML = html;
+}
+
+function startConversationWith(userId) {
+  const formData = new FormData();
+  formData.append('user_id', userId);
+  formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+  
+  fetch('/api/start-conversation/', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Close modal
+      bootstrap.Modal.getInstance(document.getElementById('enhancedNewConversationModal')).hide();
+      
+      // Reload conversations and wait for completion, then open conversation
+      loadConversations()
+        .then(() => {
+          // Small delay to ensure DOM is updated
+          setTimeout(() => {
+            openEnhancedConversation(data.conversation_id);
+          }, 100);
+        })
+        .catch((error) => {
+          console.error('Error loading conversations:', error);
+          // Try to open conversation anyway with delay
+          setTimeout(() => {
+            openEnhancedConversation(data.conversation_id);
+          }, 100);
+        });
+    } else {
+      alert('Failed to start conversation: ' + data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error starting conversation:', error);
+    alert('Failed to start conversation');
+  });
+}
+
+
+// Helper function to get CSRF token
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>

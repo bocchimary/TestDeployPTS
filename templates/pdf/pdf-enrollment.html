@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temporary Enrollment Form</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,800;1,800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+        .pdf-modal-content body,
+        .pdf-modal-content {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+        }
+
+        .open-sans-title {
+          font-family: "Open Sans", sans-serif;
+          font-optical-sizing: auto;
+          font-weight: 800;
+          font-style: normal;
+          font-variation-settings: "wdth" 100;
+          font-size: 30px;
+          color: #003399;
+        }
+        .title {
+          margin-top:-10px;
+          margin-bottom:-20px;
+          text-align: center;
+          font-weight: bold;
+          font-size: 14px;
+          color: rgb(0, 0, 0);
+        }
+        .subtitle {
+          margin-top: -15px;
+          text-align: center;
+          font-size: 12px;
+          color: #003399;
+          font-weight: bold;
+        }
+        .p-light {
+          text-align: center;
+          font-weight: light;
+        }
+        .subtitle-year {
+          padding-top:5px;
+          text-align: center;
+          font-weight: light;
+        }
+        .subtitle-acad-year {
+          text-align: center;
+          font-weight: bold;
+          text-decoration: underline;
+
+        }
+
+        .print-button {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background-color: #3498db;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: bold;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+          transition: background-color 0.3s ease;
+        }
+
+        .print-button:hover {
+          background-color: #2980b9;
+        }
+
+        .print-button:active {
+          transform: translateY(1px);
+        }
+
+        @page {
+          margin: 0.25in;
+        }
+        
+        /* Compact sections 1 & 2 on same page - reduce table rows only */
+        
+        .third-section {
+          page-break-before: always;
+          margin-top: 0;
+          margin-bottom: 0;
+          padding-top: 0;
+        }
+        
+        .third-section .header {
+          margin-top: 0;
+          padding-top: 0;
+        }
+        
+        /* Ensure HR lines don't cause page breaks */
+        hr {
+          page-break-before: avoid;
+          page-break-after: avoid;
+          margin: 5px auto;
+        }
+        @media print {
+          .print-button {
+            display: none;
+          }
+
+          body {
+
+              margin: 0;
+              padding: 0;
+
+
+          }
+          .watermark {
+            display: block !important;
+          }
+
+          .motto {
+            width: 100%;
+            margin: 0;
+            background-color: #003399; !important; /* ensure it applies in print */
+            color: #ffffff !important; /* optional: improve contrast for printing */
+            -webkit-print-color-adjust: exact; /* for Safari/Chrome */
+            print-color-adjust: exact; /* for Firefox */
+          }
+
+          th, td {
+            border: 0.5px solid #000;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+          }
+        }
+        .header {
+          display: flex;
+          justify-content: center;
+          padding-top: 10px;
+        }
+        .row-container {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+        }
+        .row-container-footer {
+          padding-top:5px;
+          display: flex;
+          justify-content: space-between;
+      
+        }
+        .row-item {
+         gap: 40px;
+          font-weight: bold;
+        }
+        .row-item-dean {
+          padding-top:15px;
+          gap: 40px;
+          
+        }
+        .row-item-default {
+          padding-top:5px;
+          gap: 40px;
+        }
+
+        .row-item p {
+          margin: 0;
+        }
+
+        .row-line {
+          display: inline-block;
+          border-bottom: 0.3px solid #000;
+          min-width: 200px;
+          height: 1em;
+          vertical-align: bottom;
+        }
+  
+
+        .pts {
+          width: 100px;
+          height: 100px;
+          margin-right: 40px;
+        }
+        .text-container {
+          display: flex;
+          flex-direction: column;
+          margin-top: -30px;
+        }
+        .info {
+          margin-top: -20px;
+        }
+        .motto {
+          font-family: "Segoe Script", cursive;
+          font-size: 16px;
+          font-weight:bold;
+          color: #ffffff;
+          background-color: #003399;
+          width: 100vw;
+          text-align: center;
+          margin-top: -5px;
+        }
+
+        .form-content {
+          font-size: 12px;
+         margin: 0.15in;
+          font-family: 'Century Gothic', 'Montserrat', 'Arial', sans-serif;
+
+        }
+
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom:-10px;
+      }
+
+      th, td {
+        border: 0.5px solid #000;
+        padding: 0;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      .day-time-cell {
+        display: flex;
+        height: 100%;
+        width: 100%;
+      }
+
+      .day-time-cell div {
+        flex: 1;
+        padding: 8px;
+        border-right: 1px solid #000;
+      }
+
+      .day-time-cell div:last-child {
+        border-right: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button class="print-button" id="printPageBtn">Print PDF</button>
+    
+    {% if enrollment_forms %}
+        {% for form_data in enrollment_forms %}
+            {% if not forloop.first %}<div style="page-break-before: always;"></div>{% endif %}
+            {% with enrollment=form_data.enrollment student=form_data.student profile=form_data.profile %}
+    
+    <!-- First Section (Compact) -->
+    <div class="compact-section">
+    <div class="header">
+      <img
+        src="https://ptscas.edu.ph/wp-content/uploads/2019/09/logo-blue-1.png"
+        alt="ptslogo"
+        class="pts"
+      />
+      <!-- New column container -->
+      <div class="text-container">
+        <p class="open-sans-title">PTS COLLEGE & ADVANCED STUDIES</p>
+        <div class="info">
+          <p class="subtitle">
+            Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite,
+            Philippines
+          </p>
+          <p class="subtitle">
+            Contact Nos.: 0917 146 6759 (046) 476 0597 | Email:
+            info@ptscas.edu.ph
+          </p>
+          <p class="subtitle">
+            Website: ptscas.edu.ph • FB: facebook.com/ptscas
+          </p>
+        </div>
+      </div>
+    </div>
+    <p class="motto">Spirituality and Academic Excellence</p>
+
+    <div class="form-content">
+      <div class="title">Temporary Enrollment Form</div>
+      <p class="subtitle-year">
+        Academic Year: <span class="subtitle-acad-year">{{ enrollment.academic_year }}</span>
+      </p>
+
+      <div class="row-container">
+        <div class="row-item">
+          <p>Name: <span class="row-line">{{ student.full_name }}</span></p>
+        </div>
+        <div class="row-item">
+          <p>Program: <span class="row-line">{{ enrollment.course }}</span></p>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Subjects</th>
+            <th>Day/Time</th>
+            <th>Professor</th>
+            <th>Units</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if enrollment.subjects %}
+            {% for subject in enrollment.subjects %}
+            <tr>
+              <td>{{ subject.name|default:subject.code|default:"" }}</td>
+              <td>
+                <div class="day-time-cell">
+                  <div></div>
+                  <div></div>
+                </div>
+              </td>
+              <td>{{ subject.professor|default:"" }}</td>
+              <td>{{ subject.units|default:"" }}</td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+          
+          <!-- Fill remaining rows - 5 rows for compact sections -->
+          {% if enrollment.subjects %}
+            {% for i in "01234"|slice:":|make_list" %}
+              {% if forloop.counter0 >= enrollment.subjects|length and forloop.counter0 < 5 %}
+              <tr>
+                <td></td>
+                <td>
+                  <div class="day-time-cell">
+                    <div></div>
+                    <div></div>
+                  </div>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <!-- Show 5 empty rows if no subjects -->
+            {% for i in "01234"|make_list %}
+            <tr>
+              <td></td>
+              <td>
+                <div class="day-time-cell">
+                  <div></div>
+                  <div></div>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+      <div class="row-container-footer">
+        <div class="row-item-default">
+          <p class="p-light">Verified & Approved by:</p>
+          <p class="p-light">Registar's Office</p>
+        </div>
+        <div class="row-item-dean">
+          <p class="p-light" style="font-weight: bold; margin-bottom: -15px">
+            Dr. Ruth Del Rosario
+          </p>
+          <p class="p-light">Academic Dean</p>
+        </div>
+      </div>
+    </div>
+    </div>
+
+      <hr style="border: none; border-top: 1px solid black;margin-top:-10px; width:90%;" />
+      
+      <!-- Second Section (Compact) -->
+      <div class="compact-section">
+      <div class="header">
+        <img
+          src="https://ptscas.edu.ph/wp-content/uploads/2019/09/logo-blue-1.png"
+          alt="ptslogo"
+          class="pts"
+        />
+        <!-- New column container -->
+        <div class="text-container">
+          <p class="open-sans-title">PTS COLLEGE & ADVANCED STUDIES</p>
+          <div class="info">
+            <p class="subtitle">
+              Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite,
+              Philippines
+            </p>
+            <p class="subtitle">
+              Contact Nos.: 0917 146 6759 (046) 476 0597 | Email:
+              info@ptscas.edu.ph
+            </p>
+            <p class="subtitle">
+              Website: ptscas.edu.ph • FB: facebook.com/ptscas
+            </p>
+          </div>
+        </div>
+      </div>
+    
+      <p class="motto">Spirituality and Academic Excellence</p>
+  
+      <div class="form-content">
+        <div class="title">Temporary Enrollment Form</div>
+        <p class="subtitle-year">
+          Academic Year: <span class="subtitle-acad-year">{{ enrollment.academic_year }}</span>
+        </p>
+  
+        <div class="row-container">
+          <div class="row-item">
+            <p>Name: <span class="row-line">{{ student.full_name }}</span></p>
+          </div>
+          <div class="row-item">
+            <p>Program: <span class="row-line">{{ enrollment.course }}</span></p>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Subjects</th>
+              <th>Day/Time</th>
+              <th>Professor</th>
+              <th>Units</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if enrollment.subjects %}
+              {% for subject in enrollment.subjects %}
+              <tr>
+                <td>{{ subject.name|default:subject.code|default:"" }}</td>
+                <td>
+                  <div class="day-time-cell">
+                    <div></div>
+                    <div></div>
+                  </div>
+                </td>
+                <td>{{ subject.professor|default:"" }}</td>
+                <td>{{ subject.units|default:"" }}</td>
+              </tr>
+              {% endfor %}
+            {% endif %}
+            
+            <!-- Fill remaining rows - 5 rows for compact sections -->
+            {% with subject_count=enrollment.subjects|length|default:0 %}
+              {% for i in "01234"|make_list %}
+                {% if forloop.counter0 >= subject_count %}
+                <tr>
+                  <td></td>
+                  <td>
+                    <div class="day-time-cell">
+                      <div></div>
+                      <div></div>
+                    </div>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                {% endif %}
+              {% endfor %}
+            {% endwith %}
+          </tbody>
+        </table>
+        <div class="row-container-footer">
+          <div class="row-item-default">
+            <p class="p-light">Verified & Approved by:</p>
+            <p class="p-light">Registar's Office</p>  
+          </div>
+          <div class="row-item-dean">
+            <p class="p-light" style="font-weight: bold; margin-bottom: -15px">
+              Dr. Ruth Del Rosario
+            </p>
+            <p class="p-light">Academic Dean</p>
+          </div>
+        </div>
+    </div>
+    </div>
+      
+      <!-- Third Section (New Page) -->
+      <div class="third-section">
+      <div class="header">
+        <img
+          src="https://ptscas.edu.ph/wp-content/uploads/2019/09/logo-blue-1.png"
+          alt="ptslogo"
+          class="pts"
+        />
+        <!-- New column container -->
+        <div class="text-container">
+          <p class="open-sans-title">PTS COLLEGE & ADVANCED STUDIES</p>
+          <div class="info">
+            <p class="subtitle">
+              Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite,
+              Philippines
+            </p>
+            <p class="subtitle">
+              Contact Nos.: 0917 146 6759 (046) 476 0597 | Email:
+              info@ptscas.edu.ph
+            </p>
+            <p class="subtitle">
+              Website: ptscas.edu.ph • FB: facebook.com/ptscas
+            </p>
+          </div>
+        </div>
+      </div>
+    
+      <p class="motto">Spirituality and Academic Excellence</p>
+  
+      <div class="form-content">
+        <div class="title">Temporary Enrollment Form</div>
+        <p class="subtitle-year">
+          Academic Year: <span class="subtitle-acad-year">{{ enrollment.academic_year }}</span>
+        </p>
+  
+        <div class="row-container">
+          <div class="row-item">
+            <p>Name: <span class="row-line">{{ student.full_name }}</span></p>
+          </div>
+          <div class="row-item">
+            <p>Program: <span class="row-line">{{ enrollment.course }}</span></p>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Subjects</th>
+              <th>Day/Time</th>
+              <th>Professor</th>
+              <th>Units</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if enrollment.subjects %}
+              {% for subject in enrollment.subjects %}
+              <tr>
+                <td>{{ subject.name|default:subject.code|default:"" }}</td>
+                <td>
+                  <div class="day-time-cell">
+                    <div></div>
+                    <div></div>
+                  </div>
+                </td>
+                <td>{{ subject.professor|default:"" }}</td>
+                <td>{{ subject.units|default:"" }}</td>
+              </tr>
+              {% endfor %}
+            {% endif %}
+            
+            <!-- Fill remaining rows to maintain 10 rows total -->
+            {% with subject_count=enrollment.subjects|length|default:0 %}
+              {% for i in "0123456789"|make_list %}
+                {% if forloop.counter0 >= subject_count %}
+                <tr>
+                  <td></td>
+                  <td>
+                    <div class="day-time-cell">
+                      <div></div>
+                      <div></div>
+                    </div>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                {% endif %}
+              {% endfor %}
+            {% endwith %}
+          </tbody>
+        </table>
+        <div class="row-container-footer">
+          <div class="row-item-default">
+            <p class="p-light">Verified & Approved by:</p>
+            <p class="p-light">Registar's Office</p>  
+          </div>
+          <div class="row-item-dean">
+            <p class="p-light" style="font-weight: bold; margin-bottom: -15px">
+              Dr. Ruth Del Rosario
+            </p>
+            <p class="p-light">Academic Dean</p>
+          </div>
+        </div>
+    </div>
+    </div>
+
+            {% endwith %}
+        {% endfor %}
+    {% endif %}
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const printBtn = document.getElementById('printPageBtn');
+        if (printBtn) {
+          printBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.print();
+          });
+        }
+        
+        // Auto-print when loaded directly (not in iframe)
+        // Disable auto-print when loaded in iframe - let parent JavaScript handle it
+        if (window.self === window.top) {
+          // This is loaded directly, not in iframe, so auto-print
+          setTimeout(function() {
+            window.print();
+          }, 500);
+        }
+      });
+    </script>
+  </body>
+</html>

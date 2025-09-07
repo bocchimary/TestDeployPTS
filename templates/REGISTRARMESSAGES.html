@@ -1,0 +1,15 @@
+{% extends 'main-registrar.html' %}
+{% load static %}
+
+{% block title %}REGISTRAR MESSAGES{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/RMESSAGES.css' %}">
+<link rel="stylesheet" href="{% static 'css/enhanced_messaging.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<div class="registrar_messages_main-content">
+  {% include 'includes/universal_messages.html' %}
+</div>
+{% endblock %}
