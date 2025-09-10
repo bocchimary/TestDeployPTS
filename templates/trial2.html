@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - PTS College and Advanced Studies</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    
+    <!-- Mobile Responsive Styles -->
+    <!-- Styles moved to static/css/login.style.css -->
+         
+    <link rel="stylesheet" href="{% static 'css/login.style.css' %}" />
+
+   
+  </head>
+
+ 
+  <body>
+  
+   <!-- Main Section -->
+<main class="container-fluid min-vh-100"
+style=" background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('{% static 'images/ptsbg.png' %}');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100%;
+  height: 100%;">
+
+      <div class="row g-0 d-flex justify-content-center align-items-center min-vh-100">
+    <!-- Left Column - Title Section -->
+    <div class="col-12 col-lg-6 d-flex align-items-center justify-content-center text-center p-4"
+         >
+      <div class="px-3 text-center page-title fade-in-left">
+        <h1 class="fs-1">Office of the Registrar</h1>
+        <h2 class="h5">PTS College and Advanced Studies</h2>
+      </div>
+    </div>
+
+        <!-- Right Column - Forms Section -->
+    <div class="col-12 col-lg-6 d-flex justify-content-center align-items-center p-4"
+    style="min-height: 100vh;">
+          <div class="forms-container">
+            <!-- LOGIN FORM -->
+            <div class="login-box active" id="login-form">
+              <h2 class="text-center login-title mb-2">Login</h2>
+              
+              <!-- Error Messages -->
+              <div id="login-error-container" class="alert alert-danger d-none" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <span id="login-error-message"></span>
+              </div>
+              
+              <form method="POST" action="{% url 'login-view' %}" id="loginForm">
+                {% csrf_token %}
+                <div class="form-group mb-4">
+                  <div class="d-flex justify-content-center">
+                    <input
+                      type="text"
+                      name="login-email"
+                      id="login-email"
+                      class="form-control w-75"
+                      required
+                      placeholder="Email or username"
+                      aria-label="Email or username"
+                      autocomplete="email"
+                    />
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <div class="invalid-feedback w-75" id="login-email-error"></div>
+                  </div>
+                </div>
+                
+                <div class="form-group mb-4">
+                  <div class="d-flex justify-content-center">
+                    <input
+                      type="password"
+                      name="login-password"
+                      id="login-password"
+                      class="form-control w-75"
+                      required
+                      placeholder="Password"
+                      aria-label="Password"
+                      minlength="8"
+                      autocomplete="current-password"
+                    />
+                  </div>
+                  <div class="d-flex justify-content-center">
+                    <div class="invalid-feedback w-75" id="login-password-error"></div>
+                  </div>
+                </div>
+                
+                <div class="d-flex justify-content-center mb-4">
+                  <button type="submit" class="btn login-btn w-50 text-white" id="login-submit-btn">
+                    <span id="login-btn-text">Login</span>
+                    <span id="login-btn-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </span>
+                  </button>
+                </div>
+                
+                <!-- Forgot Password Link -->
+                <div class="text-center mb-3">
+                  <a href="{% url 'forgot_password' %}" class="text-decoration-none" 
+                     style="color: #2E5978; font-size: 14px;">
+                    Forgot Password?
+                  </a>
+                </div>
+                
+                <div class="text-center">
+                  <hr class="border border-dark border-1 opacity-75 my-3" />
+                  <h6 class="mb-3">Or continue with Google</h6>
+                  
+                  <!-- Google Login Buttons -->
+                  <div class="d-flex flex-column gap-2 mb-3">
+                    <a href="/google-oauth/?state=student" class="btn google-login-btn w-75 mx-auto d-flex align-items-center justify-content-center text-decoration-none">
+                      <svg width="18" height="18" viewBox="0 0 24 24" class="me-2">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                      </svg>
+                      Continue as Student
+                    </a>
+                    <a href="/google-oauth/?state=alumni" class="btn google-login-btn w-75 mx-auto d-flex align-items-center justify-content-center text-decoration-none">
+                      <svg width="18" height="18" viewBox="0 0 24 24" class="me-2">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                      </svg>
+                      Continue as Alumni
+                    </a>
+                  </div>
+                  
+                  <hr class="border border-dark border-1 opacity-75 my-3" />
+                  <h6>Don't have an account?</h6>
+                  <button
+                    class="btn w-50 text-white signup-btn"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#userTypeModal"
+                  >
+                    Signup
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- STUDENT SIGNUP FORM -->
+            <div class="signup-box-student user-form d-none" id="signup-student">
+              <h2 class="text-center signup-title">Student Sign up</h2>
+              <form method="POST" action="{% url 'student_signup' %}" enctype="multipart/form-data" id="studentSignupForm" required>
+                {% csrf_token %}
+                
+                <!-- Name Fields -->
+                <div class="form-group mb-2">
+                  <label class="form-label fs-6">Name:<span class="text-danger"> *</span></label>
+                  <div class="d-flex gap-1 name-fields-container">
+                    <div class="flex-fill">
+                      <input 
+                        type="text" 
+                        name="signup-student-first-name" 
+                        class="form-control" 
+                        id="signup-student-first-name" 
+                        required 
+                        placeholder="First Name" 
+                        pattern="[A-Za-z\s]+" 
+                        maxlength="50" 
+                        aria-label="First Name" 
+                      />
+                    </div>
+                    <div class="flex-fill">
+                      <input 
+                        type="text" 
+                        name="signup-student-middle-name" 
+                        class="form-control" 
+                        id="signup-student-middle-name" 
+                        required 
+                        placeholder="Middle Name" 
+                        pattern="[A-Za-z\s]+" 
+                        maxlength="50" 
+                        aria-label="Middle Name" 
+                      />
+                    </div>
+                    <div class="flex-fill">
+                      <input 
+                        type="text" 
+                        name="signup-student-last-name" 
+                        class="form-control" 
+                        id="signup-student-last-name" 
+                        required 
+                        placeholder="Last Name" 
+                        pattern="[A-Za-z\s]+" 
+                        maxlength="50" 
+                        aria-label="Last Name" 
+                      />
+                    </div>
+                    <div class="w-25">
+                      <input 
+                        type="text" 
+                        name="signup-student-suffix" 
+                        class="form-control" 
+                        id="signup-student-suffix" 
+                        placeholder="Suffix" 
+                        maxlength="10" 
+                        aria-label="Suffix" 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Address Field -->
+                <div class="form-group mb-2">
+                  <label for="signup-student-address" class="form-label fs-6">Address<span class="text-danger"> *</span></label>
+                  <input 
+                    type="text" 
+                    name="signup-student-address" 
+                    class="form-control" 
+                    id="signup-student-address" 
+                    required 
+                    placeholder="Address" 
+                    maxlength="200" 
+                    aria-label="Address" 
+                  />
+                </div>
+
+                <!-- Gender and Birthdate -->
+                <div class="row mb-2">
+                  <div class="col-md-6">
+                    <label for="signup-student-gender" class="form-label fs-6">Gender<span class="text-danger"> *</span></label>
+                    <select name="signup-student-gender" id="signup-student-gender" class="form-select" required aria-label="Gender">
+                      <option selected disabled value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="signup-student-birthdate" class="form-label fs-6">Date of Birth<span class="text-danger"> *</span></label>
+                    <input 
+                      type="date" 
+                      id="signup-student-birthdate" 
+                      name="signup-student-birthdate" 
+                      class="form-control" 
+                      required 
+                      max="{{ max_date }}" 
+                      aria-label="Date of Birth" 
+                    />
+                  </div>
+                </div>
+
+                <!-- ID Number and Course -->
+                <div class="form-group mb-2">
+                  <label for="signup-student-id" class="form-label fs-6">ID Number:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="text" 
+                    name="signup-student-id" 
+                    class="form-control" 
+                    id="signup-student-id" 
+                    required 
+                    placeholder="Type your ID number" 
+                    pattern="[A-Za-z0-9-]+" 
+                    maxlength="20" 
+                    aria-label="ID Number" 
+                  />
+                </div>
+
+                <div class="form-group mb-2">
+                  <label for="signup-student-course" class="form-label fs-6">Course:<span class="text-danger"> *</span></label>
+                  <select name="signup-student-course" id="signup-student-course" class="form-select" required aria-label="Course">
+                    <option selected disabled value="">Loading courses...</option>
+                  </select>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="form-group mb-2">
+                  <label for="signup-student-contact" class="form-label fs-6">Contact Number:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="tel" 
+                    class="form-control" 
+                    id="signup-student-contact" 
+                    name="signup-student-contact" 
+                    placeholder="+639XXXXXXXXX" 
+                    required 
+                    pattern="^\+63[0-9]{10}$"
+                    maxlength="13"
+                    aria-label="Contact Number" 
+                  />
+                </div>
+
+                <div class="form-group mb-2">
+                  <label for="signup-student-email" class="form-label fs-6">Email:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="email" 
+                    name="signup-student-email" 
+                    class="form-control" 
+                    id="signup-student-email" 
+                    required 
+                    placeholder="Email" 
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
+                    aria-label="Email" 
+                  />
+                </div>
+
+                <!-- Password Fields -->
+                <div class="form-group mb-2">
+                  <label for="signup-student-password" class="form-label fs-6">Password:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="password" 
+                    name="signup-student-password" 
+                    id="signup-student-password" 
+                    class="form-control" 
+                    placeholder="Enter your password" 
+                    required 
+                    minlength="8" 
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" 
+                    aria-label="Password" 
+                  />
+                </div>
+
+                <div class="form-group mb-2">
+                  <label for="signup-student-confirm-password" class="form-label fs-6">Confirm Password:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="password" 
+                    name="signup-student-confirm-password" 
+                    id="signup-student-confirm-password" 
+                    class="form-control" 
+                    placeholder="Re-type your password" 
+                    required 
+                    aria-label="Confirm Password" 
+                  />
+                </div>
+
+                <!-- Profile Picture -->
+                <div class="form-group mb-2">
+                  <label for="signup-student-profilepic" class="form-label fs-6">Profile Picture:</label>
+                  <input 
+                    type="file" 
+                    class="form-control w-50" 
+                    id="signup-student-profilepic" 
+                    name="signup-student-profilepic" 
+                    accept="image/*" 
+                    aria-label="Profile Picture" 
+                  />
+                  <div class="form-text">Max 5MB. JPG, PNG, GIF only.</div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-end mt-2">
+                  <button type="submit" class="btn btn-secondary w-25 text-white signup-btn">Sign up</button>
+                </div>
+
+                <!-- Back to Login -->
+                <div class="text-center">
+                  <hr class="border border-dark border-1 opacity-75 my-3" />
+                  <h6>Already have an account?</h6>
+                  <button class="btn btn-secondary w-25 back-to-login login-btn" type="button">Login</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- ALUMNI SIGNUP FORM -->
+            <div class="signup-box-alumni user-form d-none" id="signup-alumni">
+              <h2 class="text-center signup-title mb-3">Alumni Sign up</h2>
+              <form method="POST" action="{% url 'alumni_signup' %}" enctype="multipart/form-data" id="alumniSignupForm" required>
+                {% csrf_token %}
+                
+                <!-- Name Fields -->
+                <div class="form-group mb-2">
+                  <label class="form-label fs-6">Name:<span class="text-danger"> *</span></label>
+                  <div class="d-flex gap-1 name-fields-container">
+                    <div class="flex-fill">
+                      <input 
+                        type="text" 
+                        name="signup-alumni-first-name" 
+                        class="form-control" 
+                        id="signup-alumni-first-name" 
+                        required 
+                        placeholder="First Name" 
+                        pattern="[A-Za-z\s]+" 
+                        maxlength="50" 
+                        aria-label="First Name" 
+                      />
+                    </div>
+                    <div class="flex-fill">
+                      <input 
+                        type="text" 
+                        name="signup-alumni-middle-name" 
+                        class="form-control" 
+                        id="signup-alumni-middle-name" 
+                        required 
+                        placeholder="Middle Name" 
+                        pattern="[A-Za-z\s]+" 
+                        maxlength="50" 
+                        aria-label="Middle Name" 
+                      />
+                    </div>
+                    <div class="flex-fill">
+                      <input 
+                        type="text" 
+                        name="signup-alumni-last-name" 
+                        class="form-control" 
+                        id="signup-alumni-last-name" 
+                        required 
+                        placeholder="Last Name" 
+                        pattern="[A-Za-z\s]+" 
+                        maxlength="50" 
+                        aria-label="Last Name" 
+                      />
+                    </div>
+                    <div class="w-25">
+                      <input 
+                        type="text" 
+                        name="signup-alumni-suffix" 
+                        class="form-control" 
+                        id="signup-alumni-suffix" 
+                        placeholder="Suffix" 
+                        maxlength="10" 
+                        aria-label="Suffix" 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Address Field -->
+                <div class="form-group mb-2">
+                  <label for="signup-alumni-address" class="form-label fs-6">Address<span class="text-danger"> *</span></label>
+                  <input 
+                    type="text" 
+                    name="signup-alumni-address" 
+                    class="form-control" 
+                    id="signup-alumni-address" 
+                    required 
+                    placeholder="Address" 
+                    maxlength="200" 
+                    aria-label="Address" 
+                  />
+                </div>
+
+                <!-- Gender and Birthdate -->
+                <div class="row mb-2">
+                  <div class="col-md-6">
+                    <label for="signup-alumni-gender" class="form-label fs-6">Gender<span class="text-danger"> *</span></label>
+                    <select name="signup-alumni-gender" id="signup-alumni-gender" class="form-select" required aria-label="Gender">
+                      <option selected disabled value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="signup-alumni-birthdate" class="form-label fs-6">Date of Birth<span class="text-danger"> *</span></label>
+                    <input 
+                      type="date" 
+                      id="signup-alumni-birthdate" 
+                      name="signup-alumni-birthdate" 
+                      class="form-control" 
+                      required 
+                      max="{{ max_date }}" 
+                      aria-label="Date of Birth" 
+                    />
+                  </div>
+                </div>
+                
+                  <!-- ID Number -->
+                <div class="form-group mb-2">
+                  <label for="signup-alumni-id" class="form-label fs-6">ID Number:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="text" 
+                    name="signup-alumni-id" 
+                    class="form-control" 
+                    id="signup-alumni-id" 
+                    required 
+                    placeholder="Type your ID number" 
+                    pattern="[A-Za-z0-9-]+" 
+                    maxlength="20" 
+                    aria-label="ID Number" 
+                  />
+                </div>
+                
+              <div class="row">
+  <!-- Year Graduated -->
+  <div class="col-md-6 mb-2">
+    <div class="form-group">
+      <label for="signup-alumni-year-graduated" class="form-label fs-6">Year Graduated:<span class="text-danger"> *</span></label>
+      <input 
+        type="text" 
+        name="signup-alumni-year-graduated" 
+        class="form-control" 
+        id="signup-alumni-year-graduated" 
+        required 
+        placeholder="Year Graduated" 
+        pattern="[0-9]{4}" 
+        maxlength="4" 
+        aria-label="Year Graduated" 
+      />
+    </div>
+  </div>
+
+  <!-- Course Graduated -->
+  <div class="col-md-6 mb-2">
+    <div class="form-group">
+      <label for="signup-alumni-course" class="form-label fs-6">Course Graduated:<span class="text-danger"> *</span></label>
+      <select 
+        name="signup-alumni-course" 
+        id="signup-alumni-course" 
+        class="form-select" 
+        required 
+        aria-label="Course Graduated">
+        <option selected disabled value="">Loading courses...</option>
+      </select>
+    </div>
+  </div>
+  
+</div>
+
+              
+
+                <!-- Contact Information -->
+                <div class="form-group mb-2">
+                  <label for="signup-alumni-contact" class="form-label fs-6">Contact Number:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="tel" 
+                    class="form-control" 
+                    id="signup-alumni-contact" 
+                    name="signup-alumni-contact" 
+                    placeholder="+639XXXXXXXXX" 
+                    required 
+                    pattern="^\+63[0-9]{10}$"
+                    maxlength="13"
+                    aria-label="Contact Number" 
+                  />
+                </div>
+
+                <div class="form-group mb-2">
+                  <label for="signup-alumni-email" class="form-label fs-6">Email:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="email" 
+                    name="signup-alumni-email" 
+                    class="form-control" 
+                    id="signup-alumni-email" 
+                    required 
+                    placeholder="Email" 
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
+                    aria-label="Email" 
+                  />
+                </div>
+
+                <!-- Password Fields -->
+                <div class="form-group mb-2">
+                  <label for="signup-alumni-password" class="form-label fs-6">Password:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="password" 
+                    name="signup-alumni-password" 
+                    id="signup-alumni-password" 
+                    class="form-control" 
+                    placeholder="Enter your password" 
+                    required 
+                    minlength="8" 
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" 
+                    aria-label="Password" 
+                  />
+                </div>
+
+                <div class="form-group mb-2">
+                  <label for="signup-alumni-confirm-password" class="form-label fs-6">Confirm Password:<span class="text-danger"> *</span></label>
+                  <input 
+                    type="password" 
+                    name="signup-alumni-confirm-password" 
+                    id="signup-alumni-confirm-password" 
+                    class="form-control" 
+                    placeholder="Re-type your password" 
+                    required 
+                    aria-label="Confirm Password" 
+                  />
+                </div>
+
+                <!-- Profile Picture -->
+                <div class="form-group mb-2">
+                  <label for="signup-alumni-profilepic" class="form-label fs-6">Profile Picture:</label>
+                  <input 
+                    type="file" 
+                    class="form-control w-50" 
+                    id="signup-alumni-profilepic" 
+                    name="signup-alumni-profilepic" 
+                    accept="image/*" 
+                    aria-label="Profile Picture" 
+                  />
+                  <div class="form-text">Max 5MB. JPG, PNG, GIF only.</div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-end mt-2">
+                  <button type="submit" class="btn btn-secondary w-25 text-white signup-btn">Sign up</button>
+                </div>
+
+                <!-- Back to Login -->
+                <div class="text-center">
+                  <hr class="border border-dark border-1 opacity-75 my-3" />
+                  <h6>Already have an account?</h6>
+                  <button class="btn btn-secondary w-25 back-to-login login-btn" type="button">Login</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- User Type Selection Modal -->
+    <div class="modal fade" id="userTypeModal" tabindex="-1" aria-labelledby="userTypeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="userTypeModalLabel">Sign up as:</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            <button type="button" class="btn btn-primary w-50 mb-2 users-btn" data-role="student">
+              Student
+            </button>
+            <button type="button" class="btn btn-primary w-50 mb-2 users-btn" data-role="alumni">
+              Alumni
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center text-lg-start fixed-footer">
+      <div class="text-center fs-6 py-2" style="background-color:#183A53;"
+      >
+        © 2025 PTS Request Credential Form System. All rights reserved.
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Load courses dynamically
+        loadCoursesForSignup();
+        
+        // Form elements
+        const loginBox = document.querySelector(".login-box");
+        const allSignupForms = document.querySelectorAll(".user-form");
+        const loginForm = document.getElementById("loginForm");
+        const studentSignupForm = document.getElementById("studentSignupForm");
+        const alumniSignupForm = document.getElementById("alumniSignupForm");
+        
+        // Title section element
+        const titleSection = document.querySelector('.page-title');
+
+        // User type selection
+        document.querySelectorAll(".users-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const role = this.getAttribute("data-role");
+
+            // Hide modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById("userTypeModal"));
+            if (modal) modal.hide();
+
+            // Hide login form
+            loginBox.classList.remove("active");
+
+            // Hide all signup forms
+            allSignupForms.forEach((form) => {
+              form.classList.add("d-none");
+              form.classList.remove("active");
+            });
+
+            // Show the selected form
+            const selectedForm = document.getElementById(`signup-${role}`);
+            if (selectedForm) {
+              selectedForm.classList.remove("d-none");
+              selectedForm.classList.add("active");
+            }
+          });
+        });
+
+        // Back to login functionality
+        document.querySelectorAll(".back-to-login").forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            
+            // Reset all forms and clear validation states
+            const forms = [studentSignupForm, alumniSignupForm];
+            forms.forEach(form => {
+              if (form) {
+                // Reset the form
+                form.reset();
+                
+                // Clear all validation states
+                const inputs = form.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                  input.classList.remove('is-valid', 'is-invalid');
+                });
+              }
+            });
+            
+            // Reset scrollbar of signup forms container to top
+            const formsContainer = document.querySelector('.forms-container');
+            if (formsContainer) {
+              formsContainer.scrollTop = 0;
+            }
+            
+            // Reset scrollbar of individual signup forms if they have their own scroll
+            const signupForms = document.querySelectorAll('.signup-box-student, .signup-box-alumni');
+            signupForms.forEach(form => {
+              if (form.scrollTop > 0) {
+                form.scrollTop = 0;
+              }
+            });
+            
+            // Show login form and hide signup forms
+            loginBox.classList.add("active");
+            allSignupForms.forEach((form) => {
+              form.classList.add("d-none");
+              form.classList.remove("active");
+            });
+          });
+        });
+
+        // Form validation
+        function validateForm(form) {
+          let isValid = true;
+          const inputs = form.querySelectorAll('input[required], select[required]');
+          
+          inputs.forEach(input => {
+            if (!input.checkValidity()) {
+              input.classList.add('is-invalid');
+              isValid = false;
+            } else {
+              input.classList.remove('is-invalid');
+              input.classList.add('is-valid');
+            }
+          });
+
+          return isValid;
+        }
+
+        // Password confirmation validation
+        function validatePasswordConfirmation(passwordField, confirmField) {
+          if (passwordField.value !== confirmField.value) {
+            confirmField.classList.add('is-invalid');
+            return false;
+          } else {
+            confirmField.classList.remove('is-invalid');
+            confirmField.classList.add('is-valid');
+            return true;
+          }
+        }
+
+        // Student form validation
+        if (studentSignupForm) {
+          const studentPassword = document.getElementById('signup-student-password');
+          const studentConfirmPassword = document.getElementById('signup-student-confirm-password');
+
+          studentConfirmPassword.addEventListener('input', function() {
+            validatePasswordConfirmation(studentPassword, studentConfirmPassword);
+          });
+
+          studentSignupForm.addEventListener('submit', function(e) {
+            if (!validateForm(this)) {
+              e.preventDefault();
+            }
+            if (!validatePasswordConfirmation(studentPassword, studentConfirmPassword)) {
+              e.preventDefault();
+            }
+          });
+        }
+
+        // Alumni form validation
+        if (alumniSignupForm) {
+          const alumniPassword = document.getElementById('signup-alumni-password');
+          const alumniConfirmPassword = document.getElementById('signup-alumni-confirm-password');
+
+          alumniConfirmPassword.addEventListener('input', function() {
+            validatePasswordConfirmation(alumniPassword, alumniConfirmPassword);
+          });
+
+          alumniSignupForm.addEventListener('submit', function(e) {
+            if (!validateForm(this)) {
+              e.preventDefault();
+            }
+            if (!validatePasswordConfirmation(alumniPassword, alumniConfirmPassword)) {
+              e.preventDefault();
+            }
+          });
+        }
+
+        // Enhanced Login form validation with AJAX
+        if (loginForm) {
+          loginForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Always prevent default for AJAX handling
+            handleLoginSubmission();
+          });
+        }
+
+        // Google login now uses direct links - no JavaScript needed
+
+        // Real-time validation feedback
+        document.querySelectorAll('input, select').forEach(input => {
+          input.addEventListener('blur', function() {
+            if (this.hasAttribute('required')) {
+              if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+              } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+              }
+            }
+          });
+        });
+        
+        // Real-time login field validation
+        const loginEmailField = document.getElementById('login-email');
+        const loginPasswordField = document.getElementById('login-password');
+        
+        if (loginEmailField) {
+          loginEmailField.addEventListener('input', function() {
+            clearLoginFieldError('login-email');
+            if (this.value.trim()) {
+              const value = this.value.trim();
+              if (value === 'admin' || isValidEmail(value)) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+              } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+                showLoginFieldError('login-email', 'Please enter a valid email address or username');
+              }
+            } else {
+              this.classList.remove('is-valid', 'is-invalid');
+            }
+          });
+        }
+        
+        if (loginPasswordField) {
+          loginPasswordField.addEventListener('input', function() {
+            clearLoginFieldError('login-password');
+            if (this.value) {
+              if (this.value.length >= 8) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+              } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+                showLoginFieldError('login-password', 'Password must be at least 8 characters long');
+              }
+            } else {
+              this.classList.remove('is-valid', 'is-invalid');
+            }
+          });
+        }
+      });
+        // Validate profile picture size (max 5MB)
+        ['signup-student-profilepic', 'signup-alumni-profilepic'].forEach(id => {
+          const input = document.getElementById(id);
+          if (input) {
+            input.addEventListener('change', function () {
+              const file = this.files[0];
+              if (file && file.size > 5 * 1024 * 1024) {
+                alert('File size exceeds 5MB limit.');
+                this.value = ''; // Clear input
+              }
+            });
+          }
+        });
+
+        // Phone number formatting for signup forms
+        function formatPhoneNumberSignup(input) {
+          input.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^\d]/g, '');
+            
+            if (value.length > 0 && !value.startsWith('63')) {
+              if (value.startsWith('0')) {
+                value = '63' + value.substring(1);
+              } else if (value.startsWith('9')) {
+                value = '63' + value;
+              } else {
+                value = '63' + value;
+              }
+            }
+            
+            if (value.length > 12) {
+              value = value.substring(0, 12);
+            }
+            
+            e.target.value = value.length > 0 ? '+' + value : '';
+          });
+          
+          input.addEventListener('keydown', function(e) {
+            if (e.target.selectionStart === 0 && e.target.selectionEnd === e.target.value.length) {
+              return;
+            }
+            if (e.target.selectionStart < 3) {
+              if (e.key === 'Backspace' || e.key === 'Delete') {
+                e.preventDefault();
+              }
+            }
+          });
+        }
+
+        // Apply phone formatting to signup contact inputs
+        const studentContactInput = document.getElementById('signup-student-contact');
+        const alumniContactInput = document.getElementById('signup-alumni-contact');
+        
+        if (studentContactInput) formatPhoneNumberSignup(studentContactInput);
+        if (alumniContactInput) formatPhoneNumberSignup(alumniContactInput);
+
+        // =========================================
+        // ENHANCED LOGIN VALIDATION FUNCTIONS
+        // =========================================
+        
+        function handleLoginSubmission() {
+          const email = document.getElementById('login-email').value.trim();
+          const password = document.getElementById('login-password').value;
+          
+          // Clear previous errors
+          clearLoginErrors();
+          
+          // Validate fields
+          let hasErrors = false;
+          
+          if (!email) {
+            showLoginFieldError('login-email', 'Email is required');
+            hasErrors = true;
+          } else if (email !== 'admin' && !isValidEmail(email)) {
+            showLoginFieldError('login-email', 'Please enter a valid email address or username');
+            hasErrors = true;
+          }
+          
+          if (!password) {
+            showLoginFieldError('login-password', 'Password is required');
+            hasErrors = true;
+          }
+          
+          if (hasErrors) {
+            return;
+          }
+          
+          // Show loading state
+          setLoginLoading(true);
+          
+          // Prepare form data
+          const formData = new FormData();
+          formData.append('login-email', email);
+          formData.append('login-password', password);
+          formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+          
+          // Submit via AJAX
+          fetch('{% url "login-view" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            setLoginLoading(false);
+            
+            if (data.success) {
+              // Success - redirect to dashboard
+              showLoginSuccess('Login successful! Redirecting...');
+              setTimeout(() => {
+                window.location.href = data.redirect_url;
+              }, 1000);
+            } else {
+              // Show error message
+              showLoginError(data.error || 'Login failed. Please try again.');
+              
+              // Show specific field errors if available
+              if (data.field_errors) {
+                if (data.field_errors.email) {
+                  showLoginFieldError('login-email', data.field_errors.email);
+                }
+                if (data.field_errors.password) {
+                  showLoginFieldError('login-password', data.field_errors.password);
+                }
+              }
+            }
+          })
+          .catch(error => {
+            setLoginLoading(false);
+            console.error('Login error:', error);
+            showLoginError('Network error. Please check your connection and try again.');
+          });
+        }
+        
+        function clearLoginErrors() {
+          // Clear general error
+          const errorContainer = document.getElementById('login-error-container');
+          errorContainer.classList.add('d-none');
+          
+          // Clear field errors
+          clearLoginFieldError('login-email');
+          clearLoginFieldError('login-password');
+        }
+        
+        function showLoginError(message) {
+          const errorContainer = document.getElementById('login-error-container');
+          const errorMessage = document.getElementById('login-error-message');
+          
+          errorMessage.textContent = message;
+          errorContainer.classList.remove('d-none', 'alert-success');
+          errorContainer.classList.add('alert-danger');
+        }
+        
+        function showLoginSuccess(message) {
+          const errorContainer = document.getElementById('login-error-container');
+          const errorMessage = document.getElementById('login-error-message');
+          
+          errorMessage.textContent = message;
+          errorContainer.classList.remove('d-none', 'alert-danger');
+          errorContainer.classList.add('alert-success');
+          
+          // Change icon for success
+          const icon = errorContainer.querySelector('i');
+          icon.className = 'bi bi-check-circle me-2';
+        }
+        
+        function showLoginFieldError(fieldId, message) {
+          const field = document.getElementById(fieldId);
+          const errorDiv = document.getElementById(fieldId + '-error');
+          
+          if (field) {
+            field.classList.add('is-invalid');
+          }
+          if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+          }
+        }
+        
+        function clearLoginFieldError(fieldId) {
+          const field = document.getElementById(fieldId);
+          const errorDiv = document.getElementById(fieldId + '-error');
+          
+          if (field) {
+            field.classList.remove('is-invalid');
+          }
+          if (errorDiv) {
+            errorDiv.style.display = 'none';
+            errorDiv.textContent = '';
+          }
+        }
+        
+        function setLoginLoading(loading) {
+          const submitBtn = document.getElementById('login-submit-btn');
+          const btnText = document.getElementById('login-btn-text');
+          const spinner = document.getElementById('login-btn-spinner');
+          
+          if (loading) {
+            submitBtn.disabled = true;
+            btnText.textContent = 'Logging in...';
+            spinner.classList.remove('d-none');
+          } else {
+            submitBtn.disabled = false;
+            btnText.textContent = 'Login';
+            spinner.classList.add('d-none');
+          }
+        }
+        
+        function isValidEmail(email) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(email);
+        }
+        
+        // Function to load courses dynamically from database
+        async function loadCoursesForSignup() {
+          try {
+            const response = await fetch('/api/courses/signup/');
+            const data = await response.json();
+            
+            if (data.success) {
+              const studentCourseSelect = document.getElementById('signup-student-course');
+              const alumniCourseSelect = document.getElementById('signup-alumni-course');
+              
+              // Clear loading message and add default option
+              studentCourseSelect.innerHTML = '<option selected disabled value="">Select Course</option>';
+              alumniCourseSelect.innerHTML = '<option selected disabled value="">Select Course</option>';
+              
+              // Populate both dropdowns with course data
+              data.courses.forEach(course => {
+                const studentOption = document.createElement('option');
+                studentOption.value = course.code;
+                studentOption.textContent = course.name;
+                studentCourseSelect.appendChild(studentOption);
+                
+                const alumniOption = document.createElement('option');
+                alumniOption.value = course.code;
+                alumniOption.textContent = course.name;
+                alumniCourseSelect.appendChild(alumniOption);
+              });
+            } else {
+              console.error('Failed to load courses:', data.error);
+              // Show error in dropdowns
+              document.getElementById('signup-student-course').innerHTML = '<option selected disabled value="">Error loading courses</option>';
+              document.getElementById('signup-alumni-course').innerHTML = '<option selected disabled value="">Error loading courses</option>';
+            }
+          } catch (error) {
+            console.error('Error fetching courses:', error);
+            // Show error in dropdowns
+            document.getElementById('signup-student-course').innerHTML = '<option selected disabled value="">Error loading courses</option>';
+            document.getElementById('signup-alumni-course').innerHTML = '<option selected disabled value="">Error loading courses</option>';
+          }
+        }
+
+    </script>
+
+  </body>
+</html> 
