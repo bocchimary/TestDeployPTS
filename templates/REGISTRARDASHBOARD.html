@@ -19,9 +19,9 @@
       <div class="container-fluid mt-4" id="registrar_dashboard_container">
         <div class="row" id="registrar_dashboard_row">
           <!-- Main Content -->
-          <main class="col-lg-9" id="registrar_dashboard_main_column">
+          <main class="col-lg-12" id="registrar_dashboard_main_column">
             <!-- Summary Boxes -->
-            <div class="row g-3 mb-3" id="registrar_dashboard_summary_boxes">
+            <div class="row g-1 mb-3" id="registrar_dashboard_summary_boxes">
               <div class="col-md-2 col-sm-4" id="registrar_dashboard_clearance_request_card">
                 <div class="card summary-card border-start border-success border-3">
                   <small class="text-uppercase text-muted fw-semibold">Clearance Requests</small>
@@ -64,33 +64,31 @@
                   <small class="text-muted">{{ pending_document_requests }} pending</small>
                 </div>
               </div>
+
             </div>
 
             <!-- Charts -->
-            <div class="row g-3" id="registrar_dashboard_charts_row">
-              <div class="col-md-4" id="registrar_dashboard_chart_accomplishment_card">
+            <div class="row g-2 mt-3" id="registrar_dashboard_charts_row">
+              <div class="col-md-3" id="registrar_dashboard_chart_accomplishment_card">
                 <div class="card p-3 dashboard-box">
                   <h6 class="fw-semibold mb-2">Total Accomplishment</h6>
                   <div id="registrar_dashboard_totalAccomplishmentChart" style="flex-grow: 1;"></div>
                 </div>
               </div>
-              <div class="col-md-4" id="registrar_dashboard_chart_visitors_card">
+              <div class="col-md-3" id="registrar_dashboard_chart_visitors_card">
                 <div class="card p-3 dashboard-box">
                   <h6 class="fw-semibold mb-2">Visitors</h6>
                   <div id="registrar_dashboard_visitorsChart" style="flex-grow: 1;"></div>
                 </div>
               </div>
-              <div class="col-md-4" id="registrar_dashboard_chart_documents_card">
+              <div class="col-md-3" id="registrar_dashboard_chart_documents_card">
                 <div class="card p-3 dashboard-box">
                   <h6 class="fw-semibold mb-2">Documents Released</h6>
                   <div id="registrar_dashboard_documentsReleasedChart" style="flex-grow: 1;"></div>
                 </div>
               </div>
-            </div>
-          </main>
-
-          <!-- Sidebar -->
-          <aside class="col-lg-3" id="registrar_dashboard_sidebar_calendar_column">
+              <!-- Sidebar -->
+          <aside class="col-md-3" id="registrar_dashboard_sidebar_calendar_column">
             <div class="card p-3 calendar-container mb-3" id="registrar_dashboard_calendar_card">
               <h6 class="fw-semibold mb-3">Calendar</h6>
               <iframe
@@ -126,6 +124,9 @@
               </div>
             </div>              
           </aside>
+            </div>
+            
+          </main>  
         </div>
       </div>
     </form>

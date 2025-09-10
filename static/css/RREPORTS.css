@@ -58,7 +58,10 @@ body {
 .registrar_sidebar a:hover i {
     color: white;
 }
-
+.registrar_sidebar a.active {
+  background-color: #14507d;
+  color: white;
+}
 .registrar_sidebar.collapsed a {
     justify-content: center;
 }

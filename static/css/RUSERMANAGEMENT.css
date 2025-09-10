@@ -62,7 +62,10 @@ body {
 .registrar_sidebar.collapsed a {
     justify-content: center;
 }
-
+.registrar_sidebar a.active {
+    background-color: #14507d;
+    color: white;
+}
 .registrar_user_manager_main-content {
     margin-left: 250px;
     padding: 2rem;

@@ -51,17 +51,7 @@
         </span>
       </a>
       
-      
-      <a href="#" class="nav-link d-flex align-items-center" onclick="openNotificationModal()">
-        <i class="bi bi-bell me-1"></i>
-        <span class="link-text">Notifications</span>
-        <span id="student_notification_badge" 
-              class="badge rounded-pill bg-danger ms-auto" 
-              style="font-size: 0.6rem; display: none;">
-          0
-        </span>
-      </a>
-      
+    
       <a href="#request" class="nav-link"><i class="bi bi-file-earmark-medical"></i><span class="link-text">Request</span></a>
       {% if request.user.user_type != 'alumni' %}
       <a href="#clearance" class="nav-link"><i class="bi bi-clipboard-check"></i><span class="link-text">Clearance</span></a>
