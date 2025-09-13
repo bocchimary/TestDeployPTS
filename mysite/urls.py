@@ -32,6 +32,13 @@ urlpatterns = [
     path('verify-otp/', views.verify_otp, name='verify_otp'),
     path('verify-otp-submit/', views.verify_otp_submit, name='verify_otp_submit'),
     path('resend-otp/', views.resend_otp, name='resend_otp'),
+    path('waiting-approval/', views.waiting_approval, name='waiting_approval'),
+    
+    # Pending User Management APIs
+    path('api/pending-users/', views.api_pending_users, name='api_pending_users'),
+    path('api/pending-users/<uuid:user_id>/', views.api_pending_user_details, name='api_pending_user_details'),
+    path('api/pending-users/<uuid:user_id>/approve/', views.api_approve_pending_user, name='api_approve_pending_user'),
+    path('api/pending-users/<uuid:user_id>/decline/', views.api_decline_pending_user, name='api_decline_pending_user'),
     path('dashboard/', views.students, name='student_dashboard'),
     path('graduation/view/current/', views.student_graduation_current, name='student_graduation_current'),
     path('enrollment/view/current/', views.student_enrollment_current, name='student_enrollment_current'),

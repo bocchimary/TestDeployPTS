@@ -134,10 +134,17 @@
                   <p><strong>Emergency Contact:</strong> {{ profile.emergency_contact|default:"Not set" }}</p>
                   <p><strong>Birthday:</strong> {{ profile.birthdate }}</p>
                   <p><strong>Gender:</strong> {{ profile.gender }}</p>
-                  <p><strong>Student Number:</strong> {{ profile.student_number }}</p>
-                  <p><strong>Address:</strong> {{ profile.address }}</p>
-                  <p><strong>Program:</strong> {{ profile.program }}</p>
-                  <p><strong>Year Level:</strong> {{ profile.year_level }}</p>
+                  {% if request.user.user_type == 'alumni' %}
+                    <p><strong>Alumni ID:</strong> {{ profile.alumni_id }}</p>
+                    <p><strong>Address:</strong> {{ profile.address }}</p>
+                    <p><strong>Course Graduated:</strong> {{ profile.course_graduated }}</p>
+                    <p><strong>Year Graduated:</strong> {{ profile.year_graduated }}</p>
+                  {% else %}
+                    <p><strong>Student Number:</strong> {{ profile.student_number }}</p>
+                    <p><strong>Address:</strong> {{ profile.address }}</p>
+                    <p><strong>Program:</strong> {{ profile.program }}</p>
+                    <p><strong>Year Level:</strong> {{ profile.year_level }}</p>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -972,13 +979,34 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <form id="profileCompletionForm">
               <div class="row">
+                <!-- User Type Selection -->
+                <div class="col-12 mb-4">
+                  <label class="form-label">
+                    <i class="bi bi-person-badge me-2"></i>I am a: <span class="text-danger">*</span>
+                  </label>
+                  <div class="d-flex gap-3 justify-content-center">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="user_type" id="user_type_student" value="student" checked>
+                      <label class="form-check-label fw-semibold" for="user_type_student">
+                        <i class="bi bi-mortarboard me-1"></i>Student
+                      </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="user_type" id="user_type_alumni" value="alumni">
+                      <label class="form-check-label fw-semibold" for="user_type_alumni">
+                        <i class="bi bi-award me-1"></i>Alumni
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
                 <!-- Student Number / Alumni ID -->
                 <div class="col-md-6 mb-3">
                   <label for="id_number" class="form-label">
-                    <span id="id_label">{{ request.user.user_type|capfirst }} Number</span> <span class="text-danger">*</span>
+                    <span id="id_label">Student Number</span> <span class="text-danger">*</span>
                   </label>
                   <input type="text" class="form-control" id="id_number" name="id_number" required>
-                  <div class="form-text">Enter your official student/alumni ID number</div>
+                  <div class="form-text" id="id_help_text">Enter your official student ID number</div>
                 </div>
 
                 <!-- Program/Course -->
@@ -1029,7 +1057,7 @@ document.addEventListener('DOMContentLoaded', function() {
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="contact_number" class="form-label">Contact Number</label>
-                  <input type="tel" class="form-control" id="contact_number" name="contact_number" value="{{ request.user.contact_number }}" placeholder="+639XXXXXXXXX" pattern="^\+63[0-9]{10}$" maxlength="13">
+                  <input type="tel" class="form-control" id="contact_number" name="contact_number" value="{{ request.user.contact_number|default:'' }}" placeholder="+639XXXXXXXXX" pattern="^\+63[0-9]{10}$" maxlength="13">
                 </div>
                 
                 <!-- Emergency Contact -->
@@ -1041,8 +1069,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <!-- Profile Picture -->
                 <div class="col-md-12 mb-3">
                   <label for="profile_picture" class="form-label">Profile Picture</label>
-                  <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
-                  <div class="form-text">Upload a profile picture (optional)</div>
+                  <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/jpeg,image/jpg,image/png,image/gif">
+                  <div class="form-text">Upload a profile picture (optional) - JPG, PNG, GIF only, max 5MB</div>
                 </div>
               </div>
               
@@ -1168,8 +1196,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('profileCompletionForm');
         const formData = new FormData(form);
         
-        // Add user type
-        formData.append('user_type', '{{ request.user.user_type }}');
+        // Get user type from form radio buttons
+        const userType = document.querySelector('input[name="user_type"]:checked').value;
         
         // Show loading state
         const submitBtn = event.target;
@@ -1193,10 +1221,16 @@ document.addEventListener('DOMContentLoaded', function() {
               text: 'Your profile has been successfully updated.',
               confirmButtonText: 'Continue'
             }).then(() => {
-              // Close modal and refresh page
+              // Close modal and redirect to appropriate dashboard
               const modal = bootstrap.Modal.getInstance(document.getElementById('profileCompletionModal'));
               modal.hide();
-              location.reload();
+              
+              // If redirect URL is provided, use it; otherwise reload
+              if (data.redirect_url) {
+                window.location.href = data.redirect_url;
+              } else {
+                location.reload();
+              }
             });
           } else {
             Swal.fire({
@@ -1283,7 +1317,79 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (modalContactInput) formatPhoneNumberModal(modalContactInput);
         if (modalEmergencyInput) formatPhoneNumberModal(modalEmergencyInput);
+        
+        // Handle user type selection change
+        const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
+        userTypeRadios.forEach(radio => {
+          radio.addEventListener('change', function() {
+            updateFormLabelsAndFields(this.value);
+            updateYearInfoOptions(this.value);
+          });
+        });
       });
+
+      function updateFormLabelsAndFields(userType) {
+        const idLabel = document.getElementById('id_label');
+        const idHelpText = document.getElementById('id_help_text');
+        const yearLabel = document.getElementById('year_label');
+        const programLabel = document.getElementById('program_label');
+        const studentSpecificFields = document.getElementById('student_specific_fields');
+        
+        if (userType === 'alumni') {
+          idLabel.textContent = 'Alumni ID';
+          idHelpText.textContent = 'Enter your official alumni ID number';
+          yearLabel.textContent = 'Year Graduated';
+          if (programLabel) {
+            programLabel.textContent = 'Course Graduated';
+          }
+          if (studentSpecificFields) {
+            studentSpecificFields.style.display = 'none';
+          }
+        } else {
+          idLabel.textContent = 'Student Number';
+          idHelpText.textContent = 'Enter your official student ID number';
+          yearLabel.textContent = 'Year Level';
+          if (programLabel) {
+            programLabel.textContent = 'Program';
+          }
+          if (studentSpecificFields) {
+            studentSpecificFields.style.display = 'block';
+          }
+        }
+      }
+
+      function updateYearInfoOptions(userType) {
+        const yearSelect = document.getElementById('year_info');
+        
+        if (userType === 'alumni') {
+          // For alumni, show graduation years
+          yearSelect.innerHTML = '<option value="">Select graduation year</option>';
+          const currentYear = new Date().getFullYear();
+          for (let year = currentYear; year >= currentYear - 50; year--) {
+            const option = document.createElement('option');
+            option.value = year.toString();
+            option.textContent = year.toString();
+            yearSelect.appendChild(option);
+          }
+        } else {
+          // For students, show year levels
+          yearSelect.innerHTML = '<option value="">Select year level</option>';
+          const yearLevels = [
+            { value: '1', text: '1st Year' },
+            { value: '2', text: '2nd Year' },
+            { value: '3', text: '3rd Year' },
+            { value: '4', text: '4th Year' },
+            { value: '5', text: '5th Year' }
+          ];
+          
+          yearLevels.forEach(level => {
+            const option = document.createElement('option');
+            option.value = level.value;
+            option.textContent = level.text;
+            yearSelect.appendChild(option);
+          });
+        }
+      }
     </script>
 
     <style>

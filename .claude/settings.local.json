@@ -24,7 +24,9 @@
       "Bash(claude doctor)",
       "Bash(wsl:*)",
       "Bash(docker:*)",
-      "Bash(set DJANGO_SETTINGS_MODULE=mysite.settings)"
+      "Bash(set DJANGO_SETTINGS_MODULE=mysite.settings)",
+      "Bash(chcp 65001)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": [],

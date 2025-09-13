@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Approved</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #2E5978;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E5978;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            color: #2E5978;
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .success-icon {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .user-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #2E5978;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #2E5978;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px auto;
+            display: block;
+            max-width: 200px;
+        }
+        .btn:hover {
+            background-color: #1e3d52;
+        }
+        .footer {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .contact-info {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">PTS - Clearance System</div>
+            <h1>🎉 Account Approved!</h1>
+        </div>
+        
+        <div class="content">
+            <div class="success-icon">
+                ✅ Your account has been successfully approved!
+            </div>
+            
+            <p>Dear <strong>{{ user.full_name }}</strong>,</p>
+            
+            <p>Congratulations! We are pleased to inform you that your {{ user.user_type|title }} account application has been <strong>approved</strong> by our registrar office.</p>
+            
+            <div class="user-info">
+                <h3>Account Details:</h3>
+                <ul>
+                    <li><strong>Name:</strong> {{ user.full_name }}</li>
+                    <li><strong>Email:</strong> {{ user.email }}</li>
+                    <li><strong>Account Type:</strong> {{ user.user_type|title }}</li>
+                    <li><strong>Approved Date:</strong> {{ approval_date }}</li>
+                </ul>
+            </div>
+            
+            <h3>What's Next?</h3>
+            <p>You can now access your account and enjoy all the features available to {{ user.user_type }}s:</p>
+            <ul>
+                {% if user.user_type == 'student' %}
+                <li>Submit and track clearance forms</li>
+                <li>Apply for enrollment</li>
+                <li>Submit graduation requirements</li>
+                <li>View your academic progress</li>
+                <li>Access student services</li>
+                {% else %}
+                <li>Access alumni services</li>
+                <li>Submit clearance forms</li>
+                <li>Connect with fellow alumni</li>
+                <li>Access institution resources</li>
+                <li>Update your alumni profile</li>
+                {% endif %}
+            </ul>
+            
+            <a href="{{ login_url }}" class="btn">Login to Your Account</a>
+            
+            <div class="contact-info">
+                <h4>Need Help?</h4>
+                <p>If you have any questions or need assistance logging in, please don't hesitate to contact our registrar office:</p>
+                <ul>
+                    <li><strong>Email:</strong> registrar@pts.edu.ph</li>
+                    <li><strong>Phone:</strong> (042) 123-4567</li>
+                    <li><strong>Office Hours:</strong> Monday - Friday, 8:00 AM - 5:00 PM</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated message from the PTS Clearance System.</p>
+            <p>© {{ current_year }} Philippine Technical School. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 12px;">
+                Please do not reply to this email. For inquiries, contact the registrar office directly.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

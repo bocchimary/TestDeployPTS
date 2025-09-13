@@ -179,7 +179,7 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'pts_rc',
             'USER': 'root',
-            'PASSWORD': 'root',        
+            'PASSWORD': '',        
             'HOST': '127.0.0.1',
             'PORT': '3306',
         }

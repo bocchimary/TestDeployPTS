@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Waiting for Approval - PTS</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    
+  <style>
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('{% static "images/ptsbg.png" %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .waiting-container {
+        max-width: 450px;
+        width: 90%;
+        background-color: rgba(252, 252, 252, 0.95);
+        padding: 2rem 1.5rem;
+        border-radius: 0.8rem;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+    
+    .waiting-icon {
+        font-size: 2.5rem;
+        color: #2E5978;
+        margin-bottom: 1rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .waiting-title {
+        color: #2E5978;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+        font-size: 1.4rem;
+    }
+    
+    .waiting-message {
+        color: #555;
+        line-height: 1.5;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+    
+    .waiting-message p {
+        margin-bottom: 0.8rem;
+    }
+    
+    .btn-primary {
+        background-color: #2E5978;
+        border-color: #2E5978;
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background-color: #1e3d52;
+        border-color: #1e3d52;
+        transform: translateY(-2px);
+    }
+    
+    .btn-outline-secondary {
+        color: #6c757d;
+        border-color: #6c757d;
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        transform: translateY(-2px);
+    }
+    
+    .info-box {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.4rem;
+        padding: 0.8rem;
+        margin: 1rem 0;
+    }
+    
+    .info-box .info-title {
+        color: #2E5978;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        font-size: 0.9rem;
+    }
+    
+    .info-box .info-text {
+        color: #5a6268;
+        font-size: 0.8rem;
+        margin: 0;
+    }
+    
+    .info-box ul {
+        margin-bottom: 0;
+        padding-left: 1.2rem;
+    }
+    
+    .info-box li {
+        margin-bottom: 0.2rem;
+        font-size: 0.8rem;
+    }
+</style> 
+  </head>
+
+  <body>
+    <div class="waiting-container">
+      <!-- Waiting Icon -->
+      <div class="waiting-icon">
+        <i class="bi bi-hourglass-split"></i>
+      </div>
+      
+      <!-- Title -->
+      <h2 class="waiting-title">Account Pending Approval</h2>
+      
+      <!-- Main Message -->
+      <div class="waiting-message">
+        <p>Your account has been created and is awaiting approval from our registrar office.</p>
+        <p>You'll receive an email notification once approved.</p>
+      </div>
+      
+      <!-- Information Box -->
+      <div class="info-box">
+        <div class="info-title">
+          <i class="bi bi-info-circle me-1"></i>What happens next?
+        </div>
+        <div class="info-text">
+          <ul class="text-start mb-0">
+            <li>Registrar reviews your application</li>
+            <li>Email notification sent with decision</li>
+            <li>Login access granted upon approval</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Action Button -->
+      <div class="d-flex justify-content-center">
+        <a href="{% url 'login' %}" class="btn btn-primary">
+          <i class="bi bi-box-arrow-in-right me-1"></i>Back to Login
+        </a>
+      </div>
+      
+      <!-- Footer Note -->
+      <div class="mt-3">
+        <small class="text-muted">
+          <i class="bi bi-clock me-1"></i>Processing: 1-2 business days
+        </small>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

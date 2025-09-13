@@ -492,17 +492,51 @@ def login_view(request):
         except User.DoesNotExist:
             if email == 'admin':
                 error_msg = 'Admin account not found'
+                if is_ajax:
+                    return JsonResponse({
+                        'success': False,
+                        'error': error_msg,
+                        'field_errors': {'email': error_msg}
+                    })
+                else:
+                    messages.error(request, error_msg)
+                    return redirect('login')
             else:
-                error_msg = 'No account found with this email address'
-            if is_ajax:
-                return JsonResponse({
-                    'success': False,
-                    'error': error_msg,
-                    'field_errors': {'email': error_msg}
-                })
-            else:
-                messages.error(request, error_msg)
-                return redirect('login')
+                # Check if user is in pending approval
+                from landing.models import PendingUser
+                try:
+                    pending_user = PendingUser.objects.get(email=email)
+                    if pending_user.approval_status == 'pending':
+                        error_msg = 'Your account is still pending approval. You will receive an email notification once approved.'
+                    elif pending_user.approval_status == 'declined':
+                        error_msg = 'Your account application was declined. Please contact the registrar for more information.'
+                    else:
+                        error_msg = 'Account status unclear. Please contact the registrar.'
+                    
+                    if is_ajax:
+                        return JsonResponse({
+                            'success': False,
+                            'error': error_msg,
+                            'redirect_url': '/waiting-approval/' if pending_user.approval_status == 'pending' else None
+                        })
+                    else:
+                        messages.warning(request, error_msg)
+                        if pending_user.approval_status == 'pending':
+                            return redirect('waiting_approval')
+                        else:
+                            return redirect('login')
+                            
+                except PendingUser.DoesNotExist:
+                    error_msg = 'No account found with this email address'
+                    if is_ajax:
+                        return JsonResponse({
+                            'success': False,
+                            'error': error_msg,
+                            'field_errors': {'email': error_msg}
+                        })
+                    else:
+                        messages.error(request, error_msg)
+                        return redirect('login')
 
         # Attempt authentication
         if email == 'admin':
@@ -15981,7 +16015,14 @@ def complete_profile(request):
     """Complete user profile with submitted data"""
     try:
         user = request.user
-        user_type = user.user_type
+        
+        # Get user type from form (user can now select this)
+        user_type = request.POST.get('user_type', 'student').strip()
+        
+        # Update user type if it has changed
+        if user.user_type != user_type:
+            user.user_type = user_type
+            user.save()
         
         # Get form data
         id_number = request.POST.get('id_number', '').strip()
@@ -16074,9 +16115,17 @@ def complete_profile(request):
                     profile_data['profile_picture'] = profile_picture
                 AlumniProfile.objects.create(**profile_data)
         
+        # Determine redirect URL based on user type
+        if user_type == 'alumni':
+            redirect_url = '/dashboard/'  # Alumni still use the same dashboard, just with different permissions
+        else:
+            redirect_url = '/dashboard/'  # Students use the student dashboard
+        
         return JsonResponse({
             'success': True,
-            'message': 'Profile completed successfully!'
+            'message': 'Profile completed successfully!',
+            'redirect_url': redirect_url,
+            'user_type': user_type
         })
         
     except Exception as e:
@@ -16839,94 +16888,22 @@ def verify_otp_submit(request):
             
             # Verify OTP
             if submitted_otp == otp_record.otp_code:
-                # OTP is correct, create user account
+                # OTP is correct, create pending user for approval
                 try:
+                    from landing.models import PendingUser
                     signup_data = otp_record.signup_data
                     
-                    if user_type == 'student':
-                        # Create student user
-                        full_name = f"{signup_data['first_name']} {signup_data['middle_name']} {signup_data['last_name']} {signup_data.get('suffix', '')}".strip()
-                        
-                        user = User.objects.create_user(
-                            username=email,
-                            full_name=full_name,
-                            email=email,
-                            user_type='student',
-                            contact_number=signup_data['contact'],
-                        )
-                        user.set_password(signup_data['password'])
-                        user.save()
-                        
-                        # Handle profile picture if exists
-                        profile_pic = None
-                        if 'profile_pic_path' in signup_data:
-                            try:
-                                from django.core.files.storage import default_storage
-                                # Move from temp to permanent location
-                                temp_path = signup_data['profile_pic_path']
-                                if default_storage.exists(temp_path):
-                                    with default_storage.open(temp_path, 'rb') as temp_file:
-                                        from django.core.files.base import ContentFile
-                                        import uuid
-                                        final_name = f"profile_pics/{uuid.uuid4()}_{temp_path.split('/')[-1]}"
-                                        profile_pic = ContentFile(temp_file.read(), name=final_name)
-                                    default_storage.delete(temp_path)  # Clean up temp file
-                            except Exception as e:
-                                print(f"Error handling profile picture: {e}")
-                        
-                        StudentProfile.objects.create(
-                            user=user,
-                            student_number=signup_data['student_id'],
-                            program=signup_data['course'],
-                            year_level=1,
-                            is_graduating=False,
-                            address=signup_data['address'],
-                            gender=signup_data['gender'],
-                            birthdate=signup_data['birthdate'],
-                            profile_picture=profile_pic
-                        )
-                        
-                    elif user_type == 'alumni':
-                        # Create alumni user
-                        full_name = f"{signup_data['first_name']} {signup_data['middle_name']} {signup_data['last_name']} {signup_data.get('suffix', '')}".strip()
-                        
-                        user = User.objects.create_user(
-                            username=email,
-                            full_name=full_name,
-                            email=email,
-                            user_type='alumni',
-                            contact_number=signup_data['contact'],
-                        )
-                        user.set_password(signup_data['password'])
-                        user.save()
-                        
-                        # Handle profile picture if exists
-                        profile_pic = None
-                        if 'profile_pic_path' in signup_data:
-                            try:
-                                from django.core.files.storage import default_storage
-                                # Move from temp to permanent location
-                                temp_path = signup_data['profile_pic_path']
-                                if default_storage.exists(temp_path):
-                                    with default_storage.open(temp_path, 'rb') as temp_file:
-                                        from django.core.files.base import ContentFile
-                                        import uuid
-                                        final_name = f"profile_pics/{uuid.uuid4()}_{temp_path.split('/')[-1]}"
-                                        profile_pic = ContentFile(temp_file.read(), name=final_name)
-                                    default_storage.delete(temp_path)  # Clean up temp file
-                            except Exception as e:
-                                print(f"Error handling profile picture: {e}")
-                        
-                        AlumniProfile.objects.create(
-                            user=user,
-                            alumni_id=signup_data['alumni_id'],
-                            course_graduated=signup_data['course'],
-                            year_graduated=signup_data['year_graduated'],
-                            address=signup_data['address'],
-                            gender=signup_data['gender'],
-                            birthdate=signup_data['birthdate'],
-                            profile_picture=profile_pic
-                        )
+                    # Create full name
+                    full_name = f"{signup_data['first_name']} {signup_data['middle_name']} {signup_data['last_name']} {signup_data.get('suffix', '')}".strip()
+                    
+                    # Create pending user
+                    PendingUser.objects.create(
+                        email=email,
+                        full_name=full_name,
+                        user_type=user_type,
+                        contact_number=signup_data['contact'],
+                        signup_data=signup_data
+                    )
                     
                     # Mark OTP as verified and clean up
                     otp_record.is_verified = True
@@ -16937,7 +16914,8 @@ def verify_otp_submit(request):
                     request.session.pop('user_type', None)
                     
                     user_type_display = "Student" if user_type == 'student' else "Alumni"
-                    return redirect('login')
+                    messages.success(request, f"✅ {user_type_display} account submitted successfully! Your account is now pending approval from the registrar. You will receive an email notification once approved.")
+                    return redirect('waiting_approval')
                     
                 except Exception as e:
                     print(f"❌ Error creating user: {e}")
@@ -16970,6 +16948,372 @@ def verify_otp_submit(request):
             return redirect('verify_otp')
     
     return redirect('verify_otp')
+
+def waiting_approval(request):
+    """Display waiting for approval page"""
+    return render(request, 'waiting-approval.html')
+
+# ========================================
+# PENDING USER APPROVAL SYSTEM
+# ========================================
+
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
+@login_required
+@require_http_methods(["GET"])
+def api_pending_users(request):
+    """API to get list of pending users for registrar approval"""
+    print(f"DEBUG: api_pending_users called by user: {request.user}")
+    print(f"DEBUG: user type: {request.user.user_type}")
+    
+    if request.user.user_type != 'admin':
+        print(f"DEBUG: Access denied for user type: {request.user.user_type}")
+        return JsonResponse({'error': 'Access denied'}, status=403)
+    
+    try:
+        from landing.models import PendingUser
+        print(f"DEBUG: Querying PendingUser model...")
+        pending_users = PendingUser.objects.filter(approval_status='pending').order_by('-submitted_at')
+        print(f"DEBUG: Found {pending_users.count()} pending users")
+        
+        users_data = []
+        for user in pending_users:
+            print(f"DEBUG: Processing user: {user.full_name} ({user.email})")
+            users_data.append({
+                'id': str(user.id),
+                'full_name': user.full_name,
+                'email': user.email,
+                'user_type': user.user_type,
+                'contact_number': user.contact_number,
+                'submitted_at': user.submitted_at.strftime('%Y-%m-%d %H:%M'),
+                'signup_data': user.signup_data
+            })
+        
+        print(f"DEBUG: Returning {len(users_data)} users")
+        return JsonResponse({
+            'success': True,
+            'users': users_data,
+            'count': len(users_data)
+        })
+        
+    except Exception as e:
+        print(f"DEBUG: Error in api_pending_users: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({'error': str(e)}, status=500)
+
+@login_required
+def api_pending_user_details(request, user_id):
+    """API to get detailed information about a pending user"""
+    if request.user.user_type != 'admin':
+        return JsonResponse({'error': 'Access denied'}, status=403)
+    
+    try:
+        from landing.models import PendingUser
+        pending_user = PendingUser.objects.get(id=user_id, approval_status='pending')
+        
+        user_data = {
+            'id': str(pending_user.id),
+            'full_name': pending_user.full_name,
+            'email': pending_user.email,
+            'user_type': pending_user.user_type,
+            'contact_number': pending_user.contact_number,
+            'submitted_at': pending_user.submitted_at.strftime('%Y-%m-%d %H:%M'),
+            'signup_data': pending_user.signup_data
+        }
+        
+        return JsonResponse({
+            'success': True,
+            'user': user_data
+        })
+        
+    except PendingUser.DoesNotExist:
+        return JsonResponse({'error': 'Pending user not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@login_required
+@require_POST
+def api_approve_pending_user(request, user_id):
+    """API to approve a pending user and create their account"""
+    if request.user.user_type != 'admin':
+        return JsonResponse({'error': 'Access denied'}, status=403)
+    
+    try:
+        from landing.models import PendingUser
+        from django.utils import timezone
+        
+        pending_user = PendingUser.objects.get(id=user_id, approval_status='pending')
+        signup_data = pending_user.signup_data
+        
+        # Create the actual user account
+        full_name = pending_user.full_name
+        
+        if pending_user.user_type == 'student':
+            # Create student user
+            user = User.objects.create_user(
+                username=pending_user.email,
+                full_name=full_name,
+                email=pending_user.email,
+                user_type='student',
+                contact_number=pending_user.contact_number,
+            )
+            user.set_password(signup_data['password'])
+            user.save()
+            
+            # Handle profile picture if exists
+            profile_pic = None
+            if 'profile_pic_path' in signup_data:
+                profile_pic = move_temp_profile_picture(signup_data['profile_pic_path'])
+            
+            StudentProfile.objects.create(
+                user=user,
+                student_number=signup_data['student_id'],
+                program=signup_data['course'],
+                year_level=1,
+                is_graduating=False,
+                address=signup_data['address'],
+                gender=signup_data['gender'],
+                birthdate=signup_data['birthdate'],
+                profile_picture=profile_pic
+            )
+            
+        elif pending_user.user_type == 'alumni':
+            # Create alumni user
+            user = User.objects.create_user(
+                username=pending_user.email,
+                full_name=full_name,
+                email=pending_user.email,
+                user_type='alumni',
+                contact_number=pending_user.contact_number,
+            )
+            user.set_password(signup_data['password'])
+            user.save()
+            
+            # Handle profile picture if exists
+            profile_pic = None
+            if 'profile_pic_path' in signup_data:
+                profile_pic = move_temp_profile_picture(signup_data['profile_pic_path'])
+            
+            AlumniProfile.objects.create(
+                user=user,
+                alumni_id=signup_data['alumni_id'],
+                course_graduated=signup_data['course'],
+                year_graduated=signup_data['year_graduated'],
+                address=signup_data['address'],
+                gender=signup_data['gender'],
+                birthdate=signup_data['birthdate'],
+                profile_picture=profile_pic
+            )
+        
+        # Update pending user status
+        pending_user.approval_status = 'approved'
+        pending_user.approved_at = timezone.now()
+        pending_user.approved_by = request.user
+        pending_user.save()
+        
+        # Send approval email
+        send_approval_email(pending_user)
+        
+        # Delete the pending user record
+        pending_user.delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'{pending_user.user_type.title()} account approved successfully!'
+        })
+        
+    except PendingUser.DoesNotExist:
+        return JsonResponse({'error': 'Pending user not found'}, status=404)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({'error': f'Error approving user: {str(e)}'}, status=500)
+
+@login_required
+@require_POST
+def api_decline_pending_user(request, user_id):
+    """API to decline a pending user"""
+    if request.user.user_type != 'admin':
+        return JsonResponse({'error': 'Access denied'}, status=403)
+    
+    try:
+        from landing.models import PendingUser
+        from django.utils import timezone
+        import json
+        
+        data = json.loads(request.body)
+        decline_reason = data.get('reason', '').strip()
+        
+        if not decline_reason:
+            return JsonResponse({'error': 'Decline reason is required'}, status=400)
+        
+        pending_user = PendingUser.objects.get(id=user_id, approval_status='pending')
+        
+        # Update pending user status
+        pending_user.approval_status = 'declined'
+        pending_user.decline_reason = decline_reason
+        pending_user.approved_at = timezone.now()
+        pending_user.approved_by = request.user
+        pending_user.save()
+        
+        # Send decline email
+        send_decline_email(pending_user)
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Application declined successfully'
+        })
+        
+    except PendingUser.DoesNotExist:
+        return JsonResponse({'error': 'Pending user not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': f'Error declining user: {str(e)}'}, status=500)
+
+def move_temp_profile_picture(temp_path):
+    """Move profile picture from temporary to permanent location"""
+    if not temp_path:
+        return None
+        
+    try:
+        from django.core.files.storage import default_storage
+        from django.core.files.base import ContentFile
+        import uuid
+        
+        if default_storage.exists(temp_path):
+            with default_storage.open(temp_path, 'rb') as temp_file:
+                final_name = f"profile_pics/{uuid.uuid4()}_{temp_path.split('/')[-1]}"
+                profile_pic = ContentFile(temp_file.read(), name=final_name)
+            default_storage.delete(temp_path)  # Clean up temp file
+            return profile_pic
+    except Exception as e:
+        print(f"Error moving profile picture: {e}")
+    
+    return None
+
+def send_approval_email(pending_user):
+    """Send approval email to user"""
+    try:
+        from django.core.mail import EmailMultiAlternatives
+        from django.template.loader import render_to_string
+        from django.conf import settings
+        from datetime import datetime
+        
+        # Prepare email context
+        context = {
+            'user': pending_user,
+            'approval_date': datetime.now().strftime('%B %d, %Y'),
+            'login_url': f"{settings.SITE_URL}/login/" if hasattr(settings, 'SITE_URL') else "http://localhost:8000/login/",
+            'current_year': datetime.now().year
+        }
+        
+        # Render HTML email
+        html_content = render_to_string('emails/account_approved.html', context)
+        
+        # Create email subject
+        subject = f"🎉 Your {pending_user.user_type.title()} Account Has Been Approved!"
+        
+        # Create plain text version
+        text_content = f"""
+Dear {pending_user.full_name},
+
+Congratulations! Your {pending_user.user_type} account application has been approved.
+
+You can now log in to your account at: {context['login_url']}
+
+Account Details:
+- Name: {pending_user.full_name}
+- Email: {pending_user.email}
+- Account Type: {pending_user.user_type.title()}
+- Approved Date: {context['approval_date']}
+
+If you need assistance, please contact our registrar office at registrar@pts.edu.ph
+
+Best regards,
+PTS Registrar Office
+        """
+        
+        # Send email
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=text_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[pending_user.email]
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+        
+        print(f"✅ Approval email sent successfully to {pending_user.email}")
+        
+    except Exception as e:
+        print(f"❌ Error sending approval email: {e}")
+        import traceback
+        traceback.print_exc()
+
+def send_decline_email(pending_user):
+    """Send decline email to user"""
+    try:
+        from django.core.mail import EmailMultiAlternatives
+        from django.template.loader import render_to_string
+        from django.conf import settings
+        from datetime import datetime
+        
+        # Prepare email context
+        context = {
+            'user': pending_user,
+            'application_date': pending_user.submitted_at.strftime('%B %d, %Y'),
+            'review_date': datetime.now().strftime('%B %d, %Y'),
+            'decline_reason': pending_user.decline_reason,
+            'current_year': datetime.now().year
+        }
+        
+        # Render HTML email
+        html_content = render_to_string('emails/account_declined.html', context)
+        
+        # Create email subject
+        subject = f"Application Status Update - {pending_user.user_type.title()} Account"
+        
+        # Create plain text version
+        text_content = f"""
+Dear {pending_user.full_name},
+
+Thank you for your interest in the Philippine Technical School clearance system. 
+
+After careful review, we are unable to approve your {pending_user.user_type} account application at this time.
+
+Application Details:
+- Name: {pending_user.full_name}
+- Email: {pending_user.email}
+- Account Type: {pending_user.user_type.title()}
+- Application Date: {context['application_date']}
+- Review Date: {context['review_date']}
+
+Reason for non-approval:
+{pending_user.decline_reason}
+
+If you have questions or would like to discuss this decision, please contact our registrar office at registrar@pts.edu.ph or call (042) 123-4567.
+
+Best regards,
+PTS Registrar Office
+        """
+        
+        # Send email
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=text_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[pending_user.email]
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+        
+        print(f"✅ Decline email sent successfully to {pending_user.email}")
+        
+    except Exception as e:
+        print(f"❌ Error sending decline email: {e}")
+        import traceback
+        traceback.print_exc()
 
 def resend_otp(request):
     """Resend OTP code"""

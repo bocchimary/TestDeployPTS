@@ -1401,3 +1401,48 @@ class AcademicSubject(models.Model):
     class Meta:
         db_table = 'academic_subjects'
         ordering = ['semester', 'order', 'code']
+
+
+class PendingUser(models.Model):
+    """Stores pending user accounts awaiting registrar approval"""
+    APPROVAL_STATUS_CHOICES = [
+        ('pending', 'Pending Approval'),
+        ('approved', 'Approved'),
+        ('declined', 'Declined'),
+    ]
+    
+    USER_TYPE_CHOICES = [
+        ('student', 'Student'),
+        ('alumni', 'Alumni'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(unique=True)
+    full_name = models.CharField(max_length=255)
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
+    contact_number = models.CharField(max_length=20, null=True, blank=True)
+    
+    # Store signup data as JSON for later user creation
+    signup_data = models.JSONField()
+    
+    # Approval workflow fields
+    approval_status = models.CharField(max_length=20, choices=APPROVAL_STATUS_CHOICES, default='pending')
+    submitted_at = models.DateTimeField(default=timezone.now)
+    approved_at = models.DateTimeField(null=True, blank=True)
+    approved_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='approved_pending_users'
+    )
+    
+    # Optional decline reason
+    decline_reason = models.TextField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.full_name} ({self.email}) - {self.approval_status}"
+    
+    class Meta:
+        db_table = 'pending_users'
+        ordering = ['-submitted_at']
