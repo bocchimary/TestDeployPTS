@@ -2617,6 +2617,17 @@ def approve_clearance(request):
             if all_approved:
                 clearance_form.status = 'approved'
                 clearance_form.save()
+
+                # Send completion notification to student
+                try:
+                    from landing.notification_service import NotificationService
+                    NotificationService.notify_clearance_completed(
+                        student=clearance_form.student,
+                        form_type='clearance',
+                        form_instance=clearance_form
+                    )
+                except Exception as e:
+                    print(f"Error sending completion notification: {e}")
             
             return JsonResponse({
                 'success': True, 
@@ -3285,6 +3296,23 @@ def bulk_approve_clearance(request):
                     )
                 except Exception as e:
                     print(f"Error sending approval notification for clearance {clearance_form.id}: {e}")
+
+                # Check if all signatories approved for this clearance
+                all_signatories = ClearanceSignatory.objects.filter(clearance=clearance_form)
+                all_approved = all_signatories.exists() and all(s.status == 'approved' for s in all_signatories)
+                if all_approved:
+                    clearance_form.status = 'approved'
+                    clearance_form.save()
+
+                    # Send completion notification to student
+                    try:
+                        NotificationService.notify_clearance_completed(
+                            student=clearance_form.student,
+                            form_type='clearance',
+                            form_instance=clearance_form
+                        )
+                    except Exception as e:
+                        print(f"Error sending completion notification: {e}")
             
             # Log the bulk approval action
             if approved_count > 0:
@@ -3547,7 +3575,7 @@ def approve_enrollment(request):
         required_roles_set = set(required_roles)
         
         if (signatory_roles >= required_roles_set and 
-            all_signatories.count() >= 4 and 
+            all_signatories.count() >= 3 and
             all(s.status == 'approved' for s in all_signatories)):
             enrollment.status = 'approved'
             enrollment.save()
@@ -5167,6 +5195,54 @@ def registrar_profile_upload_picture_api(request):
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 # ========================================
+# STUDENT PROFILE PICTURE UPLOAD
+# ========================================
+
+@login_required
+def student_profile_upload_picture_api(request):
+    """API endpoint to upload student profile picture"""
+    if request.user.user_type not in ['student', 'alumni']:
+        return JsonResponse({'error': 'Access denied'}, status=403)
+    
+    if request.method == 'POST':
+        try:
+            from landing.models import StudentProfile, AlumniProfile
+            
+            # Get the appropriate profile based on user type
+            if request.user.user_type == 'alumni':
+                profile, created = AlumniProfile.objects.get_or_create(user=request.user)
+            else:
+                profile, created = StudentProfile.objects.get_or_create(user=request.user)
+            
+            if 'profile_picture' not in request.FILES:
+                return JsonResponse({'error': 'No image file provided'}, status=400)
+            
+            profile_picture = request.FILES['profile_picture']
+            
+            # Validate file type
+            if not profile_picture.content_type.startswith('image/'):
+                return JsonResponse({'error': 'Please upload a valid image file'}, status=400)
+            
+            # Validate file size (max 5MB)
+            if profile_picture.size > 5 * 1024 * 1024:
+                return JsonResponse({'error': 'Image size should be less than 5MB'}, status=400)
+            
+            # Save the image
+            profile.profile_picture = profile_picture
+            profile.save()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Profile picture uploaded successfully',
+                'profile_picture_url': profile.profile_picture_url
+            })
+            
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+# ========================================
 # REGISTRAR PIN SETUP FUNCTIONS
 # ========================================
 
@@ -6638,7 +6714,7 @@ def signatory_approve_enrollment(request):
         required_roles_set = set(required_roles)
         
         if (signatory_roles >= required_roles_set and 
-            all_signatories.count() >= 4 and 
+            all_signatories.count() >= 3 and
             all(s.status == 'approved' for s in all_signatories)):
             enrollment.status = 'approved'
             enrollment.save()
@@ -7060,11 +7136,19 @@ def signatory_bulk_approve_enrollment(request):
                     signatory_roles = set(sig.role for sig in all_signatories)
                     required_roles_set = set(required_roles)
                     
-                    if (signatory_roles >= required_roles_set and 
-                        all_signatories.count() >= 4 and 
+                    if (signatory_roles >= required_roles_set and
+                        all_signatories.count() >= 3 and
                         all(s.status == 'approved' for s in all_signatories)):
                         enrollment.status = 'approved'
                         enrollment.save()
+
+                        # Send completion notification to student
+                        try:
+                            from landing.notification_service import NotificationService
+                            NotificationService.notify_enrollment_completed(enrollment.user, enrollment)
+                            NotificationService.notify_admin_form_completed('enrollment', enrollment.user.full_name)
+                        except Exception as e:
+                            print(f"Error sending enrollment completion notifications: {e}")
                     
                     # Create audit log
                     AuditLog.objects.create(
@@ -7633,11 +7717,19 @@ def signatory_bulk_approve_graduation(request):
                     signatory_roles = set(sig.role for sig in all_signatories)
                     required_roles_set = set(required_roles)
                     
-                    if (signatory_roles >= required_roles_set and 
-                        all_signatories.count() >= 4 and 
+                    if (signatory_roles >= required_roles_set and
+                        all_signatories.count() >= 4 and
                         all(s.status == 'approved' for s in all_signatories)):
                         graduation.status = 'approved'
                         graduation.save()
+
+                        # Send completion notification to student
+                        try:
+                            from landing.notification_service import NotificationService
+                            NotificationService.notify_graduation_completed(graduation.user, graduation)
+                            NotificationService.notify_admin_form_completed('graduation', graduation.user.full_name)
+                        except Exception as e:
+                            print(f"Error sending graduation completion notifications: {e}")
                     
                     # Create audit log
                     AuditLog.objects.create(
@@ -10487,6 +10579,17 @@ def signatory_approve_clearance(request):
             clearance_form.status = 'approved'
             clearance_form.finalized_at = timezone.now()
             clearance_form.save()
+
+            # Send completion notification to student
+            try:
+                from landing.notification_service import NotificationService
+                NotificationService.notify_clearance_completed(
+                    student=clearance_form.student,
+                    form_type='clearance',
+                    form_instance=clearance_form
+                )
+            except Exception as e:
+                print(f"Error sending completion notification: {e}")
             
             # Send clearance completed notification
             try:
@@ -10699,7 +10802,7 @@ def signatory_bulk_approve_clearance(request):
                     if was_updated:
                         approved_count += 1
                         student_names.append(clearance.student.get_full_name())
-                        
+
                         # Log activity only for actually updated records
                         SignatoryActivityLog.objects.create(
                             signatory=request.user,
@@ -10710,6 +10813,35 @@ def signatory_bulk_approve_clearance(request):
                             ip_address=get_client_ip(request),
                             user_agent=request.META.get('HTTP_USER_AGENT', '')
                         )
+
+                        # Send individual approval notification to student
+                        try:
+                            from landing.notification_service import NotificationService
+                            NotificationService.notify_form_approval(
+                                form_instance=clearance,
+                                form_type='clearance',
+                                signatory_user=request.user,
+                                remarks=comment or ''
+                            )
+                        except Exception as e:
+                            print(f"Error sending approval notification for clearance {clearance.id}: {e}")
+
+                        # Check if all signatories approved for this clearance
+                        all_signatories = ClearanceSignatory.objects.filter(clearance=clearance)
+                        all_approved = all_signatories.exists() and all(s.status == 'approved' for s in all_signatories)
+                        if all_approved:
+                            clearance.status = 'approved'
+                            clearance.save()
+
+                            # Send completion notification to student
+                            try:
+                                NotificationService.notify_clearance_completed(
+                                    student=clearance.student,
+                                    form_type='clearance',
+                                    form_instance=clearance
+                                )
+                            except Exception as e:
+                                print(f"Error sending completion notification: {e}")
                     
                 except Exception as e:
                     print(f"Error approving clearance {clearance.id}: {e}")
@@ -14560,6 +14692,17 @@ def business_manager_approve_clearance(request):
             clearance_form.status = 'approved'
             clearance_form.finalized_at = timezone.now()
             clearance_form.save()
+
+            # Send completion notification to student
+            try:
+                from landing.notification_service import NotificationService
+                NotificationService.notify_clearance_completed(
+                    student=clearance_form.student,
+                    form_type='clearance',
+                    form_instance=clearance_form
+                )
+            except Exception as e:
+                print(f"Error sending completion notification: {e}")
         
         # Log activity
         BusinessManagerActivityLog.objects.create(
@@ -14762,14 +14905,35 @@ def business_manager_bulk_approve_clearance(request):
                     
                     approved_count += 1
                     student_names.append(clearance.student.get_full_name())
-                    
-                    # Send individual notification to student
-                    Notification.objects.create(
-                        user=clearance.student,
-                        title="Clearance Approved",
-                        message=f"Your clearance form has been approved by the Business Manager.",
-                        notification_type='success'
-                    )
+
+                    # Send individual approval notification to student
+                    try:
+                        from landing.notification_service import NotificationService
+                        NotificationService.notify_form_approval(
+                            form_instance=clearance,
+                            form_type='clearance',
+                            signatory_user=request.user,
+                            remarks=comment or ''
+                        )
+                    except Exception as e:
+                        print(f"Error sending approval notification for clearance {clearance.id}: {e}")
+
+                    # Check if all signatories approved for this clearance
+                    all_signatories = ClearanceSignatory.objects.filter(clearance=clearance)
+                    all_approved = all_signatories.exists() and all(s.status == 'approved' for s in all_signatories)
+                    if all_approved:
+                        clearance.status = 'approved'
+                        clearance.save()
+
+                        # Send completion notification to student
+                        try:
+                            NotificationService.notify_clearance_completed(
+                                student=clearance.student,
+                                form_type='clearance',
+                                form_instance=clearance
+                            )
+                        except Exception as e:
+                            print(f"Error sending completion notification: {e}")
                     
                     # Log activity
                     ActivityLog.objects.create(
@@ -15538,7 +15702,7 @@ def business_manager_approve_enrollment(request):
         required_roles_set = set(required_roles)
         
         if (signatory_roles >= required_roles_set and 
-            all_signatories.count() >= 4 and 
+            all_signatories.count() >= 3 and
             all(s.status == 'approved' for s in all_signatories)):
             enrollment_form.status = 'approved'
             enrollment_form.save()
@@ -15926,8 +16090,11 @@ def google_oauth_callback(request):
         
         try:
             user = User.objects.get(email=email)
-            # Update existing user
-            user.user_type = user_type
+            # Update existing user - don't overwrite user_type if it's already been set by profile completion
+            # This prevents resetting alumni users back to student on subsequent Google logins
+            # Only update user_type if it's not yet determined or if explicitly changing from student to alumni
+            if user.user_type == 'student' and user_type == 'alumni':
+                user.user_type = user_type
             user.is_google_account = True
             if name and not user.full_name:
                 user.full_name = name

@@ -100,9 +100,8 @@ window.EnrollmentPrint = (function() {
         resetPreviewModal();
         showPreviewLoader();
         
-        // Show modal
+        // Don't show modal - we'll load content invisibly
         const modal = new bootstrap.Modal(modalEl);
-        modal.show();
         
         // Update modal title based on count
         const title = idsArray.length === 1 ? 
@@ -142,6 +141,14 @@ window.EnrollmentPrint = (function() {
             
             contentEl.innerHTML = html;
             contentEl.style.display = 'block';
+            
+            // Hide loading spinner since content is loaded
+            hidePreviewLoader();
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                printPreviewContent();
+            }, 500);
         })
         .catch(error => {
             clearTimeout(timeoutId);
@@ -190,39 +197,72 @@ window.EnrollmentPrint = (function() {
                     iframe.contentWindow.focus();
                     iframe.contentWindow.print();
                     
+                    // Refresh immediately when print dialog closes
+                    iframe.contentWindow.onafterprint = function() {
+                        location.reload();
+                    };
+                    
+                    // Fallback in case onafterprint doesn't work
                     setTimeout(() => {
                         if (iframe.parentNode) {
                             document.body.removeChild(iframe);
                         }
-                    }, 1000);
+                        location.reload();
+                    }, 100);
                 } catch (e) {
                     console.error('Print error:', e);
                     showAlert('Print failed. Please try again.', 'error');
                     
-                    // Fallback: open in new window
-                    try {
-                        const printWindow = window.open('', '_blank', 'width=800,height=600');
-                        printWindow.document.open();
-                        printWindow.document.write(htmlContent);
-                        printWindow.document.close();
-                        printWindow.focus();
-                        setTimeout(() => printWindow.print(), 500);
-                    } catch (fallbackError) {
-                        showAlert('Print functionality is not available.', 'error');
-                    }
-                    
                     if (iframe.parentNode) {
                         document.body.removeChild(iframe);
                     }
+                    location.reload();
                 }
             }, 100);
         };
         
-        iframe.src = `/registrar/enrollment/preview-print/?ids=single`;
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         doc.open();
         doc.write(htmlContent);
         doc.close();
+    }
+    
+    // Function to completely reset page state after printing
+    function resetPageState() {
+        // Force multiple reflows to reset CSS state
+        document.body.offsetHeight;
+        document.documentElement.offsetHeight;
+        
+        // Reset all potentially affected elements
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            // Remove any inline styles that might have been added
+            if (el.style.border || el.style.borderColor || el.style.borderWidth || el.style.borderStyle) {
+                el.style.border = '';
+                el.style.borderColor = '';
+                el.style.borderWidth = '';
+                el.style.borderStyle = '';
+            }
+        });
+        
+        // Specifically reset enrollment table elements
+        const tables = document.querySelectorAll('.registrar_enrollment_table, .registrar_enrollment_table *');
+        tables.forEach(el => {
+            el.style.cssText = '';
+            el.removeAttribute('style');
+        });
+        
+        // Force browser to recalculate styles
+        window.getComputedStyle(document.body).getPropertyValue('border');
+        
+        // Trigger layout recalculation
+        window.dispatchEvent(new Event('resize'));
+        
+        // Additional reset - refresh CSS by toggling a class
+        document.body.classList.add('print-reset');
+        setTimeout(() => {
+            document.body.classList.remove('print-reset');
+        }, 10);
     }
 
     // Initialize event handlers

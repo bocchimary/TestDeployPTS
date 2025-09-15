@@ -5,6 +5,12 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/SGRADUATION.css' %}">
+<style>
+/* Hide the modal - keep it functional but invisible */
+#graduationPreviewModal {
+  display: none !important;
+}
+</style>
 {% endblock %}
 
 {% block main_content %}

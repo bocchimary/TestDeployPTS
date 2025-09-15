@@ -64,8 +64,8 @@
       </div>
 
       <div class="fw-bold registrar_sidebar_user-info d-flex align-items-center gap-2 text-white">
-        {% if user.profile.profile_picture_url %}
-          <img src="{{ user.profile.profile_picture_url }}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;" alt="Profile Picture">
+        {% if user.registrar_profile.profile_picture_url %}
+          <img src="{{ user.registrar_profile.profile_picture_url }}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;" alt="Profile Picture">
         {% else %}
           <i class="bi bi-person-circle fs-4"></i>
         {% endif %}

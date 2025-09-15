@@ -403,8 +403,8 @@ function previewGraduationPDF(graduationId) {
     };
     modalElement.addEventListener('hidden.bs.modal', handleModalHidden);
     
-    // Show modal
-    modal.show();
+    // Don't show modal - we'll load content invisibly
+    // modal.show();
     
     // Load form content - using same URL pattern as working bulk printing
     const url = `/signatory/graduation/bulk-print/?ids=${graduationId}`;
@@ -437,6 +437,11 @@ function previewGraduationPDF(graduationId) {
             contentEl.style.display = 'block';
             
             console.log('Content set successfully, contentEl display:', contentEl.style.display);
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                createPrintIframe(html);
+            }, 500);
             
             // Show print button
             const printBtn = document.getElementById('printGraduationBtn');
@@ -930,8 +935,8 @@ function bulkPrint() {
     };
     modalElement.addEventListener('hidden.bs.modal', handleModalHidden);
     
-    // Show modal
-    modal.show();
+    // Don't show modal - we'll load content invisibly
+    // modal.show();
     
     // Fetch preview content
     const url = `/signatory/graduation/bulk-print/?ids=${selectedIds.join(',')}`;
@@ -956,6 +961,11 @@ function bulkPrint() {
             spinnerEl.innerHTML = ''; // Clear loading text
             contentEl.innerHTML = html;
             contentEl.style.display = 'block';
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                createPrintIframe(contentEl.innerHTML);
+            }, 500);
             
             // Setup print button
             const printBtn = document.getElementById('printPreviewBtn');
@@ -1276,11 +1286,18 @@ function createPrintIframe(htmlContent) {
             iframe.contentWindow.focus();
             iframe.contentWindow.print();
             
+            // Refresh immediately when print dialog closes
+            iframe.contentWindow.onafterprint = function() {
+                location.reload();
+            };
+            
+            // Fallback in case onafterprint doesn't work
             setTimeout(() => {
                 if (iframe.parentNode) {
                     iframe.parentNode.removeChild(iframe);
                 }
-            }, 500);
+                location.reload();
+            }, 100);
         } catch (e) {
             console.error('Print error:', e);
             showError('Print failed. Please try again.');
@@ -1300,6 +1317,7 @@ function createPrintIframe(htmlContent) {
             if (iframe.parentNode) {
                 iframe.parentNode.removeChild(iframe);
             }
+            location.reload();
         }
     };
     

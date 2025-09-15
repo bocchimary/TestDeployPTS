@@ -82,37 +82,39 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Check if user needs to complete their profile (especially for Google OAuth users)"""
         if not self.is_google_account:
             return False
-            
+
         if self.user_type == 'student':
             try:
                 profile = self.profile
-                # Check if essential fields are missing
+                # Check if essential fields are missing - student_number must not start with GOOGLE_
+                # and must have basic required fields filled
                 return not all([
                     profile.student_number and not profile.student_number.startswith('GOOGLE_'),
-                    profile.program,
+                    profile.program and profile.program.strip() != 'To be set',
                     profile.year_level,
-                    profile.address,
-                    profile.gender,
+                    profile.address and profile.address.strip(),
+                    profile.gender and profile.gender.strip(),
                     profile.birthdate
                 ])
             except:
                 return True
-                
+
         elif self.user_type == 'alumni':
             try:
                 profile = self.alumni_profile
-                # Check if essential fields are missing
+                # Check if essential fields are missing - alumni_id must not start with GOOGLE_
+                # and must have basic required fields filled
                 return not all([
                     profile.alumni_id and not profile.alumni_id.startswith('GOOGLE_'),
-                    profile.course_graduated,
-                    profile.year_graduated,
-                    profile.address,
-                    profile.gender,
+                    profile.course_graduated and profile.course_graduated.strip() != 'To be set',
+                    profile.year_graduated and profile.year_graduated.strip() != '2024',
+                    profile.address and profile.address.strip(),
+                    profile.gender and profile.gender.strip(),
                     profile.birthdate
                 ])
             except:
                 return True
-                
+
         return False
 
     class Meta:
@@ -809,6 +811,8 @@ class NotificationTemplate(models.Model):
         ('document_ready', 'Document Ready'),
         ('document_released', 'Document Released'),
         ('clearance_completed', 'Clearance Completed'),
+        ('enrollment_completed', 'Enrollment Completed'),
+        ('graduation_completed', 'Graduation Completed'),
         ('daily_digest', 'Daily Digest'),
         ('report_generated', 'Report Generated'),
     ]
@@ -874,6 +878,8 @@ class NotificationPreference(models.Model):
     email_on_form_disapproved = models.BooleanField(default=True)
     email_on_document_ready = models.BooleanField(default=True)
     email_on_clearance_completed = models.BooleanField(default=True)
+    email_on_enrollment_completed = models.BooleanField(default=True)
+    email_on_graduation_completed = models.BooleanField(default=True)
     email_daily_digest = models.BooleanField(default=True)
     
     # In-app notification preferences

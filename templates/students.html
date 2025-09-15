@@ -1102,16 +1102,31 @@ document.addEventListener('DOMContentLoaded', function() {
     <script>
       // Check if profile completion is needed on page load
       document.addEventListener('DOMContentLoaded', function() {
-        checkProfileCompletion();
+        // Add a small delay to allow database commits to complete after profile completion
+        setTimeout(function() {
+          checkProfileCompletion();
+        }, 500); // 500ms delay
         setupProfileCompletionForm();
       });
 
       function checkProfileCompletion() {
+        // Make sessionStorage user-specific to handle account deletions/recreations
+        const userId = '{{ request.user.id }}';
+        const storageKey = `profileCompletionChecked_${userId}`;
+
+        // Check if we've already shown the modal for this specific user in this session
+        if (sessionStorage.getItem(storageKey) === 'true') {
+          return;
+        }
+
         fetch('/check-profile-completion/')
           .then(response => response.json())
           .then(data => {
             if (data.needs_completion) {
               showProfileCompletionModal();
+            } else {
+              // Mark as checked to prevent repeated checks for this specific user
+              sessionStorage.setItem(storageKey, 'true');
             }
           })
           .catch(error => {
@@ -1221,10 +1236,15 @@ document.addEventListener('DOMContentLoaded', function() {
               text: 'Your profile has been successfully updated.',
               confirmButtonText: 'Continue'
             }).then(() => {
+              // Clear the session check since profile is now complete
+              const userId = '{{ request.user.id }}';
+              const storageKey = `profileCompletionChecked_${userId}`;
+              sessionStorage.setItem(storageKey, 'true');
+
               // Close modal and redirect to appropriate dashboard
               const modal = bootstrap.Modal.getInstance(document.getElementById('profileCompletionModal'));
               modal.hide();
-              
+
               // If redirect URL is provided, use it; otherwise reload
               if (data.redirect_url) {
                 window.location.href = data.redirect_url;

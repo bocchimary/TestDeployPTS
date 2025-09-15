@@ -6,6 +6,11 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/RCLEARANCE.css' %}?v=1.2">
 <style>
+/* Hide the modal - keep it functional but invisible */
+#previewPrintModal {
+  display: none !important;
+}
+
 /* Preview & Print Modal Styles */
 .preview-print-content {
   font-family: Arial, sans-serif;
@@ -440,7 +445,7 @@
     // Global variable to track current request for cancellation
     let currentPreviewController = null;
     
-    // Override print functions to use modal preview
+    // Override print functions to use hidden modal preview with auto-print
     function printClearance(clearanceId) {
         openPreviewModal([clearanceId]);
     }
@@ -533,18 +538,49 @@
                     background: white;
                 }
                 
-                /* Compress clearance form to fit on one page */
-                .clearance-form {
-                    break-inside: avoid !important;
-                    page-break-inside: avoid !important;
-                    page-break-before: auto;
+                /* Match the working template structure */
+                .page-wrapper {
+                    min-height: 100vh;
+                    page-break-after: always;
+                    page-break-inside: avoid;
+                    display: block;
+                }
+                
+                .page-wrapper:last-child {
                     page-break-after: avoid;
-                    max-height: 277mm;
-                    overflow: visible;
-                    display: flex;
-                    flex-direction: column;
-                    margin: 0;
+                    min-height: auto;
+                }
+                
+                .clearance-form {
+                    margin-bottom: 0;
                     padding: 0;
+                    display: block;
+                }
+                
+                /* Increase signature font sizes */
+                .approved-signature {
+                    color: green;
+                    font-weight: bold;
+                    font-size: 12px;
+                }
+                
+                .disapproved-signature {
+                    color: red;
+                    font-weight: bold;
+                    font-size: 12px;
+                }
+                
+                .pending-signature {
+                    color: orange;
+                    font-weight: bold;
+                    font-size: 12px;
+                }
+                
+                /* Table font sizes */
+                .dept-table th,
+                .dept-table td {
+                    font-size: 12px;
+                    height: 20px;
                 }
                 
                 /* Compress both copies to fit in one page */
@@ -753,11 +789,13 @@
                     iframe.contentWindow.focus();
                     iframe.contentWindow.print();
                     
-                    // Clean up iframe after printing
+                    // Clean up iframe and modal state after printing
                     setTimeout(() => {
                         if (iframe.parentNode) {
                             document.body.removeChild(iframe);
                         }
+                        // Reset modal state
+                        resetPreviewModal();
                     }, 1000);
                 } catch (e) {
                     console.error('Print error:', e);
@@ -765,6 +803,8 @@
                     if (iframe.parentNode) {
                         document.body.removeChild(iframe);
                     }
+                    // Reset modal state on error
+                    resetPreviewModal();
                 }
             }, 100);
         };
@@ -795,9 +835,7 @@
         resetPreviewModal();
         showPreviewLoader();
         
-        // Show modal
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
+        // Don't show modal - we'll load content invisibly
         
         // Update modal title based on count
         const title = clearanceIds.length === 1 ? 
@@ -847,6 +885,14 @@
                 // Show content
                 contentEl.innerHTML = html;
                 contentEl.style.display = 'block';
+                
+                // Hide loading spinner since content is loaded
+                hidePreviewLoader();
+                
+                // Auto-trigger print after content loads
+                setTimeout(function() {
+                    printPreviewContent();
+                }, 500);
             })
             .catch(error => {
                 console.error('Error loading preview:', error);

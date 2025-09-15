@@ -887,4 +887,145 @@ function getCookie(name) {
   }
   return cookieValue;
 }
+
+// Real-time messaging functionality
+let realtimePollingInterval = null;
+let lastMessageTimestamp = null;
+let isUserActive = true;
+
+// Track user activity
+let lastActivityTime = Date.now();
+document.addEventListener('click', () => lastActivityTime = Date.now());
+document.addEventListener('keypress', () => lastActivityTime = Date.now());
+document.addEventListener('mousemove', () => lastActivityTime = Date.now());
+
+// Check if user is still active (within last 5 minutes)
+function checkUserActivity() {
+  const now = Date.now();
+  isUserActive = (now - lastActivityTime) < 300000; // 5 minutes
+  return isUserActive;
+}
+
+// Start real-time messaging polling
+function startRealtimeMessaging() {
+  if (realtimePollingInterval) {
+    clearInterval(realtimePollingInterval);
+  }
+
+  // Poll for new conversations every 5 seconds
+  realtimePollingInterval = setInterval(async () => {
+    if (!checkUserActivity()) {
+      return; // Skip polling if user is inactive
+    }
+
+    try {
+      // Check for new conversations
+      await checkForNewConversations();
+
+      // Check for new messages in current open conversation
+      if (currentConversationId) {
+        await checkForNewMessages(currentConversationId);
+      }
+    } catch (error) {
+      console.log('Polling error:', error);
+    }
+  }, 5000); // Poll every 5 seconds
+}
+
+// Check for new conversations
+async function checkForNewConversations() {
+  try {
+    const response = await fetch('/api/conversations/');
+    const data = await response.json();
+
+    if (data.success) {
+      const currentConversationElements = document.querySelectorAll('.conversation-item');
+      const currentConversationIds = Array.from(currentConversationElements)
+        .map(el => el.getAttribute('data-conversation-id'));
+
+      const newConversations = data.conversations.filter(conv =>
+        !currentConversationIds.includes(conv.id)
+      );
+
+      if (newConversations.length > 0) {
+        // Reload conversations to show new ones
+        loadConversations();
+      }
+    }
+  } catch (error) {
+    console.log('Error checking for new conversations:', error);
+  }
+}
+
+// Check for new messages in current conversation
+async function checkForNewMessages(conversationId) {
+  try {
+    const response = await fetch(`/api/conversations/${conversationId}/messages/`);
+    const data = await response.json();
+
+    if (data.success && data.messages.length > 0) {
+      const latestMessage = data.messages[data.messages.length - 1];
+      const latestTimestamp = new Date(latestMessage.sent_at).getTime();
+
+      // If we have new messages since last check
+      if (lastMessageTimestamp && latestTimestamp > lastMessageTimestamp) {
+        // Update the messages area with new messages
+        renderEnhancedMessages(data.messages);
+        scrollToBottom();
+
+        // Update conversation list to show updated timestamp/preview
+        loadConversations();
+
+        // Show notification for new message (optional)
+        showNewMessageNotification(data.conversation.other_user.name);
+      }
+
+      lastMessageTimestamp = latestTimestamp;
+    }
+  } catch (error) {
+    console.log('Error checking for new messages:', error);
+  }
+}
+
+// Show a subtle notification for new messages
+function showNewMessageNotification(senderName) {
+  // Only show if page is not in focus
+  if (document.hidden) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(`New message from ${senderName}`, {
+        icon: '/static/images/logo.png',
+        body: 'You have received a new message.',
+        tag: 'new-message'
+      });
+    }
+  }
+}
+
+// Hook into the existing openEnhancedConversation function
+const originalOpenEnhancedConversation = openEnhancedConversation;
+openEnhancedConversation = function(conversationId) {
+  lastMessageTimestamp = null; // Reset timestamp when switching conversations
+
+  // Call the original function (which sets currentConversationId)
+  return originalOpenEnhancedConversation(conversationId);
+};
+
+// Request notification permission on page load
+document.addEventListener('DOMContentLoaded', function() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+
+  // Start real-time messaging after a short delay to ensure everything is loaded
+  setTimeout(() => {
+    startRealtimeMessaging();
+  }, 2000);
+});
+
+// Stop polling when page is about to unload
+window.addEventListener('beforeunload', () => {
+  if (realtimePollingInterval) {
+    clearInterval(realtimePollingInterval);
+  }
+});
 </script>

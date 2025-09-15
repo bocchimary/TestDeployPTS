@@ -6,6 +6,26 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/RENROLLMENT.css' %}?v=1.1">
 <style>
+/* Hide the modal - keep it functional but invisible */
+#previewPrintModal {
+  display: none !important;
+}
+
+/* Prevent any print-related border changes */
+@media print {
+  .registrar_enrollment_table,
+  .registrar_enrollment_table *,
+  .registrar_enrollment_table td,
+  .registrar_enrollment_table th,
+  .registrar_enrollment_table tr {
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+}
+
 /* Preview & Print Modal Styles - minimal to avoid interference */
 .preview-print-content {
   background: white;

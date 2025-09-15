@@ -128,6 +128,52 @@ class Command(BaseCommand):
                 'in_app_message': 'Congratulations! All signatories have approved your {form_type} clearance.'
             },
             {
+                'template_type': 'enrollment_completed',
+                'email_subject': 'Enrollment Completed - All Approvals Received',
+                'email_template': '''
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #27ae60;">Congratulations! Enrollment Completed 🎉</h2>
+                    <p>Dear {user_name},</p>
+                    <p>Excellent news! Your enrollment form has been completed successfully:</p>
+                    <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #27ae60;">
+                        <p><strong>Form Type:</strong> Enrollment</p>
+                        <p><strong>Completion Date:</strong> {completion_date}</p>
+                        <p><strong>Status:</strong> All Required Signatories Approved ✓</p>
+                    </div>
+                    <p>All required signatories have approved your enrollment form. Your enrollment is now complete and ready for processing.</p>
+                    <p>You can view and download your enrollment form from your student dashboard.</p>
+                    <p style="color: #7f8c8d; font-size: 12px;">
+                        This is an automated message from the Educational Institution Clearance System.
+                    </p>
+                </div>
+                ''',
+                'in_app_title': 'Enrollment Completed!',
+                'in_app_message': 'Congratulations! All required signatories have approved your enrollment form.'
+            },
+            {
+                'template_type': 'graduation_completed',
+                'email_subject': 'Graduation Completed - All Approvals Received',
+                'email_template': '''
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #27ae60;">Congratulations! Graduation Completed 🎉</h2>
+                    <p>Dear {user_name},</p>
+                    <p>Excellent news! Your graduation form has been completed successfully:</p>
+                    <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #27ae60;">
+                        <p><strong>Form Type:</strong> Graduation</p>
+                        <p><strong>Completion Date:</strong> {completion_date}</p>
+                        <p><strong>Status:</strong> All Required Signatories Approved ✓</p>
+                    </div>
+                    <p>All required signatories have approved your graduation form. Your graduation is now complete and ready for final processing.</p>
+                    <p>You can view and download your graduation form from your student dashboard.</p>
+                    <p style="color: #7f8c8d; font-size: 12px;">
+                        This is an automated message from the Educational Institution Clearance System.
+                    </p>
+                </div>
+                ''',
+                'in_app_title': 'Graduation Completed!',
+                'in_app_message': 'Congratulations! All required signatories have approved your graduation form.'
+            },
+            {
                 'template_type': 'daily_digest',
                 'email_subject': 'Daily Digest - Pending Forms Summary',
                 'email_template': '''

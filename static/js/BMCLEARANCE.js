@@ -813,9 +813,8 @@ function openPreviewModal(clearanceIds) {
     resetPreviewModal();
     showPreviewLoader();
     
-    // Show modal
+    // Don't show modal - we'll load content invisibly
     const modal = new bootstrap.Modal(modalEl);
-    modal.show();
     
     // Update modal title based on count
     const title = clearanceIds.length === 1 ? 
@@ -859,6 +858,14 @@ function openPreviewModal(clearanceIds) {
             // Show content
             contentEl.innerHTML = html;
             contentEl.style.display = 'block';
+            
+            // Hide loading spinner since content is loaded
+            hidePreviewLoader();
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                printPreviewContent();
+            }, 500);
         })
         .catch(error => {
             console.error('Error loading preview:', error);
@@ -1184,18 +1191,25 @@ function createPrintIframe(htmlContent) {
                 iframe.contentWindow.focus();
                 iframe.contentWindow.print();
                 
-                // Clean up iframe after printing
+                // Refresh immediately when print dialog closes
+                iframe.contentWindow.onafterprint = function() {
+                    location.reload();
+                };
+                
+                // Fallback in case onafterprint doesn't work
                 setTimeout(() => {
                     if (iframe.parentNode) {
                         document.body.removeChild(iframe);
                     }
-                }, 1000);
+                    location.reload();
+                }, 100);
             } catch (e) {
                 console.error('Print error:', e);
                 showNotification('Print failed. Please try again.', 'error');
                 if (iframe.parentNode) {
                     document.body.removeChild(iframe);
                 }
+                location.reload();
             }
         }, 100);
     };

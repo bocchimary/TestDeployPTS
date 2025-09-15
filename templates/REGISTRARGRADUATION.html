@@ -6,6 +6,24 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/RGRADUATION.css' %}?v=1.1">
 <style>
+/* Hide the modal - keep it functional but invisible */
+#previewPrintModal {
+  display: none !important;
+}
+
+/* Prevent any print-related layout/sizing changes */
+@media print {
+  body, html, .registrar_graduation_main-content,
+  .nav, .nav-tabs, .nav-link, .tab-content, .tab-pane {
+    transform: none !important;
+    scale: none !important;
+    zoom: 1 !important;
+    font-size: inherit !important;
+    width: auto !important;
+    height: auto !important;
+  }
+}
+
 /* Preview & Print Modal Styles - minimal to avoid interference */
 .preview-print-content {
   background: white;

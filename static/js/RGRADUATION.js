@@ -96,9 +96,8 @@ window.GraduationPrint = (function() {
         resetPreviewModal();
         showPreviewLoader();
         
-        // Show modal
+        // Don't show modal - we'll load content invisibly
         const modal = new bootstrap.Modal(modalEl);
-        modal.show();
         
         // Update modal title based on count
         const title = idsArray.length === 1 ? 
@@ -138,6 +137,14 @@ window.GraduationPrint = (function() {
             
             contentEl.innerHTML = html;
             contentEl.style.display = 'block';
+            
+            // Hide loading spinner since content is loaded
+            hidePreviewLoader();
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                printPreviewContent();
+            }, 500);
         })
         .catch(error => {
             clearTimeout(timeoutId);
@@ -186,30 +193,26 @@ window.GraduationPrint = (function() {
                     iframe.contentWindow.focus();
                     iframe.contentWindow.print();
                     
+                    // Refresh immediately when print dialog closes
+                    iframe.contentWindow.onafterprint = function() {
+                        location.reload();
+                    };
+                    
+                    // Fallback in case onafterprint doesn't work
                     setTimeout(() => {
                         if (iframe.parentNode) {
                             document.body.removeChild(iframe);
                         }
-                    }, 1000);
+                        location.reload();
+                    }, 100);
                 } catch (e) {
                     console.error('Print error:', e);
                     showAlert('Print failed. Please try again.', 'error');
                     
-                    // Fallback: open in new window
-                    try {
-                        const printWindow = window.open('', '_blank', 'width=800,height=600');
-                        printWindow.document.open();
-                        printWindow.document.write(htmlContent);
-                        printWindow.document.close();
-                        printWindow.focus();
-                        setTimeout(() => printWindow.print(), 500);
-                    } catch (fallbackError) {
-                        showAlert('Print functionality is not available.', 'error');
-                    }
-                    
                     if (iframe.parentNode) {
                         document.body.removeChild(iframe);
                     }
+                    location.reload();
                 }
             }, 100);
         };
@@ -218,6 +221,62 @@ window.GraduationPrint = (function() {
         doc.open();
         doc.write(htmlContent);
         doc.close();
+    }
+    
+    // Function to completely reset page state after printing
+    function resetPageState() {
+        // Force multiple reflows to reset CSS state
+        document.body.offsetHeight;
+        document.documentElement.offsetHeight;
+        
+        // Reset viewport and zoom issues
+        document.documentElement.style.zoom = '';
+        document.body.style.zoom = '';
+        document.body.style.transform = '';
+        document.body.style.scale = '';
+        
+        // Reset all potentially affected elements
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            // Remove any transform, scale, zoom properties
+            if (el.style.transform || el.style.scale || el.style.zoom) {
+                el.style.transform = '';
+                el.style.scale = '';
+                el.style.zoom = '';
+            }
+        });
+        
+        // Specifically reset graduation main content and tabs
+        const mainContent = document.querySelector('.registrar_graduation_main-content');
+        if (mainContent) {
+            mainContent.style.cssText = '';
+            mainContent.removeAttribute('style');
+        }
+        
+        // Reset navigation tabs if they exist
+        const tabs = document.querySelectorAll('.nav-link, .tab-content, .tab-pane');
+        tabs.forEach(tab => {
+            tab.style.fontSize = '';
+            tab.style.transform = '';
+            tab.style.scale = '';
+            tab.style.zoom = '';
+        });
+        
+        // Force browser to recalculate all layouts
+        window.getComputedStyle(document.body).getPropertyValue('zoom');
+        window.getComputedStyle(document.documentElement).getPropertyValue('zoom');
+        
+        // Trigger multiple layout events
+        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event('orientationchange'));
+        
+        // Additional reset - refresh CSS by toggling a class
+        document.body.classList.add('print-reset');
+        setTimeout(() => {
+            document.body.classList.remove('print-reset');
+            // Final layout reset
+            window.dispatchEvent(new Event('resize'));
+        }, 10);
     }
 
     // Initialize event handlers

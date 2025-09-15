@@ -553,8 +553,8 @@ function viewEnrollmentPDF(enrollmentId) {
         contentEl.innerHTML = '';
     }
     
-    // Show modal
-    modal.show();
+    // Don't show modal - we'll load content invisibly
+    // modal.show();
     
     // Set up cleanup handlers to prevent CSS bleeding and fix loading text issue
     const handleModalHidden = function() {
@@ -588,6 +588,11 @@ function viewEnrollmentPDF(enrollmentId) {
             hideLoadingSpinner();
             contentEl.innerHTML = `<div class="pdf-modal-content">${html}</div>`;
             contentEl.style.display = 'block';
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                printPreviewContent();
+            }, 500);
         })
         .catch(error => {
             console.error('Error loading form:', error);
@@ -649,8 +654,8 @@ function printEnrollment(enrollmentId) {
         contentEl.innerHTML = '';
     }
     
-    // Show modal
-    modal.show();
+    // Don't show modal - we'll load content invisibly
+    // modal.show();
     
     // Set up cleanup handlers to prevent CSS bleeding
     const handleModalHidden = function() {
@@ -683,6 +688,11 @@ function printEnrollment(enrollmentId) {
             hideLoadingSpinner();
             contentEl.innerHTML = `<div class="pdf-modal-content">${html}</div>`;
             contentEl.style.display = 'block';
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                printPreviewContent();
+            }, 500);
         })
         .catch(error => {
             console.error('Error loading form:', error);
@@ -715,8 +725,8 @@ function bulkPrint() {
         contentEl.innerHTML = '';
     }
     
-    // Show modal
-    modal.show();
+    // Don't show modal - we'll load content invisibly
+    // modal.show();
     
     // Set up cleanup handlers to prevent CSS bleeding
     const handleModalHidden = function() {
@@ -737,35 +747,59 @@ function bulkPrint() {
     // Add cleanup listener
     document.getElementById('pdfPreviewModal').addEventListener('hidden.bs.modal', handleModalHidden);
     
-    // Load forms using individual print endpoint for consistent formatting
-    // If multiple IDs, fetch first one to show same format as individual
-    const firstId = selectedIds[0];
-    fetch(`/signatory/enrollment/print/${firstId}/`)
-        .then(response => response.text())
-        .then(html => {
-            if (!html || html.trim().length === 0) {
-                throw new Error('Empty response received from server');
-            }
-            
-            // Hide loading and show content
-            hideLoadingSpinner();
-            contentEl.innerHTML = `<div class="pdf-modal-content">${html}</div>`;
-            contentEl.style.display = 'block';
-            
-            // Update modal title to reflect bulk operation
-            const modalTitle = document.getElementById('pdfPreviewModalLabel');
-            if (modalTitle && selectedIds.length > 1) {
-                modalTitle.innerHTML = `<i class="bi bi-file-pdf me-2"></i>Enrollment Forms Preview (${selectedIds.length} selected)`;
-            }
-        })
-        .catch(error => {
-            console.error('Error loading bulk forms:', error);
-            
-            // Hide loading and show error
-            hideLoadingSpinner();
-            contentEl.innerHTML = `<div class="alert alert-danger m-3">Failed to load bulk form preview. Please try again.</div>`;
-            contentEl.style.display = 'block';
-        });
+    // Load all selected forms using individual endpoints and combine them
+    console.log('Bulk print called with IDs:', selectedIds);
+    
+    const fetchPromises = selectedIds.map(id => 
+        fetch(`/signatory/enrollment/print/${id}/`)
+            .then(response => response.text())
+            .then(html => {
+                if (html && html.trim().length > 0) {
+                    // Wrap each form in a container with page break
+                    return `<div class="enrollment-form" style="page-break-after: always; page-break-inside: avoid;">${html}</div>`;
+                }
+                return '';
+            })
+            .catch(error => {
+                console.error(`Error loading enrollment ${id}:`, error);
+                return '';
+            })
+    );
+    
+    Promise.all(fetchPromises).then(htmlArray => {
+        const combinedHtml = htmlArray.filter(html => html).join('');
+        
+        if (!combinedHtml) {
+            throw new Error('No valid forms received from server');
+        }
+        
+        // Hide loading and show content
+        hideLoadingSpinner();
+        contentEl.innerHTML = `<div class="pdf-modal-content">${combinedHtml}</div>`;
+        contentEl.style.display = 'block';
+        
+        // Auto-trigger print after content loads
+        setTimeout(function() {
+            printPreviewContent();
+        }, 500);
+        
+        // Update modal title to reflect bulk operation
+        const modalTitle = document.getElementById('pdfPreviewModalLabel');
+        if (modalTitle && selectedIds.length > 1) {
+            modalTitle.innerHTML = `<i class="bi bi-file-pdf me-2"></i>Enrollment Forms Preview (${selectedIds.length} selected)`;
+        }
+    }).catch(error => {
+        console.error('Error in bulk print:', error);
+        hideLoadingSpinner();
+        contentEl.innerHTML = `
+            <div class="alert alert-danger m-3">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Error loading enrollment forms for printing. Please try again.
+                <br><small class="text-muted">Error: ${error.message}</small>
+            </div>
+        `;
+        contentEl.style.display = 'block';
+    });
 }
 
 function getSelectedEnrollmentIds() {
@@ -1231,17 +1265,25 @@ function printPreviewContent() {
                 iframe.contentWindow.focus();
                 iframe.contentWindow.print();
                 
+                // Refresh immediately when print dialog closes
+                iframe.contentWindow.onafterprint = function() {
+                    location.reload();
+                };
+                
+                // Fallback in case onafterprint doesn't work
                 setTimeout(() => {
                     if (iframe.parentNode) {
                         document.body.removeChild(iframe);
                     }
-                }, 1000);
+                    location.reload();
+                }, 100);
             } catch (e) {
                 console.error('Print error:', e);
                 showAlert('Unable to print. Please try again.', 'error');
                 if (iframe.parentNode) {
                     document.body.removeChild(iframe);
                 }
+                location.reload();
             }
         }, 500);
     };

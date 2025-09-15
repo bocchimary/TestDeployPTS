@@ -146,6 +146,8 @@ class NotificationService:
             'document_ready': prefs.email_on_document_ready,
             'document_released': prefs.email_on_document_ready,
             'clearance_completed': prefs.email_on_clearance_completed,
+            'enrollment_completed': prefs.email_on_enrollment_completed,
+            'graduation_completed': prefs.email_on_graduation_completed,
         }
         return mapping.get(notification.notification_type, True)
     

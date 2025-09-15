@@ -9,8 +9,6 @@
 </div>
 
 <div class="student_profile_main-content" id="student_profile_main_content">
-  <form id="student_profile_form" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
     <div class="row g-4" style="margin-top:-3rem;">
       <!-- Left Column -->
       <div class="col-lg-4 col-md-12">
@@ -22,28 +20,36 @@
      id="student_profile_image_preview" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;">
             </div>
 
-            <input type="file" name="profile_picture" id="student_profile_upload_btn" class="form-control mb-4">
+            <button class="btn btn-outline-secondary w-100 mb-3" type="button" id="student_profile_upload_btn">
+              <i class="bi bi-upload me-2"></i>Upload new image
+            </button>
+            
+            <input type="file" id="student_profile_file_input" accept="image/*" style="display: none;">
 
             <hr>
             {% if not request.user.is_google_account %}
             <div class="mb-3 fw-bold">Change Password</div>
-            <div class="mb-3 text-start">
-              <label for="student_profile_oldPassword" class="form-label small">Old Password</label>
-              <input type="password" class="form-control" id="student_profile_oldPassword" name="oldPassword">
-              {% if errors.old_password_error %}
-                <small class="text-danger">{{ errors.old_password_error }}</small>
-              {% endif %}
-            </div>
-            <div class="mb-3 text-start">
-              <label for="student_profile_newPassword" class="form-label small">New Password</label>
-              <input type="password" class="form-control" id="student_profile_newPassword" name="newPassword">
-              {% if errors.new_password_error %}
-                <small class="text-danger">{{ errors.new_password_error }}</small>
-              {% endif %}
-            </div>
-            <button type="submit" class="btn btn-primary w-80" name="changePassword" id="student_profile_changePassword_btn"
-              style=" background-color: #183a53;"
-            >Change Password</button>
+            <form id="student_profile_password_form">
+              <div class="mb-3 text-start">
+                <label for="student_profile_oldPassword" class="form-label small">Old Password</label>
+                <input type="password" class="form-control" id="student_profile_oldPassword" name="oldPassword" required>
+                <div class="invalid-feedback" id="student_profile_oldPassword_error"></div>
+              </div>
+              <div class="mb-3 text-start">
+                <label for="student_profile_newPassword" class="form-label small">New Password</label>
+                <input type="password" class="form-control" id="student_profile_newPassword" name="newPassword" required>
+                <div class="invalid-feedback" id="student_profile_newPassword_error"></div>
+              </div>
+              <div class="mb-3 text-start">
+                <label for="student_profile_confirmPassword" class="form-label small">Confirm New Password</label>
+                <input type="password" class="form-control" id="student_profile_confirmPassword" name="confirmPassword" required>
+                <div class="invalid-feedback" id="student_profile_confirmPassword_error"></div>
+              </div>
+              <button type="submit" class="btn btn-primary w-100" id="student_profile_changePassword_btn"
+                style="background-color: #183a53;">
+                <i class="bi bi-key me-2"></i>Change Password
+              </button>
+            </form>
             {% else %}
             <div class="mb-3 fw-bold text-muted">Change Password</div>
             <div class="alert alert-info small">
@@ -58,9 +64,10 @@
       <!-- Right Column -->
       <div class="col-lg-8 col-md-12">
         <div class="card">
-          <div class="card-header p-2 fw-bold">Account Details (Read Only)</div>
+          <div class="card-header p-2 fw-bold">Account Details</div>
           <div class="card-body">
-            <div class="row g-3">
+            <form id="student_profile_details_form">
+              <div class="row g-3">
               <div class="col-md-3">
                 <label for="student_profile_firstName" class="form-label small">First name</label>
                 <input type="text" class="form-control" name="firstName" id="student_profile_firstName" placeholder="First name" value="{{ first_name|default_if_none:'' }}" readonly>
@@ -104,90 +111,40 @@
               <div class="col-md-12">
                 <label for="student_profile_address" class="form-label small">Address</label>
                 <input type="text" class="form-control" name="address" id="student_profile_address" value="{{ profile.address|default_if_none:'' }}">
+                <div class="invalid-feedback" id="student_profile_address_error"></div>
               </div>
               <div class="col-md-6">
                 <label for="student_profile_email" class="form-label small">Email (required)</label>
-                <input type="email" class="form-control" name="email" id="student_profile_email" value="{{ request.user.email }}">
+                <input type="email" class="form-control" name="email" id="student_profile_email" value="{{ request.user.email }}" required>
+                <div class="invalid-feedback" id="student_profile_email_error"></div>
               </div>
               <div class="col-md-6">
                 <label for="student_profile_contactNumber" class="form-label small">Contact Number</label>
                 <input type="tel" class="form-control" name="contactNumber" id="student_profile_contactNumber" value="{{ request.user.contact_number }}" placeholder="+639XXXXXXXXX" pattern="^\+63[0-9]{10}$" maxlength="13">
+                <div class="invalid-feedback" id="student_profile_contactNumber_error"></div>
               </div>
               <div class="col-md-12">
                 <label for="student_profile_emergency_contact" class="form-label small">Emergency Contact</label>
                 <input type="tel" class="form-control" name="emergency_contact" id="student_profile_emergency_contact" value="{{ profile.emergency_contact|default_if_none:'' }}" placeholder="+639XXXXXXXXX" pattern="^\+63[0-9]{10}$" maxlength="13">
+                <div class="invalid-feedback" id="student_profile_emergency_contact_error"></div>
               </div>
-            </div>
-            <div class="mt-3 text-end">
-              <button class="btn btn-secondary" onclick="toggleEditProfile()">Cancel Edit</button>
-              <button type="submit" class="btn text-white" name="saveProfile" id="student_profile_save_btn"
-              style=" background-color: #183a53;"
-              >Save changes</button>
-            </div>
+              </div>
+              <div class="mt-3 text-end">
+                <button type="button" class="btn btn-secondary" id="student_profile_reset_btn">
+                  <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                </button>
+                <button type="submit" class="btn text-white" id="student_profile_save_btn"
+                style="background-color: #183a53;">
+                  <i class="bi bi-check-circle me-2"></i>Save changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
-  </form>
 </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const input = document.getElementById("student_profile_upload_btn");
-    const preview = document.getElementById("student_profile_image_preview");
-
-    input.addEventListener("change", function () {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          preview.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Phone number formatting for contact number and emergency contact
-    function formatPhoneNumber(input) {
-      input.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/[^\d]/g, '');
-        
-        if (value.length > 0 && !value.startsWith('63')) {
-          if (value.startsWith('0')) {
-            value = '63' + value.substring(1);
-          } else if (value.startsWith('9')) {
-            value = '63' + value;
-          } else {
-            value = '63' + value;
-          }
-        }
-        
-        if (value.length > 12) {
-          value = value.substring(0, 12);
-        }
-        
-        e.target.value = value.length > 0 ? '+' + value : '';
-      });
-      
-      input.addEventListener('keydown', function(e) {
-        if (e.target.selectionStart === 0 && e.target.selectionEnd === e.target.value.length) {
-          return;
-        }
-        if (e.target.selectionStart < 3) {
-          if (e.key === 'Backspace' || e.key === 'Delete') {
-            e.preventDefault();
-          }
-        }
-      });
-    }
-
-    const contactInput = document.getElementById('student_profile_contactNumber');
-    const emergencyInput = document.getElementById('student_profile_emergency_contact');
-    
-    if (contactInput) formatPhoneNumber(contactInput);
-    if (emergencyInput) formatPhoneNumber(emergencyInput);
-  });
-</script>
 
 
 <script src="{% static 'js/studentsprofile.js' %}"></script>

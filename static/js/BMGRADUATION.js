@@ -117,7 +117,8 @@ window.GraduationPrint = (function() {
             }
         });
         
-        modal.show();
+        // Don't show modal - we'll load content invisibly
+        // modal.show();
         
         // Update modal title based on count
         const title = idsArray.length === 1 ? 
@@ -157,6 +158,11 @@ window.GraduationPrint = (function() {
             
             contentEl.innerHTML = html;
             contentEl.style.display = 'block';
+            
+            // Auto-print after content loads
+            setTimeout(function() {
+                printPreviewContent();
+            }, 500);
         })
         .catch(error => {
             clearTimeout(timeoutId);
@@ -205,30 +211,25 @@ window.GraduationPrint = (function() {
                     iframe.contentWindow.focus();
                     iframe.contentWindow.print();
                     
+                    // Refresh immediately when print dialog closes
+                    iframe.contentWindow.onafterprint = function() {
+                        location.reload();
+                    };
+                    
+                    // Fallback in case onafterprint doesn't work
                     setTimeout(() => {
                         if (iframe.parentNode) {
                             document.body.removeChild(iframe);
                         }
-                    }, 1000);
+                        location.reload();
+                    }, 100);
                 } catch (e) {
                     console.error('Print error:', e);
                     showAlert('Print failed. Please try again.', 'error');
-                    
-                    // Fallback: open in new window
-                    try {
-                        const printWindow = window.open('', '_blank', 'width=800,height=600');
-                        printWindow.document.open();
-                        printWindow.document.write(htmlContent);
-                        printWindow.document.close();
-                        printWindow.focus();
-                        setTimeout(() => printWindow.print(), 500);
-                    } catch (fallbackError) {
-                        showAlert('Print functionality is not available.', 'error');
-                    }
-                    
                     if (iframe.parentNode) {
                         document.body.removeChild(iframe);
                     }
+                    location.reload();
                 }
             }, 100);
         };
@@ -1144,8 +1145,8 @@ window.BMGraduation = (function() {
         contentEl.style.display = 'none';
         contentEl.innerHTML = '';
         
-        // Show modal
-        modal.show();
+        // Don't show modal for PDF preview
+        // modal.show();
         
         // Load form content
         fetch(`/business-manager/graduation/view/${graduationId}/`)

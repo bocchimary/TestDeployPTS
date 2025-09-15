@@ -6,6 +6,11 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/BMGRADUATION.css' %}">
 <style>
+/* Hide modal for auto-printing */
+#previewPrintModal {
+  display: none !important;
+}
+
 /* Preview & Print Modal Styles */
 .preview-print-content {
   font-family: Arial, sans-serif;

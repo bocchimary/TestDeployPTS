@@ -59,6 +59,7 @@ urlpatterns = [
     path('view-request/<uuid:request_id>/', views.view_request, name='view_request'),
     path('profile/', views.handle_profile, name='profile'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('students/profile/upload-picture/', views.student_profile_upload_picture_api, name='student_profile_upload_picture_api'),
     path('check-request-history/', views.check_request_history, name='check_request_history'),
     path('get-request-data/<uuid:request_id>/', views.get_request_data, name='get_request_data'),
     path('submit-clearance/', views.submit_clearance_form, name='submit_clearance'),

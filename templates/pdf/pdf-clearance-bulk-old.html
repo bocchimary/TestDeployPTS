@@ -169,11 +169,10 @@
       .dept-table td {
         border: 0.5px solid #000;
         padding: 4px;
-        height: 20px;
+        height: 12px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        font-size: 12px;
       }
 
       .dept-text {
@@ -221,7 +220,7 @@
       .approved-signature {
         color: green;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 9px;
         display: inline-block;
         max-width: 100%;
         overflow: hidden;
@@ -231,7 +230,7 @@
       .disapproved-signature {
         color: red;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 9px;
         display: inline-block;
         max-width: 100%;
         overflow: hidden;
@@ -241,7 +240,7 @@
       .pending-signature {
         color: orange;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 9px;
         display: inline-block;
         max-width: 100%;
         overflow: hidden;
@@ -296,7 +295,7 @@
               <td>Dorm Supervisor</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Dorm Supervisor' %}
+                  {% if signatory.role == 'dorm_supervisor' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -312,7 +311,7 @@
               <td>Canteen Concessionaire</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Canteen Concessionaire' %}
+                  {% if signatory.role == 'canteen_concessionaire' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -328,7 +327,7 @@
               <td>Director of Library & Info.</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Library Director' %}
+                  {% if signatory.role == 'library_director' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -344,7 +343,7 @@
               <td>Director of Scholarship</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Scholarship Director' %}
+                  {% if signatory.role == 'scholarship_director' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -360,7 +359,7 @@
               <td>Information Technology</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'IT Director' %}
+                  {% if signatory.role == 'it_director' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -376,7 +375,7 @@
               <td>Dean of Student Affairs</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Student Affairs' %}
+                  {% if signatory.role == 'student_affairs' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -392,7 +391,7 @@
               <td>Cashier</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Cashier' %}
+                  {% if signatory.role == 'cashier' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -408,7 +407,7 @@
               <td>Business Manager</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Business Manager' %}
+                  {% if signatory.role == 'business_manager' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -424,7 +423,7 @@
               <td>Registrar</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Registrar' %}
+                  {% if signatory.role == 'registrar' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -440,7 +439,7 @@
               <td>Academic Dean</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Academic Dean' %}
+                  {% if signatory.role == 'academic_dean' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -491,7 +490,7 @@
               <td>Dorm Supervisor</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Dorm Supervisor' %}
+                  {% if signatory.role == 'dorm_supervisor' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -507,7 +506,7 @@
               <td>Canteen Concessionaire</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Canteen Concessionaire' %}
+                  {% if signatory.role == 'canteen_concessionaire' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -523,7 +522,7 @@
               <td>Director of Library & Info.</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Library Director' %}
+                  {% if signatory.role == 'library_director' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -539,7 +538,7 @@
               <td>Director of Scholarship</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Scholarship Director' %}
+                  {% if signatory.role == 'scholarship_director' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -555,7 +554,7 @@
               <td>Information Technology</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'IT Director' %}
+                  {% if signatory.role == 'it_director' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -571,7 +570,7 @@
               <td>Dean of Student Affairs</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Student Affairs' %}
+                  {% if signatory.role == 'student_affairs' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -587,7 +586,7 @@
               <td>Cashier</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Cashier' %}
+                  {% if signatory.role == 'cashier' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -603,7 +602,7 @@
               <td>Business Manager</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Business Manager' %}
+                  {% if signatory.role == 'business_manager' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -619,7 +618,7 @@
               <td>Registrar</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Registrar' %}
+                  {% if signatory.role == 'registrar' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}
@@ -635,7 +634,7 @@
               <td>Academic Dean</td>
               <td>
                 {% for signatory in form_data.signatories %}
-                  {% if signatory.role == 'Academic Dean' %}
+                  {% if signatory.role == 'academic_dean' %}
                     {% if signatory.status == 'approved' %}
                       <span class="approved-signature">✓ Approved</span>
                     {% elif signatory.status == 'disapproved' %}

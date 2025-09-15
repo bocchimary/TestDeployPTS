@@ -150,7 +150,15 @@ function initializeStudentMessaging() {
   
   // Load conversations
   loadStudentConversations();
-  
+
+  // Setup search functionality
+  const searchInput = document.getElementById('student_conversations_search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      filterStudentConversations(this.value);
+    });
+  }
+
   // Setup message input auto-resize
   const messageInput = document.getElementById('student_message_input');
   if (messageInput) {
@@ -464,6 +472,57 @@ function formatMessageTime(timeStr) {
   }
 }
 
+// Search/filter functionality for student conversations
+function filterStudentConversations(searchTerm) {
+  const items = document.querySelectorAll('#student_conversations_list .conversation-item');
+  const noConversationsDiv = document.getElementById('student_no_conversations');
+  let visibleCount = 0;
+
+  items.forEach(item => {
+    const nameElement = item.querySelector('.conversation-name');
+    if (nameElement) {
+      const name = nameElement.textContent.toLowerCase();
+      if (name.includes(searchTerm.toLowerCase())) {
+        item.style.display = 'flex';
+        visibleCount++;
+      } else {
+        item.style.display = 'none';
+      }
+    }
+  });
+
+  // Show/hide no conversations message based on search results
+  if (noConversationsDiv) {
+    if (items.length > 0 && visibleCount === 0 && searchTerm.trim() !== '') {
+      // Show "no results found" message
+      noConversationsDiv.innerHTML = `
+        <div class="text-center py-5">
+          <div class="no-conversations-icon">
+            <i class="bi bi-search"></i>
+          </div>
+          <h6 class="text-muted mb-2">No conversations found</h6>
+          <p class="text-muted small">Try searching with a different term</p>
+        </div>
+      `;
+      noConversationsDiv.style.display = 'block';
+    } else if (items.length === 0 && searchTerm.trim() === '') {
+      // Show default "no conversations" message
+      noConversationsDiv.innerHTML = `
+        <div class="text-center py-5">
+          <div class="no-conversations-icon">
+            <i class="bi bi-chat-text"></i>
+          </div>
+          <h6 class="text-muted mb-2">No communications yet</h6>
+          <p class="text-muted small">Your institutional communications will appear here</p>
+        </div>
+      `;
+      noConversationsDiv.style.display = 'block';
+    } else if (visibleCount > 0) {
+      noConversationsDiv.style.display = 'none';
+    }
+  }
+}
+
 // Helper function to get CSRF token (reuse existing function)
 function getCookie(name) {
   let cookieValue = null;
@@ -479,4 +538,152 @@ function getCookie(name) {
   }
   return cookieValue;
 }
+
+// Real-time messaging functionality for students
+let studentRealtimePollingInterval = null;
+let studentLastMessageTimestamp = null;
+let studentIsUserActive = true;
+
+// Track user activity
+let studentLastActivityTime = Date.now();
+document.addEventListener('click', () => studentLastActivityTime = Date.now());
+document.addEventListener('keypress', () => studentLastActivityTime = Date.now());
+document.addEventListener('mousemove', () => studentLastActivityTime = Date.now());
+
+// Check if user is still active (within last 5 minutes)
+function checkStudentUserActivity() {
+  const now = Date.now();
+  studentIsUserActive = (now - studentLastActivityTime) < 300000; // 5 minutes
+  return studentIsUserActive;
+}
+
+// Start real-time messaging polling for students
+function startStudentRealtimeMessaging() {
+  if (studentRealtimePollingInterval) {
+    clearInterval(studentRealtimePollingInterval);
+  }
+
+  // Poll for new conversations every 5 seconds
+  studentRealtimePollingInterval = setInterval(async () => {
+    if (!checkStudentUserActivity()) {
+      return; // Skip polling if user is inactive
+    }
+
+    try {
+      // Check for new conversations
+      await checkStudentForNewConversations();
+
+      // Check for new messages in current open conversation
+      if (studentCurrentConversationId) {
+        await checkStudentForNewMessages(studentCurrentConversationId);
+      }
+    } catch (error) {
+      console.log('Student polling error:', error);
+    }
+  }, 5000); // Poll every 5 seconds
+}
+
+// Check for new conversations for students
+async function checkStudentForNewConversations() {
+  try {
+    const response = await fetch('/api/conversations/');
+    const data = await response.json();
+
+    if (data.success) {
+      const currentConversationElements = document.querySelectorAll('#student_conversations_list .conversation-item');
+      const currentConversationIds = Array.from(currentConversationElements)
+        .map(el => {
+          const onclick = el.getAttribute('onclick');
+          if (onclick) {
+            const match = onclick.match(/openStudentConversation\('([^']+)'\)/);
+            return match ? match[1] : null;
+          }
+          return null;
+        }).filter(id => id !== null);
+
+      const newConversations = data.conversations.filter(conv =>
+        !currentConversationIds.includes(conv.id)
+      );
+
+      if (newConversations.length > 0) {
+        // Reload conversations to show new ones
+        loadStudentConversations();
+      }
+    }
+  } catch (error) {
+    console.log('Error checking for new student conversations:', error);
+  }
+}
+
+// Check for new messages in current conversation for students
+async function checkStudentForNewMessages(conversationId) {
+  try {
+    const response = await fetch(`/api/conversations/${conversationId}/messages/`);
+    const data = await response.json();
+
+    if (data.success && data.messages.length > 0) {
+      const latestMessage = data.messages[data.messages.length - 1];
+      const latestTimestamp = new Date(latestMessage.sent_at).getTime();
+
+      // If we have new messages since last check
+      if (studentLastMessageTimestamp && latestTimestamp > studentLastMessageTimestamp) {
+        // Update the messages area with new messages
+        renderStudentMessages(data.messages);
+        scrollStudentToBottom();
+
+        // Update conversation list to show updated timestamp/preview
+        loadStudentConversations();
+
+        // Show notification for new message (optional)
+        showStudentNewMessageNotification(data.conversation.other_user.name);
+      }
+
+      studentLastMessageTimestamp = latestTimestamp;
+    }
+  } catch (error) {
+    console.log('Error checking for new student messages:', error);
+  }
+}
+
+// Show a subtle notification for new messages for students
+function showStudentNewMessageNotification(senderName) {
+  // Only show if page is not in focus
+  if (document.hidden) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(`New message from ${senderName}`, {
+        icon: '/static/images/logo.png',
+        body: 'You have received a new message.',
+        tag: 'student-new-message'
+      });
+    }
+  }
+}
+
+// Hook into the existing openStudentConversation function
+const originalOpenStudentConversation = openStudentConversation;
+openStudentConversation = function(conversationId) {
+  studentLastMessageTimestamp = null; // Reset timestamp when switching conversations
+
+  // Call the original function (which sets studentCurrentConversationId)
+  return originalOpenStudentConversation(conversationId);
+};
+
+// Request notification permission on page load for students
+document.addEventListener('DOMContentLoaded', function() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+
+  // Start real-time messaging after a short delay to ensure everything is loaded
+  setTimeout(() => {
+    startStudentRealtimeMessaging();
+  }, 2000);
+});
+
+// Stop polling when page is about to unload for students
+window.addEventListener('beforeunload', () => {
+  if (studentRealtimePollingInterval) {
+    clearInterval(studentRealtimePollingInterval);
+  }
+});
 </script>

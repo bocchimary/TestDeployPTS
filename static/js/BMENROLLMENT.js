@@ -383,9 +383,8 @@ window.BMEnrollment = (function() {
         resetPreviewModal();
         showPreviewLoader();
         
-        // Show modal
+        // Don't show modal - we'll load content invisibly
         const modal = new bootstrap.Modal(modalEl);
-        modal.show();
         
         // Update modal title based on count
         const title = enrollmentIds.length === 1 ? 
@@ -422,6 +421,11 @@ window.BMEnrollment = (function() {
             hidePreviewLoader();
             contentEl.innerHTML = html;
             contentEl.style.display = 'block';
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                printPreviewContent();
+            }, 500);
         })
         .catch(error => {
             clearTimeout(timeoutId);
@@ -551,18 +555,25 @@ window.BMEnrollment = (function() {
                     iframe.contentWindow.focus();
                     iframe.contentWindow.print();
                     
-                    // Clean up iframe after printing
+                    // Refresh immediately when print dialog closes
+                    iframe.contentWindow.onafterprint = function() {
+                        location.reload();
+                    };
+                    
+                    // Fallback in case onafterprint doesn't work
                     setTimeout(() => {
                         if (iframe.parentNode) {
                             document.body.removeChild(iframe);
                         }
-                    }, 1000);
+                        location.reload();
+                    }, 100);
                 } catch (e) {
                     console.error('Print error:', e);
                     showAlert('Print failed. Please try again.', 'error');
                     if (iframe.parentNode) {
                         document.body.removeChild(iframe);
                     }
+                    location.reload();
                 }
             }, 100);
         };
@@ -1278,8 +1289,8 @@ function previewEnrollmentPDF(enrollmentId) {
     contentEl.style.display = 'none';
     contentEl.innerHTML = '';
     
-    // Show modal
-    modal.show();
+    // Don't show modal - we'll load content invisibly
+    // modal.show();
     
     // Load form content - use preview-print endpoint with single ID
     fetch(`/business-manager/enrollment/preview-print/?ids=${enrollmentId}`)
@@ -1324,6 +1335,11 @@ function previewEnrollmentPDF(enrollmentId) {
                 });
             }
             contentEl.style.display = 'block';
+            
+            // Auto-trigger print after content loads
+            setTimeout(function() {
+                printPreviewContent();
+            }, 500);
         })
         .catch(error => {
             console.error('Error loading form:', error);
