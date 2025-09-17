@@ -18,6 +18,73 @@ class Command(BaseCommand):
 
         # Complete curriculum data from enrollment.txt
         curriculum_data = {
+            'BTh': {
+                'name': 'Bachelor of Theology',
+                'type': 'undergraduate',
+                'years': 3,
+                'description': 'Program in theological studies preparing students for ministry and scholarship.',
+                'curriculum': {
+                    "1st-year": {
+                        "1st-sem": [
+                            {"code": "MCT01", "subject": "Introduction to Biblical Theology", "professor": "TBA", "units": 3},
+                            {"code": "IDC01", "subject": "Research in Theology", "professor": "TBA", "units": 3},
+                            {"code": "IDC02", "subject": "Hebrew Language 1", "professor": "TBA", "units": 3},
+                            {"code": "MCB01", "subject": "Hermeneutics", "professor": "TBA", "units": 3},
+                            {"code": "MCB02", "subject": "Old Testament Survey 1", "professor": "TBA", "units": 3},
+                            {"code": "MCB04", "subject": "New Testament Survey 1", "professor": "TBA", "units": 3},
+                            {"code": "IDC04", "subject": "Church History 1", "professor": "TBA", "units": 3},
+                            {"code": "PHE03", "subject": "PATHFIT3: Sport Teams (Swimming)", "professor": "TBA", "units": 2},
+                            {"code": "IDC18", "subject": "Field Ministry Education 1", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "MCT02", "subject": "Systematic Theology 1", "professor": "TBA", "units": 3},
+                            {"code": "IDC03", "subject": "Greek Language 1", "professor": "TBA", "units": 3},
+                            {"code": "MCB03", "subject": "Old Testament Survey 2", "professor": "TBA", "units": 3},
+                            {"code": "MCB05", "subject": "New Testament Survey 2", "professor": "TBA", "units": 3},
+                            {"code": "IDC05", "subject": "Church History 2", "professor": "TBA", "units": 3},
+                            {"code": "IDC08", "subject": "Homiletics 1", "professor": "TBA", "units": 3},
+                            {"code": "IDC10", "subject": "Reformed Worship & Church Polity", "professor": "TBA", "units": 3},
+                            {"code": "PHE04", "subject": "PATHFIT4: Sport Teams (Outdoor Games: Volleyball/Basketball)", "professor": "TBA", "units": 2},
+                            {"code": "IDC19", "subject": "Field Ministry Education 2", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "2nd-year": {
+                        "1st-sem": [
+                            {"code": "MCT03", "subject": "Systematic Theology 2", "professor": "TBA", "units": 3},
+                            {"code": "IDC06", "subject": "Presbyterian History", "professor": "TBA", "units": 3},
+                            {"code": "IDC09", "subject": "Homiletics 2", "professor": "TBA", "units": 3},
+                            {"code": "MCR01", "subject": "Calvin Studies & Reformed Creeds", "professor": "TBA", "units": 3},
+                            {"code": "MCR02", "subject": "Foundation of Christian Education", "professor": "TBA", "units": 3},
+                            {"code": "IDC14", "subject": "Church Music", "professor": "TBA", "units": 3},
+                            {"code": "MCR03", "subject": "Contextualization", "professor": "TBA", "units": 3},
+                            {"code": "ELEC1", "subject": "Principles & Methods of Teaching", "professor": "TBA", "units": 3},
+                            {"code": "IDC20", "subject": "Field Ministry Education 3", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "MCT04", "subject": "Systematic Theology 3", "professor": "TBA", "units": 3},
+                            {"code": "IDC07", "subject": "Historical Theology", "professor": "TBA", "units": 3},
+                            {"code": "IDC11", "subject": "Introduction to Biblical Counseling", "professor": "TBA", "units": 3},
+                            {"code": "IDC12", "subject": "Church Leadership & Administration", "professor": "TBA", "units": 3},
+                            {"code": "IDC13", "subject": "Pastoral Theology", "professor": "TBA", "units": 3},
+                            {"code": "IDC15", "subject": "History & Theology of Missions", "professor": "TBA", "units": 3},
+                            {"code": "ELEC2", "subject": "Christian Values Integration in the Various Discipline", "professor": "TBA", "units": 3},
+                            {"code": "IDC21", "subject": "Field Ministry Education 4", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "3rd-year": {
+                        "1st-sem": [
+                            {"code": "MCT05", "subject": "Systematic Theology 4", "professor": "TBA", "units": 3},
+                            {"code": "IDC16", "subject": "Apologetics", "professor": "TBA", "units": 3},
+                            {"code": "RRC01", "subject": "Comparative Religions", "professor": "TBA", "units": 3},
+                            {"code": "IDC17", "subject": "Contemporary Theology", "professor": "TBA", "units": 3},
+                            {"code": "IDC22", "subject": "Field Ministry Education 5", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "MCP01", "subject": "Internship", "professor": "TBA", "units": 6}
+                        ]
+                    }
+                }
+            },
             'ABTh': {
                 'name': 'Bachelor of Arts in Theology',
                 'type': 'undergraduate',
@@ -455,8 +522,301 @@ class Command(BaseCommand):
                         ]
                     }
                 }
+            },
+            
+            'MABE': {
+                'name': 'Master of Arts in Biblical Exposition',
+                'type': 'graduate',
+                'years': 4,
+                'description': 'Graduate program emphasizing biblical exegesis and exposition.',
+                'curriculum': {
+                    "1st-year": {
+                        "1st-sem": [
+                            {"code": "EBS05", "subject": "Foundation of Exegesis", "professor": "TBA", "units": 3},
+                            {"code": "GFME10", "subject": "Ministry Clinic I", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "EPR05", "subject": "Foundation of Exposition", "professor": "TBA", "units": 3},
+                            {"code": "GFME11", "subject": "Ministry Clinic II", "professor": "TBA", "units": 2}
+                        ]
+                    },
+                    "2nd-year": {
+                        "1st-sem": [
+                            {"code": "EBS10", "subject": "Exegetical Method I", "professor": "TBA", "units": 3},
+                            {"code": "EPR10", "subject": "Exposition of Epistolary Genre", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "EBS20", "subject": "Exegetical Method II", "professor": "TBA", "units": 3},
+                            {"code": "EPR20", "subject": "Exposition of Narrative Genre", "professor": "TBA", "units": 3}
+                        ]
+                    },
+                    "3rd-year": {
+                        "1st-sem": [
+                            {"code": "EBS30", "subject": "Exegesis of Philippians 1-2", "professor": "TBA", "units": 3},
+                            {"code": "EPR30", "subject": "Exposition of Poetic Genre", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "EBS40", "subject": "Exegesis of Philippians 3-4", "professor": "TBA", "units": 3},
+                            {"code": "EPR40", "subject": "Exposition of Prophetic Genre", "professor": "TBA", "units": 3}
+                        ]
+                    },
+                    "4th-year": {
+                        "1st-sem": [
+                            {"code": "EPR50", "subject": "Methodology Sequential Exposition", "professor": "TBA", "units": 3},
+                            {"code": "GFME15", "subject": "Ministry Internship I", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "EPR60", "subject": "Sequential Exposition of Philippians", "professor": "TBA", "units": 3},
+                            {"code": "GFME16", "subject": "Ministry Internship II", "professor": "TBA", "units": 3}
+                        ]
+                    }
+                }
+            },
+
+            'MACE': {
+                'name': 'Master of Arts in Christian Education',
+                'type': 'graduate',
+                'years': 2,
+                'description': 'Graduate program focused on Christian education leadership and pedagogy.',
+                'curriculum': {
+                    "1st-year": {
+                        "1st-sem": [
+                            {"code": "RES01", "subject": "Research & Methodology in Writing", "professor": "TBA", "units": 3},
+                            {"code": "HER01", "subject": "Hermeneutics", "professor": "TBA", "units": 3},
+                            {"code": "THEO01", "subject": "Biblical Theology", "professor": "TBA", "units": 3},
+                            {"code": "CED03", "subject": "Intro Christian Education", "professor": "TBA", "units": 3},
+                            {"code": "ELEC1", "subject": "OT Elective", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO02", "subject": "Theology 1", "professor": "TBA", "units": 3},
+                            {"code": "CHI01", "subject": "Church History 1", "professor": "TBA", "units": 3},
+                            {"code": "CON01", "subject": "Contextualization", "professor": "TBA", "units": 3},
+                            {"code": "SOE01", "subject": "Social Ethics", "professor": "TBA", "units": 3},
+                            {"code": "ELEC2", "subject": "NT Elective", "professor": "TBA", "units": 3},
+                            {"code": "GFME1", "subject": "Field Ministry Education 1", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "2nd-year": {
+                        "1st-sem": [
+                            {"code": "THEO03", "subject": "Theology 2", "professor": "TBA", "units": 3},
+                            {"code": "CHI02", "subject": "Church History 2", "professor": "TBA", "units": 3},
+                            {"code": "CED04", "subject": "Foundation of Christian Education", "professor": "TBA", "units": 3},
+                            {"code": "CED05", "subject": "Principles and Methods of Teaching", "professor": "TBA", "units": 3},
+                            {"code": "CED06", "subject": "Curriculum Development", "professor": "TBA", "units": 3},
+                            {"code": "GFME2", "subject": "Field Ministry Education 2", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO04", "subject": "Theology 3", "professor": "TBA", "units": 3},
+                            {"code": "CED07", "subject": "CE of Children, Youth & Adult", "professor": "TBA", "units": 3},
+                            {"code": "CED08", "subject": "College Teaching", "professor": "TBA", "units": 3},
+                            {"code": "CLM01", "subject": "21st Century Leadership & Ministry", "professor": "TBA", "units": 3},
+                            {"code": "CCO01", "subject": "Christian Counseling", "professor": "TBA", "units": 3},
+                            {"code": "GFME3", "subject": "Field Ministry Education 3", "professor": "TBA", "units": 1}
+                        ]
+                    }
+                }
+            },
+            'MAM': {
+                'name': 'Master of Arts in Ministry',
+                'type': 'graduate',
+                'years': 2,
+                'description': 'Graduate program centered on ministry practice and leadership.',
+                'curriculum': {
+                    "1st-year": {
+                        "1st-sem": [
+                            {"code": "RES01", "subject": "Research & Methodology in Writing", "professor": "TBA", "units": 3},
+                            {"code": "HER01", "subject": "Hermeneutics", "professor": "TBA", "units": 3},
+                            {"code": "THEO01", "subject": "Biblical Theology", "professor": "TBA", "units": 3},
+                            {"code": "CED01", "subject": "Christian Education", "professor": "TBA", "units": 3},
+                            {"code": "ELEC1", "subject": "OT Elective", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO02", "subject": "Theology 1", "professor": "TBA", "units": 3},
+                            {"code": "CHI01", "subject": "Church History 1", "professor": "TBA", "units": 3},
+                            {"code": "CON01", "subject": "Contextualization", "professor": "TBA", "units": 3},
+                            {"code": "SOE01", "subject": "Social Ethics", "professor": "TBA", "units": 3},
+                            {"code": "ELEC2", "subject": "NT Elective", "professor": "TBA", "units": 3},
+                            {"code": "GFME1", "subject": "Field Ministry Education 1", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "2nd-year": {
+                        "1st-sem": [
+                            {"code": "THEO03", "subject": "Theology 2", "professor": "TBA", "units": 3},
+                            {"code": "CHI02", "subject": "Church History 2", "professor": "TBA", "units": 3},
+                            {"code": "MEV01", "subject": "Mission and Evangelism", "professor": "TBA", "units": 3},
+                            {"code": "CML01", "subject": "Church Management & Leadership", "professor": "TBA", "units": 3},
+                            {"code": "CRE01", "subject": "Comparative Religion", "professor": "TBA", "units": 3},
+                            {"code": "GFME2", "subject": "Field Ministry Education 2", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO04", "subject": "Theology 3", "professor": "TBA", "units": 3},
+                            {"code": "KCC01", "subject": "Kingdom, Covenant & Canon of the Bible", "professor": "TBA", "units": 3},
+                            {"code": "CPC01", "subject": "Church Planting & Church Growth", "professor": "TBA", "units": 3},
+                            {"code": "CLM01", "subject": "21st Century Leadership", "professor": "TBA", "units": 3},
+                            {"code": "CCO01", "subject": "Christian Counseling", "professor": "TBA", "units": 3},
+                            {"code": "GFME3", "subject": "Field Ministry Education 3", "professor": "TBA", "units": 1}
+                        ]
+                    }
+                }
+            },
+            'MAICS': {
+                'name': 'Master of Arts in Intercultural Studies',
+                'type': 'graduate',
+                'years': 2,
+                'description': 'Graduate program focusing on missions and intercultural ministry.',
+                'curriculum': {
+                    "1st-year": {
+                        "1st-sem": [
+                            {"code": "RES01", "subject": "Research & Methodology in Writing", "professor": "TBA", "units": 3},
+                            {"code": "HER01", "subject": "Hermeneutics", "professor": "TBA", "units": 3},
+                            {"code": "THEO01", "subject": "Biblical Theology", "professor": "TBA", "units": 3},
+                            {"code": "CED02", "subject": "Christian Education (Cross-Cultural)", "professor": "TBA", "units": 3},
+                            {"code": "ELEC1", "subject": "OT Elective", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO02", "subject": "Theology 1", "professor": "TBA", "units": 3},
+                            {"code": "CHI01", "subject": "Church History 1", "professor": "TBA", "units": 3},
+                            {"code": "CON01", "subject": "Contextualization", "professor": "TBA", "units": 3},
+                            {"code": "SOE01", "subject": "Social Ethics", "professor": "TBA", "units": 3},
+                            {"code": "ELEC2", "subject": "NT Elective", "professor": "TBA", "units": 3},
+                            {"code": "GFME1", "subject": "Field Ministry Education 1", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "2nd-year": {
+                        "1st-sem": [
+                            {"code": "THEO03", "subject": "Theology 2", "professor": "TBA", "units": 3},
+                            {"code": "STM01", "subject": "Short Term Mission", "professor": "TBA", "units": 3},
+                            {"code": "CIM01", "subject": "Contemporary Issues in Mission", "professor": "TBA", "units": 3},
+                            {"code": "CRE01", "subject": "Comparative Religion", "professor": "TBA", "units": 3},
+                            {"code": "MEV01", "subject": "Mission and Evangelism", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO04", "subject": "Theology 3", "professor": "TBA", "units": 3},
+                            {"code": "CAM01", "subject": "Cultural Anthropology and Mission", "professor": "TBA", "units": 3},
+                            {"code": "ICO01", "subject": "Intercultural Communications", "professor": "TBA", "units": 3},
+                            {"code": "CLM01", "subject": "21st Century Leadership & Ministry", "professor": "TBA", "units": 3},
+                            {"code": "CPC01", "subject": "Church Planting & Church Growth", "professor": "TBA", "units": 3}
+                        ]
+                    }
+                }
+            },
+            'MABS': {
+                'name': 'Master of Arts in Biblical Studies',
+                'type': 'graduate',
+                'years': 3,
+                'description': 'Graduate program in biblical studies and ministry.',
+                'curriculum': {
+                    "1st-year": {
+                        "1st-sem": [
+                            {"code": "RES01", "subject": "Research Methodology & Writing", "professor": "TBA", "units": 3},
+                            {"code": "HER01", "subject": "Hermeneutics", "professor": "TBA", "units": 3},
+                            {"code": "THEO01", "subject": "Biblical Theology", "professor": "TBA", "units": 3},
+                            {"code": "CED01", "subject": "Christian Education", "professor": "TBA", "units": 3},
+                            {"code": "ELEC1", "subject": "OT Elective", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO02", "subject": "Theology 1", "professor": "TBA", "units": 3},
+                            {"code": "CHI01", "subject": "Church History 1", "professor": "TBA", "units": 3},
+                            {"code": "CON01", "subject": "Contextualization", "professor": "TBA", "units": 3},
+                            {"code": "SOE01", "subject": "Social Ethics", "professor": "TBA", "units": 3},
+                            {"code": "ELEC2", "subject": "NT Elective: Gospel and Acts", "professor": "TBA", "units": 3},
+                            {"code": "GFME1", "subject": "Field Ministry Education 1", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "2nd-year": {
+                        "1st-sem": [
+                            {"code": "THEO03", "subject": "Theology 2", "professor": "TBA", "units": 3},
+                            {"code": "CHI02", "subject": "Church History 2", "professor": "TBA", "units": 3},
+                            {"code": "MEV01", "subject": "Mission and Evangelism", "professor": "TBA", "units": 3},
+                            {"code": "CML01", "subject": "Church Management and Leadership", "professor": "TBA", "units": 3},
+                            {"code": "CRE01", "subject": "Comparative Religion", "professor": "TBA", "units": 3},
+                            {"code": "GFME2", "subject": "Field Ministry Education 2", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO04", "subject": "Theology 3", "professor": "TBA", "units": 3},
+                            {"code": "KCC01", "subject": "Kingdom, Covenant & Canon of the Bible", "professor": "TBA", "units": 3},
+                            {"code": "CPC01", "subject": "Foundation & Strategies of Church Planting & Church Growth", "professor": "TBA", "units": 3},
+                            {"code": "CLM01", "subject": "21st Century Leadership & Ministry", "professor": "TBA", "units": 3},
+                            {"code": "CCO01", "subject": "Christian Ethics and Counseling", "professor": "TBA", "units": 3},
+                            {"code": "GFME3", "subject": "Field Ministry Education 3", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "3rd-year": {
+                        "1st-sem": [
+                            {"code": "CTP01", "subject": "Christian Thought and Philosophy", "professor": "TBA", "units": 3},
+                            {"code": "EPR01", "subject": "Homiletics & Expository Preaching", "professor": "TBA", "units": 3},
+                            {"code": "RES02", "subject": "Statistics in Research", "professor": "TBA", "units": 3},
+                            {"code": "CPR01", "subject": "Church Polity & Reformed Worship", "professor": "TBA", "units": 3},
+                            {"code": "THEO05", "subject": "Pastoral Theology", "professor": "TBA", "units": 3},
+                            {"code": "GFME4", "subject": "Field Ministry Education 4", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "ELEC3", "subject": "Elective (Independent Study)", "professor": "TBA", "units": 3},
+                            {"code": "", "subject": "Thesis or Internship (full-time Pastorate or Church Planting)", "professor": "TBA", "units": 6}
+                        ]
+                    }
+                }
+            },
+            'MABC': {
+                'name': 'Master of Arts in Biblical Counseling',
+                'type': 'graduate',
+                'years': 3,
+                'description': 'Graduate program focusing on counseling grounded in biblical principles.',
+                'curriculum': {
+                    "1st-year": {
+                        "1st-sem": [
+                            {"code": "RES01", "subject": "Research Methodology & Writing", "professor": "TBA", "units": 3},
+                            {"code": "HER01", "subject": "Hermeneutics", "professor": "TBA", "units": 3},
+                            {"code": "THEO01", "subject": "Biblical Theology", "professor": "TBA", "units": 3},
+                            {"code": "CED01", "subject": "Christian Education", "professor": "TBA", "units": 3},
+                            {"code": "ELEC1", "subject": "OT Elective", "professor": "TBA", "units": 3}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO02", "subject": "Theology 1", "professor": "TBA", "units": 3},
+                            {"code": "CHI01", "subject": "Church History 1", "professor": "TBA", "units": 3},
+                            {"code": "CON01", "subject": "Contextualization", "professor": "TBA", "units": 3},
+                            {"code": "SOE01", "subject": "Social Ethics", "professor": "TBA", "units": 3},
+                            {"code": "ELEC2", "subject": "NT Elective: Gospel and Acts", "professor": "TBA", "units": 3},
+                            {"code": "GFME1", "subject": "Field Ministry Education 1", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "2nd-year": {
+                        "1st-sem": [
+                            {"code": "THEO03", "subject": "Theology 2", "professor": "TBA", "units": 3},
+                            {"code": "CHI02", "subject": "Church History 2", "professor": "TBA", "units": 3},
+                            {"code": "MEV01", "subject": "Mission and Evangelism", "professor": "TBA", "units": 3},
+                            {"code": "CML01", "subject": "Church Management and Leadership", "professor": "TBA", "units": 3},
+                            {"code": "CRE01", "subject": "Comparative Religion", "professor": "TBA", "units": 3},
+                            {"code": "GFME2", "subject": "Field Ministry Education 2", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "THEO04", "subject": "Theology 3", "professor": "TBA", "units": 3},
+                            {"code": "KCC01", "subject": "Kingdom, Covenant & Canon of the Bible", "professor": "TBA", "units": 3},
+                            {"code": "CPC01", "subject": "Foundation & Strategies of Church Planting & Church Growth", "professor": "TBA", "units": 3},
+                            {"code": "CLM01", "subject": "21st Century Leadership & Ministry", "professor": "TBA", "units": 3},
+                            {"code": "CCO01", "subject": "Christian Ethics and Counseling", "professor": "TBA", "units": 3},
+                            {"code": "GFME3", "subject": "Field Ministry Education 3", "professor": "TBA", "units": 1}
+                        ]
+                    },
+                    "3rd-year": {
+                        "1st-sem": [
+                            {"code": "CTP01", "subject": "Christian Thought and Philosophy", "professor": "TBA", "units": 3},
+                            {"code": "EPR01", "subject": "Homiletics & Expository Preaching", "professor": "TBA", "units": 3},
+                            {"code": "RES02", "subject": "Statistics in Research", "professor": "TBA", "units": 3},
+                            {"code": "CPR01", "subject": "Church Polity & Reformed Worship", "professor": "TBA", "units": 3},
+                            {"code": "THEO05", "subject": "Pastoral Theology", "professor": "TBA", "units": 3},
+                            {"code": "GFME4", "subject": "Field Ministry Education 4", "professor": "TBA", "units": 1}
+                        ],
+                        "2nd-sem": [
+                            {"code": "ELEC3", "subject": "Elective (Independent Study)", "professor": "TBA", "units": 3},
+                            {"code": "", "subject": "Thesis or Internship (full-time Pastorate or Church Planting)", "professor": "TBA", "units": 6}
+                        ]
+                    }
+                }
             }
-        }
+            };
+            
+    
 
         if options['force']:
             self.stdout.write("Clearing existing curriculum data...")
