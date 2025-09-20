@@ -1,0 +1,437 @@
+{% extends 'main-bm.html' %}
+{% load static %}
+
+{% block title %}BM CLEARANCE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/BMCLEARANCE.css' %}">
+<style>
+/* Hide the modal - keep it functional but invisible */
+#previewPrintModal {
+  display: none !important;
+}
+/* Preview & Print Modal Styles */
+.preview-print-content {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: white;
+  padding: 20px;
+}
+
+.clearance-form {
+  margin-bottom: 30px;
+}
+
+.copy-container {
+  position: relative;
+  border: 1px solid #333;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: white;
+}
+
+.watermark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 10px;
+  color: #666;
+  font-weight: bold;
+}
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.subtitle {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+.clearance {
+  margin: 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.year {
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+.row-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.name, .course {
+  font-weight: bold;
+  text-align: left;
+  font-size: 10px;
+}
+
+.row-line, .row-line-1 {
+  text-decoration: underline;
+  margin: 0 5px;
+}
+
+.desc {
+  font-size: 10px;
+  display: block;
+  margin: 10px 0;
+}
+
+.dept-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 9px;
+}
+
+.dept-table th, .dept-table td {
+  border: 1px solid #333;
+  padding: 5px;
+  text-align: left;
+}
+
+.dept-text {
+  width: 60%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dept-sign {
+  width: 40%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.approved-signature {
+  color: green;
+  font-weight: bold;
+  font-size: 9px;
+}
+
+.disapproved-signature {
+  color: red;
+  font-weight: bold;
+  font-size: 9px;
+}
+
+.pending-signature {
+  color: orange;
+  font-weight: bold;
+  font-size: 9px;
+}
+
+.signatory-reminder, .purpose {
+  font-size: 8px;
+  text-align: center;
+  margin: 5px 0;
+}
+
+.page-break {
+  page-break-before: always;
+  border-top: 2px dashed #ccc;
+  margin: 20px 0;
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+
+.page-break::before {
+  content: "Page Break";
+  background: white;
+  padding: 0 10px;
+}
+
+/* Modal preview styles only - printing handled by iframe */
+</style>
+{% endblock %}
+
+{% block main_content %}
+<!-- Main Content -->
+<div class="bm_clearance_main-content">
+  <form id="bm_clearance_form">
+    <div class="text-end text-muted mb-2 small"><strong>Date:</strong> <span id="bm_clearance_dateToday"></span></div>
+    <h1 class="fw-bold">List of Clearance</h1>
+
+    <!-- Filter + Search Row -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="d-flex flex-wrap gap-3 align-items-center">
+          <div class="filter-group">
+            <select class="form-select form-select-sm" style="min-width: 180px;" id="bm_clearance_filter_course">
+              <option selected disabled>Filter by Course</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select class="form-select form-select-sm" style="min-width: 150px;" id="bm_clearance_filter_year">
+              <option selected disabled>Filter by Year</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select class="form-select form-select-sm" style="min-width: 160px;" id="bm_clearance_filter_section">
+              <option selected disabled>Filter by Section</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <select class="form-select form-select-sm" style="min-width: 160px;" id="bm_clearance_filter_status">
+              <option selected disabled>Filter by Status</option>
+              <option value="pending">Pending</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          
+          <!-- Search input -->
+          <div class="bm_clearance_search-bar input-group" style="min-width: 300px;">
+            <input type="text" class="form-control" placeholder="Search by name or ID number..." id="bm_clearance_search_input">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+          </div>
+          
+          <!-- Reset Filter Button -->
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="bm_clearance_reset_filters">
+            <i class="bi bi-arrow-clockwise me-1"></i>Reset Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bulk Actions Section -->
+    <div class="row mb-3" id="bm_clearance_bulk_actions" style="display: none;">
+      <div class="col-12">
+        <div class="d-flex gap-2 align-items-center">
+          <span class="text-muted small" id="bm_clearance_selected_count">0 selected</span>
+          <button type="button" class="btn btn-primary btn-sm" onclick="bulkApproveClearanceBM()">
+            <i class="bi bi-check-circle me-1"></i>Bulk Approve
+          </button>
+          <button type="button" class="btn btn-warning btn-sm" onclick="bulkDisapproveClearanceBM()">
+            <i class="bi bi-x-circle me-1"></i>Bulk Disapprove
+          </button>
+          <button type="button" class="btn btn-success btn-sm" onclick="bulkPrintClearance()">
+            <i class="bi bi-printer me-1"></i>Bulk Print
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bm_clearance_table-fixed-container">
+      <div class="bm_clearance_table-scroll-wrapper">
+        <table class="table bm_clearance_table text-center align-middle">
+          <thead class="table-dark">
+                <tr>
+                <th style="width: 50px; min-width: 50px;">
+                  <input type="checkbox" id="bm_clearance_select_all" title="Select All">
+                </th>
+                <th style="width: 250px;" id="bm_sort_name">Student's Name</th>
+                <th style="width: 150px;" id="bm_sort_course">Course</th>
+                <th style="width: 90px;" id="bm_sort_year">Year</th>
+                <th style="width: 100px;">Section</th>
+                <th style="width: 150px;" id="bm_sort_id">ID Number</th>
+                <th style="width: 150px;" id="bm_sort_submitted">Date Submitted</th>
+                <th style="width: 160px;">Business Manager</th>
+                <th style="width: 200px;">Overall Summary</th>
+                <th style="width: 150px;">Status</th>
+                <th style="width: 100px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="bm_clearance_table_body">
+              <!-- Dynamic content will be loaded here by JavaScript -->
+              <tr>
+                  <td colspan="10" class="text-center text-muted py-4">
+                      <i class="bi bi-hourglass-split fs-1"></i><br>
+                      Loading clearance data...
+                  </td>
+              </tr>
+            </tbody>
+            
+        </table>
+        <!-- OTP Sidebar -->
+        <div id="bm_clearance_otpSidebar" class="bm_clearance_otp-sidebar">
+          <div class="bm_clearance_otp-header d-flex justify-content-between align-items-start">
+            <h4 class="mb-0 fw-bold" id="bm_clearance_approve_title">APPROVAL PIN</h4>
+            <button type="button" class="btn-close" onclick="closeOtpSidebar()" aria-label="Close"></button>
+          </div>
+          <div class="bm_clearance_otp-body d-flex flex-column align-items-center justify-content-center text-center">
+            <p class="text-muted mb-3 w-100 text-start">Input Pincode to Proceed:</p>
+            <div class="d-flex justify-content-center gap-2 mb-3">
+              <input type="text" class="form-control text-center" maxlength="8" placeholder="Enter PIN" id="bm_clearance_otpinput">
+            </div>
+            <div class="mb-3 w-100">
+              <label for="bm_clearance_otpComment" class="form-label text-muted">Comment (optional):</label>
+              <textarea class="form-control" rows="2" id="bm_clearance_otpComment" placeholder="Add a comment..."></textarea>
+            </div>
+            
+            <div class="text-center">
+              <button type="button" class="btn btn-dark bm_clearance_approve-btn" id="bm_clearance_verifyOtpBtn">APPROVE</button>
+            </div>
+            <div class="text-danger mt-2" id="bm_clearance_otpError" style="display: none;">Incorrect PIN</div>
+          </div>
+        </div>
+
+        <!-- Disapprove Sidebar -->
+        <!-- DISAPPROVE SIDEBAR -->
+        <div id="bm_clearance_disapproveSidebar" class="bm_clearance_otp-sidebar">
+          <div class="bm_clearance_otp-header d-flex justify-content-between align-items-start">
+            <h4 class="mb-0 fw-bold" id="bm_clearance_disapprove_title">DISAPPROVE REASON</h4>
+            <button type="button" class="btn-close" onclick="closeDisapproveSidebar()" aria-label="Close"></button>
+          </div>
+
+          <!-- WRAPPER for body steps -->
+          <div class="bm_clearance_otp-body">
+
+            <!-- STEP 1: PIN -->
+            <div id="bm_clearance_disapprove_pin_step">
+              <p class="text-muted mb-3 w-100 text-start">Input Pincode to Proceed:</p>
+              <div class="d-flex justify-content-center gap-2 mb-3">
+                <input type="text" class="form-control text-center" maxlength="8" placeholder="Enter PIN" id="bm_clearance_disapprove_pin_input">
+              </div>
+              <div class="text-center mb-2">
+                <button type="button" class="btn btn-dark" id="bm_clearance_disapprove_pin_submit_btn">VERIFY</button>
+              </div>
+              <div class="text-danger mt-2" id="bm_clearance_disapprove_pin_error" style="display: none;">Incorrect PIN</div>
+            </div>
+
+            <!-- STEP 2: Reason (Initially hidden) -->
+            <div id="bm_clearance_disapprove_reason_step" style="display: none;">
+              <p class="text-muted mb-3 w-100 text-start">Please select a reason:</p>
+
+              <!-- REASONS -->
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Unpaid fees" id="bm_clearance_reason1">
+                <label class="form-check-label" for="bm_clearance_reason1">Unpaid fees</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Damage to school property" id="bm_clearance_reason2">
+                <label class="form-check-label" for="bm_clearance_reason2">Damage to school property</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Violation of rules" id="bm_clearance_reason3">
+                <label class="form-check-label" for="bm_clearance_reason3">Violation of rules</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Unreturned school property" id="bm_clearance_reason4">
+                <label class="form-check-label" for="bm_clearance_reason4">Unreturned school property</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Incomplete Requirements/Documents" id="bm_clearance_reason5">
+                <label class="form-check-label" for="bm_clearance_reason5">Incomplete Requirements/Documents</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Incomplete course requirements" id="bm_clearance_reason6">
+                <label class="form-check-label" for="bm_clearance_reason6">Incomplete course requirements</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Unsettled promissory note" id="bm_clearance_reason7">
+                <label class="form-check-label" for="bm_clearance_reason7">Unsettled promissory note</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Incomplete academic units" id="bm_clearance_reason8">
+                <label class="form-check-label" for="bm_clearance_reason8">Incomplete academic units</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="Other" id="bm_clearance_reasonOther" onchange="toggleOtherReasonInput()">
+                <label class="form-check-label" for="bm_clearance_reasonOther">Other</label>
+              </div>
+
+              <div class="mb-2" id="bm_clearance_otherReasonContainer" style="display: none;">
+                <input type="text" id="bm_clearance_otherReasonInput" class="form-control" placeholder="Enter other reason">
+              </div>
+
+              <!-- Comment -->
+              <div class="mb-3 w-100">
+                <label for="bm_clearance_disapproveComment" class="form-label text-muted">Comment (optional):</label>
+                <textarea class="form-control" rows="2" id="bm_clearance_disapproveComment" placeholder="Add a comment..."></textarea>
+              </div>
+
+              <!-- Appointment -->
+              <div id="bm_clearance_appointmentContainer" class="mt-4">
+                <label for="bm_clearance_appointmentDate" class="form-label text-muted">Set Appointment Date:</label>
+                <input type="date" id="bm_clearance_appointmentDate" class="form-control mb-2">
+                <button type="button" class="btn btn-primary btn-sm w-100" id="bm_clearance_submit_Appointment_Disapproval_Btn">Submit Disapproval and Appointment</button>
+
+                <div class="text-danger mt-2" id="bm_clearance_disapproveError" style="display: none;">Please select a reason</div>
+                <div class="text-danger mt-1" id="bm_clearance_appointmentError" style="display: none;">Please select an appointment date</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>  
+
+
+  <!-- PREVIEW & PRINT MODAL -->
+  <div class="modal fade" id="previewPrintModal" tabindex="-1" aria-labelledby="previewPrintModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="previewPrintModalLabel">
+            <i class="bi bi-printer me-2"></i>Preview & Print Clearance Forms
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <!-- Loading spinner -->
+          <div id="previewLoadingSpinner" class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading preview...</span>
+            </div>
+            <span class="ms-2">Loading preview...</span>
+          </div>
+          
+          <!-- Preview content container -->
+          <div id="previewContent" class="preview-print-content" style="display: none;">
+            <!-- Content will be loaded here -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i>Close
+          </button>
+          <button type="button" class="btn btn-primary" id="printPreviewBtn">
+            <i class="bi bi-printer me-1"></i>Print
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/BMCLEARANCE.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<script>
+// Get CSRF token from Django template 
+const CSRF_TOKEN = '{{ csrf_token }}';
+
+// Override print functions to use modal preview
+function printClearance(clearanceId) {
+    openPreviewModal([clearanceId]);
+}
+
+function bulkPrintClearance() {
+    const selectedCheckboxes = document.querySelectorAll('.clearance-checkbox:checked');
+    
+    if (selectedCheckboxes.length === 0) {
+        showNotification('Please select at least one clearance form to print', 'warning');
+        return;
+    }
+
+    const clearanceIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+    openPreviewModal(clearanceIds);
+}
+</script>
+{% endblock %}

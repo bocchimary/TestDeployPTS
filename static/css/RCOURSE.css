@@ -1,0 +1,856 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #f1f1f198;
+}
+
+.registrar_sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #183a53;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.registrar_sidebar.collapsed {
+  width: 60px;
+  align-items: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.registrar_sidebar .registrar_sidebar-title {
+  white-space: nowrap;
+}
+
+.registrar_sidebar.collapsed .registrar_sidebar-title,
+.registrar_sidebar.collapsed .registrar_sidebar_link-text {
+  display: none;
+}
+
+.registrar_sidebar a {
+  color: #adb5bd;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 5px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.registrar_sidebar a:hover {
+  background-color: #14507d;
+  color: white;
+}
+
+.registrar_sidebar a i {
+  color: #ffffff;
+  transition: color 0.3s ease;
+}
+
+.registrar_sidebar a:hover i {
+  color: white;
+}
+
+/* Active state for current page */
+.registrar_sidebar a.active {
+  background-color: #14507d;
+  color: white;
+}
+
+.registrar_sidebar a.active i {
+  color: white;
+}
+
+.registrar_sidebar.collapsed a {
+  justify-content: center;
+}
+
+/* Top Bar Styles */
+.registrar_sidebar_top-bar {
+  position: fixed;
+  left: 250px;
+  right: 0;
+  top: 0;
+  height: 90px;
+  background-color: #183a53;
+  color: white;
+  z-index: 1035;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  transition: left 0.3s ease;
+}
+
+.registrar_sidebar.collapsed ~ .registrar_sidebar_top-bar {
+  left: 60px;
+}
+
+.registrar_sidebar_top-bar .registrar_sidebar_user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.registrar_sidebar_top-bar .registrar_sidebar_user-info i {
+  font-size: 1.5rem;
+}
+
+/* Backdrop for mobile */
+#registrar_sidebar_sidebarBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1030;
+  display: none;
+}
+
+#registrar_sidebar_sidebarBackdrop.active {
+  display: block;
+}
+
+/* Toggle buttons */
+.registrar_sidebar_toggle-button,
+.registrar_sidebar_desktopToggle-button,
+.registrar_sidebar_topbarToggle-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.registrar_sidebar_toggle-button i,
+.registrar_sidebar_desktopToggle-button i,
+.registrar_sidebar_topbarToggle-button i {
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.registrar_sidebar_toggle-button:hover,
+.registrar_sidebar_desktopToggle-button:hover,
+.registrar_sidebar_topbarToggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.registrar_sidebar_toggle-button:hover i,
+.registrar_sidebar_desktopToggle-button:hover i,
+.registrar_sidebar_topbarToggle-button:hover i {
+  color: white;
+}
+
+.registrar_sidebar_logo-img {
+  height: 60px;
+  width: auto;
+}
+
+/* Registrar Clearance Styles */
+.registrar_course_main_content{
+  margin-left: 250px;
+  padding: 2rem;
+  padding-top: 6.2rem;
+  transition: margin-left 0.3s ease;
+  background-color: #f1f1f198;
+  min-height: 100vh;
+}
+
+.registrar_sidebar.collapsed ~ .registrar_course_main_content {
+  margin-left: 60px;
+}
+
+/* Header and Title */
+.registrar_course_main_content h1 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+.registrar_course_main_content .text-end {
+  margin-bottom: 1rem;
+}
+
+  /* ======================================================
+     HEADER SECTION
+     ====================================================== */
+  .registrar_course_header {
+    margin-bottom: 2rem;
+  }
+  
+  .registrar_course_title {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .registrar_course_subtitle {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+  }
+  
+  .registrar_course_actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  /* ======================================================
+     BUTTONS
+     ====================================================== */
+  .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  .btn-add-subject {
+    background: #246b8c;
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .btn_add_course,
+  .btn-search,
+  .btn-add-year
+ {
+    background: #246b8c;
+    color: #fff;
+  }
+  
+  .btn_add_course:hover,
+  .btn-search:hover,
+  .btn-add-year:hover,
+  .btn-add-subject:hover {
+    background: #1d5f78;
+    color: #fff;
+  }
+  
+  .btn-outline-secondary {
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    background: transparent;
+  }
+  
+  .btn-outline-secondary:hover {
+    background: #6c757d;
+    color: white;
+  }
+  
+  /* ======================================================
+     FORM & INPUT
+     ====================================================== */
+  .form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+  }
+  
+  .form-control::placeholder {
+    color: #adb5bd;
+  }
+  
+  .input-group {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* ======================================================
+     CARDS
+     ====================================================== */
+  .card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    background: white;
+    overflow: hidden;
+  }
+  
+  .card-header-first,
+  .card-header-second,
+  .card-header-third,
+  .card-header-fourth {
+    background: linear-gradient(90deg, #183a53 0%, #1f4669 100%);
+    color: white;
+    border: none;
+    padding: 1rem;
+  }
+  
+  .card-header-semester {
+    background: whitesmoke;
+    color: #0f0707;
+    border: none;
+    padding: 2rem;
+  }
+  
+  /* ======================================================
+     TABLES
+     ====================================================== */
+  .table {
+    margin-bottom: 0;
+    width: 100%;
+  }
+  
+  .table th {
+    border-top: none;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+    padding: 1rem 1.5rem;
+    background-color: #f8f9fa;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .table td {
+    padding: 1rem 1.5rem;
+    vertical-align: middle;
+    border-top: 1px solid #f1f3f4;
+    font-size: 0.95rem;
+  }
+  
+  /* Highlight second column with badge style */
+  .table tbody tr td:nth-child(2) span {
+    background-color: #e9f4ff;
+    color: #02070f;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: inline-block;
+  }
+  
+  /* Course column hover */
+  .table tbody tr td:nth-child(3) {
+    color: #183a53;
+    font-weight: 500;
+  }
+  
+  .table tbody tr td:nth-child(3):hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  /* ======================================================
+     STAT CARDS
+     ====================================================== */
+  .registrar_course_stat-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .registrar_course_stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .registrar_course_stat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #007bff;
+  }
+  
+  .registrar_course_stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+  
+  .registrar_course_stat-label {
+    color: #6c757d;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+  }
+  
+  /* ======================================================
+     MODALS
+     ====================================================== */
+  .modal-content {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header {
+    background: linear-gradient(to bottom, #183a53, #1f4d6e);
+    color: #fff;
+  }
+  
+  .modal-header .btn-close {
+    filter: invert(1);
+    opacity: 0.8;
+  }
+  
+  .modal-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+  
+  /* ======================================================
+     RESPONSIVE
+     ====================================================== */
+ /* Responsive Design */
+  @media (max-width: 768px) {
+    
+
+    .registrar_sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+        left: 0;
+    }
+    .registrar_sidebar.show {
+        transform: translateX(0%);
+    }
+  
+    .registrar_sidebar.collapsed {
+        transform: translateX(-100%) !important;
+    }
+  
+    .registrar_sidebar_top-bar .registrar_sidebar_system-title,
+    .registrar_sidebar_top-bar .registrar_sidebar_user-info span {
+        display: none;
+    }
+    
+    .registrar_sidebar_top-bar,
+    .registrar_sidebar_top-bar .registrar_sidebar_system-title,
+    .registrar_sidebar_top-bar .registrar_sidebar_user-info {
+        left: 0;
+        font-size: 0.9rem;
+    }
+  
+ 
+    .registrar_sidebar_top-bar,
+    .registrar_sidebar.collapsed ~ .registrar_sidebar_top-bar {
+        left: 0 !important;
+    }
+  
+    .registrar_course_main_content {
+       margin-left: 0 !important;
+        padding-top: 6.1rem;
+    }
+  
+    .registrar_course_main_content.sidebar-collapsed {
+        margin-left: 0;
+    }
+
+    .registrar_course_main_content h1 {
+       
+        font-size: 2rem;
+    }
+ 
+  
+    .registrar_graduation_table thead th {
+        font-size: 0.75rem;
+        padding: 8px 4px;;
+    }
+  
+    .registrar_graduation_table tbody td {
+        padding: 6px 4px;
+    }
+  
+    .form-select-sm {
+        width: 100%;
+        margin-bottom: -0.9rem;;
+    }
+    .btn-sm {
+        width: 150px;
+        left: 0 !important  ;
+    
+    }
+  
+    .registrar_graduation_search-bar {
+        width: 100%;
+        max-width: none;
+    }
+
+   .btn_add_course {
+    font-size: 0.9rem;
+    width: 150px;
+    left: 0 !important  ;
+
+   }
+  }
+  @media (max-width: 576px) {
+    .registrar_course_main_content .d-flex {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+  
+    .registrar_course_main_content .form-select {
+        width: 100% !important;
+        min-width: auto;
+    }
+  
+    .registrar_graduation_search-bar {
+        width: 100%;
+    }
+  }
+  
+  
+/* Mobile responsiveness for the Course Modal */
+@media (max-width: 768px) {
+  #viewCourseModal .modal-dialog {
+    max-width: 95% !important; /* shrink to almost full width */
+    margin: 10px auto;
+  }
+
+  #viewCourseModal h4 {
+    font-size: 1.2rem; /* smaller course name */
+  }
+
+  #viewCourseModal .card-header-first button {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  #viewCourseModal table th,
+  #viewCourseModal table td {
+    font-size: 0.8rem; /* smaller table text */
+    white-space: nowrap;
+  }
+
+  #viewCourseModal .modal-footer button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+  #viewCourseModal .modal-dialog {
+    max-width: 95% !important; /* shrink modal */
+    margin: 10px auto;
+  }
+
+  #viewCourseModal h4 {
+    font-size: 1.2rem;
+  }
+
+  #viewCourseModal .card-header-first button {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  /* ✅ Make tables scrollable on small screens */
+  #viewCourseModal .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #viewCourseModal table {
+    min-width: 600px; /* ensures horizontal scroll kicks in */
+    font-size: 0.8rem;
+  }
+
+  #viewCourseModal table th,
+  #viewCourseModal table td {
+    white-space: nowrap; /* prevents wrapping */
+    padding: 6px 8px;
+  }
+
+  #viewCourseModal .modal-footer button {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+
+}
+
+/* Mobile-specific styles for Add Course Modal */
+@media (max-width: 576px) {
+  #addCourseModal .modal-content {
+    border-radius: 0; /* edge-to-edge on mobile */
+    margin: 0.3rem;
+  }
+
+  #addCourseModal .modal-header h5 {
+    font-size: 1rem;
+  }
+
+  #addCourseModal .form-label {
+    font-size: 0.85rem;
+  }
+
+  #addCourseModal input,
+  #addCourseModal select,
+  #addCourseModal textarea {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  #addCourseModal .modal-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #addCourseModal .modal-footer .btn {
+    width: 100%; /* full-width buttons on mobile */
+  }
+
+  #addCourseModal .card-header h5,
+  #addCourseModal .card-header h6 {
+    font-size: 1rem;
+  }
+
+  #addCourseModal table th,
+  #addCourseModal table td {
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+
+  #addCourseModal .btn-add-year {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    width: auto;
+  }
+  
+}
+/* Semester counter buttons */
+.minus-btn,
+.plus-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+.minus-btn:hover,
+.plus-btn:hover {
+  background-color: #385e7a;
+}
+
+.semester-count {
+  min-width: 28px;
+  text-align: center;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* On mobile: slightly larger buttons for easier tapping */
+@media (max-width: 576px) {
+  .minus-btn,
+  .plus-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+  }
+
+  .semester-count {
+    font-size: 1.1rem;
+  }
+}
+
+/* Mobile-specific styles for Subjects Table */
+@media (max-width: 576px) {
+  #subjectsTable thead {
+    display: none; /* hide table headers */
+  }
+
+  #subjectsTable tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.75rem;
+    background: #f9f9f9;
+  }
+
+  #subjectsTable tbody tr td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    padding: 0.5rem 0;
+  }
+
+  /* Add labels dynamically via data-label */
+  #subjectsTable tbody tr td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* Inputs should fill available space */
+  #subjectsTable input.form-control {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Center the delete button */
+  #subjectsTable td[data-label="Actions"] {
+    justify-content: center;
+  }
+}
+/* Mobile-specific styles for Subjects Table */
+@media (max-width: 576px) {
+
+  .btn-add-subject {
+    background: #246b8c;
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.3rem;
+    font-size: 0.6rem;
+  }
+  #subjectsTable thead {
+    display: none; /* hide table headers */
+  }
+
+  #subjectsTable tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.75rem;
+    background: #f9f9f9;
+  }
+
+  #subjectsTable tbody tr td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    padding: 0.5rem 0;
+  }
+
+  /* Add labels dynamically via data-label */
+  #subjectsTable tbody tr td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* Inputs should fill available space */
+  #subjectsTable input.form-control {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Center the delete button */
+  #subjectsTable td[data-label="Actions"] {
+    justify-content: center;
+  }
+}
+@media (max-width: 768px) {
+  #subjectsTable thead {
+    display: none; /* hide table headers */
+  }
+
+  #subjectsTable tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.75rem;
+    background: #f9f9f9;
+  }
+
+  #subjectsTable tbody tr td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    padding: 0.5rem 0;
+  }
+
+  /* Add labels dynamically via data-label */
+  #subjectsTable tbody tr td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* Inputs should fill available space */
+  #subjectsTable input.form-control {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Center the delete button */
+  #subjectsTable td[data-label="Actions"] {
+    justify-content: center;
+  }
+}
+/* Hide table headers on mobile */
+#subjectsTable thead {
+  display: none;
+}
+
+/* Each row becomes a very compact block card */
+#subjectsTable tbody tr {
+  display: block;
+  margin-bottom: 0.2rem; /* minimal spacing between rows */
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 0.25rem 0.35rem; /* smaller padding */
+  background: #f9f9f9;
+}
+
+/* Two-column layout inside each row */
+#subjectsTable tbody tr td {
+  display: grid;
+  grid-template-columns: 25% 75%; /* label | input */
+  align-items: center;
+  border: none;
+  padding: 0.1rem 0.3rem; /* tight padding */
+  gap: 0.25rem; /* minimal gap */
+}
+
+/* Dynamic label styling - keep original font size */
+#subjectsTable tbody tr td::before {
+  content: attr(data-label);
+  font-weight: 600;
+  margin-bottom: 0; /* no extra spacing */
+}
+
+/* Inputs full width, compact padding */
+#subjectsTable input.form-control {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.2rem 0.3rem; /* compact input */
+  font-size: 0.85rem; /* slightly smaller for tight layout */
+}
+
+
+
+/* Subtle hover effect for UX */
+#subjectsTable tbody tr:hover {
+  background: #f1f3f5;
+}

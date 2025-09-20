@@ -1,0 +1,1034 @@
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #f1f1f198;
+  }
+  .registrar_sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #183a53;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .registrar_sidebar.collapsed {
+    width: 60px;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .registrar_sidebar .registrar_sidebar-title {
+    white-space: nowrap;
+  }
+  
+  .registrar_sidebar.collapsed .registrar_sidebar-title,
+  .registrar_sidebar.collapsed .registrar_sidebar_link-text {
+    display: none;
+  }
+  
+  .registrar_sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .registrar_sidebar a:hover {
+    background-color: #14507d;
+    color: white;
+  }
+  
+  .registrar_sidebar a i {
+    color: #ffffff;
+    transition: color 0.3s ease;
+  }
+  
+  .registrar_sidebar a:hover i {
+    color: white;
+  }
+  
+  /* Active state for current page */
+  .registrar_sidebar a.active {
+    background-color: #14507d;
+    color: white;
+  }
+  
+  .registrar_sidebar a.active i {
+    color: white;
+  }
+  
+  .registrar_sidebar.collapsed a {
+    justify-content: center;
+  }
+  
+  /* Top Bar Styles */
+  .registrar_sidebar_top-bar {
+    position: fixed;
+    left: 250px;
+    right: 0;
+    top: 0;
+    height: 90px;
+    background-color: #183a53;
+    color: white;
+    z-index: 1035;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    transition: left 0.3s ease;
+  }
+  
+  .registrar_sidebar.collapsed ~ .registrar_sidebar_top-bar {
+    left: 60px;
+  }
+  
+  .registrar_sidebar_top-bar .registrar_sidebar_user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .registrar_sidebar_top-bar .registrar_sidebar_user-info i {
+    font-size: 1.5rem;
+  }
+  
+  #registrar_sidebar_sidebarBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1030;
+    display: none;
+  }
+  
+  #registrar_sidebar_sidebarBackdrop.active {
+    display: block;
+  }
+  
+  .registrar_sidebar_toggle-button,
+  .registrar_sidebar_desktopToggle-button,
+  .registrar_sidebar_topbarToggle-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .registrar_sidebar_toggle-button i,
+  .registrar_sidebar_desktopToggle-button i,
+  .registrar_sidebar_topbarToggle-button i {
+    color: white;
+  
+    transition: color 0.3s ease;
+  }
+  
+  .registrar_sidebar_toggle-button:hover,
+  .registrar_sidebar_desktopToggle-button:hover,
+  .registrar_sidebar_topbarToggle-button:hover {
+    background-color: #14507d;
+  }
+  
+  .registrar_sidebar_toggle-button:hover i,
+  .registrar_sidebar_desktopToggle-button:hover i,
+  .registrar_sidebar_topbarToggle-button:hover i {
+    color: #d8d8d8;
+  }
+  
+  .registrar_sidebar_logo-img {
+    height: 60px;
+    width: auto;
+  }
+  
+  /* Main Content Styles */
+  .registrar_course_main_content {
+    margin-left: 250px;
+    padding: 2rem;
+    padding-top: 6.2rem;
+    transition: margin-left 0.3s ease;
+    background-color: #f1f1f198;
+    min-height: 100vh;
+  }
+  
+  .registrar_sidebar.collapsed ~ .registrar_course_main_content {
+    margin-left: 60px;
+  }
+  
+  .registrar_course_main_content h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-weight: 700;
+    margin-top: 0;
+  }
+  
+  .registrar_course_main_content .text-end {
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .registrar_sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+        left: 0;
+    }
+  
+    .registrar_sidebar.show {
+        transform: translateX(0%);
+    }
+  
+    .registrar_sidebar.collapsed {
+        transform: translateX(-100%) !important;
+    }
+  
+    .registrar_sidebar_top-bar .registrar_sidebar_system-title,
+    .registrar_sidebar_top-bar .registrar_sidebar_user-info span {
+        display: none;
+    }
+    
+    .registrar_sidebar_top-bar,
+    .registrar_sidebar_top-bar .registrar_sidebar_system-title,
+    .registrar_sidebar_top-bar .registrar_sidebar_user-info {
+        left: 0;
+        font-size: 0.9rem;
+    }
+  
+    .registrar_graduation_table-fixed-container {
+        height: calc(100vh - 290px);
+    }
+  
+    .registrar_sidebar_top-bar,
+    .registrar_sidebar.collapsed ~ .registrar_sidebar_top-bar {
+        left: 0 !important;
+    }
+  
+    .registrar_course_main_content {
+       margin-left: 0 !important;
+        padding-top: 6.1rem;
+    }
+  
+    .registrar_course_main_content.sidebar-collapsed {
+        margin-left: 0;
+    }
+  
+    .registrar_graduation_otp-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+  
+    .registrar_course_main_content h1 {
+        font-size: 1.5rem;
+    }
+  
+    .registrar_graduation_table {
+        font-size: 0.8rem;
+    }
+  
+    .registrar_graduation_table thead th {
+        font-size: 0.75rem;
+        padding: 8px 4px;;
+    }
+  
+    .registrar_graduation_table tbody td {
+        padding: 6px 4px;
+    }
+  
+    .form-select-sm {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    .btn-sm {
+        width: 150px;
+        left: 0 !important  ;
+    
+    }
+  
+    .registrar_graduation_search-bar {
+        width: 100%;
+        max-width: none;
+    }
+  }
+  @media (max-width: 576px) {
+    .registrar_course_main_content .d-flex {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+  
+    .registrar_course_main_content .form-select {
+        width: 100% !important;
+        min-width: auto;
+    }
+  
+    .registrar_graduation_search-bar {
+        width: 100%;
+    }
+  }
+  
+  
+  
+    /* ========================================
+       HEADER SECTION
+       ======================================== */
+       .registrar_course_header {
+        margin-bottom: 2rem;
+      }
+      
+      .registrar_course_title {
+        color: #2c3e50;
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .registrar_course_subtitle {
+        font-size: 1.1rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+      }
+      
+      .registrar_course_actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      
+      /* ========================================
+         BUTTON STYLES
+         ======================================== */
+      .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border: none;
+        padding: 0.75rem 1.5rem;
+      }
+      
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      
+      .btn_add_course {
+        background: #246b8c;
+        color: #fff;
+        border: none;
+      }
+      
+      .btn_add_course:hover {
+        background: #1d5f78; /* darker shade of #246b8c */
+        color: #fff;
+      }
+      .btn-search{
+        background: #246b8c;
+        color: #fff;
+        border: none;
+      }
+      .btn-search:hover{
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      
+      .btn-add-year {
+        background: #246b8c;
+        color: #fff;
+        border: none;
+      }
+      
+      .btn-add-subject {
+        background: #246b8c;
+        color: #fff;
+        border: none;
+      }
+      .btn-outline-secondary {
+        border: 2px solid #6c757d;
+        color: #6c757d;
+        background: transparent;
+      }
+      
+      .btn-outline-secondary:hover {
+        background: #6c757d;
+        color: white;
+      }
+      
+      /* ========================================
+         FORM & INPUT STYLES
+         ======================================== */
+      .form-control {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+        font-size: 1rem;
+      }
+      
+      
+      .form-control::placeholder {
+        color: #adb5bd;
+      }
+      
+      .input-group {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      
+      /* ========================================
+         CARD STYLES
+         ======================================== */
+      .card {
+        border: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        background: white;
+        overflow: hidden;
+      }
+      .header-color {
+        background: linear-gradient(to bottom, #183a53, #1f4d6e);
+        color: white;
+        border: none;
+        padding: 1.25rem 1.5rem;
+      }
+      
+      .card-header h5 {
+        margin-bottom: 0;
+        font-weight: 600;
+        font-size: 1.25rem;
+      }
+      .card-header-first
+      {
+        background: linear-gradient(90deg, #183a53 0%, #1f4669 100%);
+        color: white;
+        border: none;
+        padding: 1.rem;
+      }
+      .card-header-second
+      {
+        background: linear-gradient(90deg, #183a53 0%, #1f4669 100%);
+        color: white;
+        border: none;
+        padding: 1.rem;
+      }
+      .card-header-third
+      {
+        background: linear-gradient(90deg, #183a53 0%, #1f4669 100%);
+        color: white;
+        border: none;
+        padding: 1.rem;
+      }
+      .card-header-fourth
+      {
+        background: linear-gradient(90deg, #183a53 0%, #1f4669 100%);
+        color: white;
+        border: none;
+        padding: 1.rem;
+      }
+      .card-body {
+        padding: 0;
+      }
+      .card-header-semester {
+        background: whitesmoke;
+        color: rgb(15, 7, 7);
+        border: none;
+        padding: 2rem;
+      }
+      
+      
+      /* ========================================
+         TABLE STYLES
+         ======================================== */
+      
+      
+      .table {
+        margin-bottom: 0;
+        width: 100%;
+      }
+      
+      .table th {
+        border-top: none;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        color: #495057;
+        padding: 1rem 1.5rem;
+        background-color: #f8f9fa;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+      }
+      
+      .table td {
+        padding: 1rem 1.5rem;
+        vertical-align: middle;
+        border-top: 1px solid #f1f3f4;
+        font-size: 0.95rem;
+      }
+      
+      .table tbody tr {
+        transition: all 0.2s ease;
+      }
+      
+      
+      .table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      
+      table tbody tr td:nth-child(2) {
+        text-align: left;
+        vertical-align: middle;
+        padding-left: 1rem; /* optional: add space from border */
+      }
+      
+      /* Apply badge style only to the inner span */
+      table tbody tr td:nth-child(2) span {
+        background-color: #e9f4ff; /* light bootstrap-like */
+        color: #02070f;            /* bootstrap primary */
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 0.85rem;
+      }
+      
+      
+      /* Hover underline only for Course column */
+      table tbody tr td:nth-child(3) {
+        color: #183a53;
+        font-weight: 500;
+      }
+      
+      /* Hover underline only for Course column */
+      table tbody tr td:nth-child(3):hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      
+      /* ========================================
+         STATISTICS CARDS
+         ======================================== */
+      .registrar_course_stat-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 1.5rem;
+        text-align: center;
+      }
+      
+      .registrar_course_stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+      
+      .registrar_course_stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #007bff;
+      }
+      
+      .registrar_course_stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+      }
+      
+      .registrar_course_stat-label {
+        color: #6c757d;
+        font-weight: 500;
+        margin-bottom: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+      }
+      
+      /* ========================================
+         BADGES & STATUS INDICATORS
+         ======================================== */
+      .badge {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .badge-primary {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+      }
+      
+      .badge-success {
+        background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+        color: white;
+      }
+      
+      .badge-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+        color: #212529;
+      }
+      
+      .badge-danger {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+      }
+      
+      /* ========================================
+         ACTION BUTTONS
+         ======================================== */
+      .btn-group {
+        display: flex;
+        gap: 0.5rem;
+      }
+      
+      .btn-group .btn {
+        border-radius: 8px;
+        margin: 0;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+      }
+      
+      .btn-group .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      
+      .btn-sm {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      
+      .btn-lg {
+        padding: 1rem 2rem;
+        font-size: 1.125rem;
+      }
+      
+      /* ========================================
+         EMPTY STATE
+         ======================================== */
+      .registrar_course_empty-state {
+        padding: 3rem 1rem;
+        text-align: center;
+        color: #6c757d;
+      }
+      
+      .registrar_course_empty-state i {
+        color: #dee2e6;
+        margin-bottom: 1rem;
+        font-size: 3rem;
+      }
+      
+      .registrar_course_empty-state h4 {
+        color: #495057;
+        margin-bottom: 1rem;
+      }
+      
+      /* ========================================
+         MODAL STYLES
+         ======================================== */
+      .modal-content {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+      
+      
+      .modal-header {
+        background: linear-gradient(to bottom, #183a53, #1f4d6e);
+        color: #fff; /* makes title and close button visible */
+      }
+      
+      
+      .modal-header .btn-close {
+        filter: invert(1);
+        opacity: 0.8;
+      }
+      
+      .modal-header .btn-close:hover {
+        opacity: 1;
+      }
+      
+      .modal-title {
+        
+        font-weight: 600;
+        font-size: 1.25rem;
+      }
+      
+      .modal-body {
+        padding: 1.5rem;
+      }
+      
+      .modal-footer {
+        border-top: 1px solid #e9ecef;
+        padding: 1rem 1.5rem;
+      }
+      
+      /* ========================================
+         FORM STYLING
+         ======================================== */
+      .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+      
+      .form-select-program {
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        width:250px;
+        margin-right: 2rem;
+      }
+      .form-select-year {
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        width:200px;
+      
+      }
+      
+      /* ========================================
+         UTILITY CLASSES
+         ======================================== */
+      .text-muted {
+        color: #6c757d !important;
+      }
+      
+      .text-primary {
+        color: #007bff !important;
+      }
+      
+      .text-success {
+        color: #28a745 !important;
+      }
+      
+      .text-warning {
+        color: #ffc107 !important;
+      }
+      
+      .text-danger {
+        color: #dc3545 !important;
+      }
+      
+      .bg-light {
+        background-color: #f8f9fa !important;
+      }
+      
+      .bg-white {
+        background-color: #ffffff !important;
+      }
+      
+      .border-0 {
+        border: 0 !important;
+      }
+      
+      .shadow-sm {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+      }
+      
+      .shadow {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+      }
+      
+      .shadow-lg {
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+      }
+      
+      /* ========================================
+         ANIMATIONS
+         ======================================== */
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .slide-in {
+        animation: slideIn 0.3s ease-out;
+      }
+      
+      @keyframes slideIn {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+      
+      .slide-up {
+        animation: slideUp 0.4s ease-out;
+      }
+      
+      @keyframes slideUp {
+        from {
+          transform: translateY(30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      
+      /* ========================================
+         LOADING STATES
+         ======================================== */
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+        position: relative;
+      }
+      
+      .loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid #007bff;
+        border-top: 2px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* ========================================
+         CUSTOM SCROLLBAR
+         ======================================== */
+      .table-responsive::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+      }
+      
+      .table-responsive::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      
+      }
+      
+      .table-responsive::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+      
+      }
+      
+      .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+      }
+      
+      /* ========================================
+         RESPONSIVE DESIGN
+         ======================================== */
+      @media (max-width: 1200px) {
+        .container {
+          max-width: 960px;
+        }
+      }
+      
+      @media (max-width: 992px) {
+        .container {
+          max-width: 720px;
+        }
+        
+        .registrar_course_title {
+          font-size: 2rem;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .registrar_course_main-content {
+          padding: 1rem;
+        }
+        
+        .registrar_course_title {
+          font-size: 1.75rem;
+        }
+        
+        .registrar_course_actions {
+          flex-direction: column;
+          width: 100%;
+          gap: 0.5rem;
+        }
+        
+        .registrar_course_actions .btn {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+        
+        .registrar_course_stat-number {
+          font-size: 2rem;
+        }
+        
+        .table-responsive {
+          font-size: 0.875rem;
+        }
+        
+        .btn-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+        
+        .btn-group .btn {
+          margin: 0;
+          width: 100%;
+        }
+        
+        .card-header {
+          padding: 1rem;
+        }
+        
+        .table th, .table td {
+          padding: 0.75rem 0.5rem;
+        }
+      }
+      
+      @media (max-width: 576px) {
+        .registrar_course_header {
+          text-align: center;
+        }
+        
+        .registrar_course_actions {
+          margin-top: 1rem;
+        }
+        
+        .card-body {
+          padding: 1rem;
+        }
+        
+        .table th, .table td {
+          padding: 0.5rem 0.25rem;
+          font-size: 0.8rem;
+        }
+        
+        .btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+        }
+        
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+          padding: 1rem;
+        }
+      }
+      
+      /* ========================================
+         PRINT STYLES
+         ======================================== */
+      @media print {
+        .registrar_course_actions,
+        .btn-group,
+        .modal,
+        .btn {
+          display: none !important;
+        }
+        
+        .registrar_course_main-content {
+          padding: 0;
+          background: white;
+        }
+        
+        .card {
+          box-shadow: none;
+          border: 1px solid #dee2e6;
+        }
+        
+        .table th {
+          background-color: #f8f9fa !important;
+          color: #000 !important;
+        }
+        
+        .table td {
+          color: #000 !important;
+        }
+      }
+      
+      /* ========================================
+         ACCESSIBILITY IMPROVEMENTS
+         ======================================== */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      
+      
+      
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        .table th {
+          background-color: #000 !important;
+          color: #fff !important;
+        }
+        
+        .table td {
+          border-color: #000 !important;
+        }
+        
+        .card {
+          border: 2px solid #000 !important;
+        }
+      }
+      
+      .collapse-icon {
+        display: inline-block;
+        transition: transform 0.3s ease;
+      }
+      /* Rotate icon when collapsed */
+      .collapse.show + .card-body + .collapse-icon,
+      .collapse:not(.show) + .card-body + .collapse-icon {
+        transform: rotate(0deg);
+      }
+      
+      /* Fade & slide-down animation */
+      @keyframes slideFadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Activity Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            margin: 20px;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+        }
+        .header h1 {
+            margin: 0;
+            color: #007bff;
+            font-size: 24px;
+        }
+        .header .subtitle {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #666;
+        }
+        .report-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .info-group {
+            margin-bottom: 10px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .info-value {
+            color: #212529;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 11px;
+        }
+        .activity-table th,
+        .activity-table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .activity-table th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .activity-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .activity-table tr:hover {
+            background-color: #e3f2fd;
+        }
+        .badge {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .badge-success { background-color: #28a745; color: white; }
+        .badge-danger { background-color: #dc3545; color: white; }
+        .badge-warning { background-color: #ffc107; color: #212529; }
+        .badge-info { background-color: #17a2b8; color: white; }
+        .badge-secondary { background-color: #6c757d; color: white; }
+        .summary {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            display: block;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .no-data {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+        }
+        .filters-applied {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .filters-applied h4 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        .filter-item {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin: 2px;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Activity Report</h1>
+        <div class="subtitle">Generated for {{ generated_by.full_name }}</div>
+        <div class="subtitle">{{ report_type|title }}</div>
+    </div>
+
+    <div class="report-info">
+        <div>
+            <div class="info-group">
+                <span class="info-label">Report Period:</span>
+                <span class="info-value">{{ start_date }} to {{ end_date }}</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Period Type:</span>
+                <span class="info-value">{{ period_type|title }}</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Generated On:</span>
+                <span class="info-value">{{ "now"|date:"F d, Y H:i T" }}</span>
+            </div>
+        </div>
+        <div>
+            <div class="info-group">
+                <span class="info-label">Generated By:</span>
+                <span class="info-value">{{ generated_by.full_name }} ({{ generated_by.user_type|title }})</span>
+            </div>
+            <div class="info-group">
+                <span class="info-label">Total Activities:</span>
+                <span class="info-value">{{ total_count }}</span>
+            </div>
+        </div>
+    </div>
+
+    {% if filters.form_status or filters.role_filter or filters.form_type or filters.text_search %}
+    <div class="filters-applied">
+        <h4>Applied Filters:</h4>
+        {% if filters.form_status %}<span class="filter-item">Status: {{ filters.form_status|title }}</span>{% endif %}
+        {% if filters.role_filter %}<span class="filter-item">Role: {{ filters.role_filter|title }}</span>{% endif %}
+        {% if filters.form_type %}<span class="filter-item">Form Type: {{ filters.form_type|title }}</span>{% endif %}
+        {% if filters.text_search %}<span class="filter-item">Search: {{ filters.text_search }}</span>{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="summary">
+        <div class="summary-stats">
+            <div class="stat-item">
+                <span class="stat-number">{{ total_count }}</span>
+                <span class="stat-label">Total Activities</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ total_signatory_count }}</span>
+                <span class="stat-label">Signatory Activities</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ total_audit_count }}</span>
+                <span class="stat-label">System Activities</span>
+            </div>
+        </div>
+    </div>
+
+    {% if signatory_activities %}
+    <div class="section">
+        <div class="section-title">Signatory Activities ({{ total_signatory_count }})</div>
+        <table class="activity-table">
+            <thead>
+                <tr>
+                    <th>Date/Time</th>
+                    <th>Signatory</th>
+                    <th>Action</th>
+                    <th>Form Type</th>
+                    <th>Student</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in signatory_activities %}
+                <tr>
+                    <td>{{ activity.created_at|date:"M d, Y H:i" }}</td>
+                    <td>{{ activity.signatory.full_name|default:"N/A" }}</td>
+                    <td>
+                        {% if activity.action_type == 'approve' %}
+                            <span class="badge badge-success">{{ activity.action_type|title }}</span>
+                        {% elif activity.action_type == 'disapprove' %}
+                            <span class="badge badge-danger">{{ activity.action_type|title }}</span>
+                        {% elif activity.action_type == 'view' %}
+                            <span class="badge badge-secondary">{{ activity.action_type|title }}</span>
+                        {% else %}
+                            <span class="badge badge-info">{{ activity.action_type|title }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ activity.form_type|default:"N/A" }}</td>
+                    <td>{{ activity.student_name|default:"N/A" }}</td>
+                    <td>{{ activity.details|default:"N/A"|truncatechars:100 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if audit_activities %}
+    <div class="section">
+        <div class="section-title">System Activities ({{ total_audit_count }})</div>
+        <table class="activity-table">
+            <thead>
+                <tr>
+                    <th>Date/Time</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Entity</th>
+                    <th>Description</th>
+                    <th>IP Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in audit_activities %}
+                <tr>
+                    <td>{{ activity.timestamp|date:"M d, Y H:i" }}</td>
+                    <td>{{ activity.user.full_name|default:"System" }}</td>
+                    <td>
+                        {% if 'approval' in activity.action_type %}
+                            <span class="badge badge-success">{{ activity.action_type|title }}</span>
+                        {% elif 'disapproval' in activity.action_type %}
+                            <span class="badge badge-danger">{{ activity.action_type|title }}</span>
+                        {% elif 'delete' in activity.action_type %}
+                            <span class="badge badge-warning">{{ activity.action_type|title }}</span>
+                        {% else %}
+                            <span class="badge badge-info">{{ activity.action_type|title }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ activity.entity_type|default:"N/A" }}</td>
+                    <td>{{ activity.description|default:"N/A"|truncatechars:150 }}</td>
+                    <td>{{ activity.ip_address|default:"N/A" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if not signatory_activities and not audit_activities %}
+    <div class="no-data">
+        <p>No activities found for the specified criteria.</p>
+        <p>Try adjusting your filters or date range.</p>
+    </div>
+    {% endif %}
+</body>
+</html>

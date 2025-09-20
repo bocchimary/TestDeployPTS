@@ -1,0 +1,81 @@
+{% load static %}
+<section class="container my-1">
+  <h1 class="fw-bold mt-3 mb-3">Enrollment Forms</h1>
+  <p class="fst-italic">Submit your enrollment form here.</p>
+
+  <!-- New-form trigger -->
+  {% if can_submit_new_enrollment %}
+    <button class="text-white fw-bold rounded mb-3 custom-btn"
+            data-bs-toggle="modal"
+            data-bs-target="#enrollmentModal">
+      <i class="bi bi-plus-lg"></i> Fill out new form
+    </button>
+  {% else %}
+    <button class="text-white fw-bold rounded mb-3 custom-btn"
+            onclick="Swal.fire('Not Allowed', 'You still have an ongoing enrollment. Please complete it first.', 'warning')">
+      <i class="bi bi-plus-lg"></i> Fill out new form
+    </button>
+  {% endif %}
+
+  <div class="custom-table-wrapper">
+    <h4 class="fw-bold text-start">Enrollment Forms History</h4>
+  
+    <!-- Responsive Table Wrapper -->
+    <div class="table-responsive">
+      <table class="custom-table table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 20%;">Date</th>
+            <th style="width: 30%;">Course</th>
+            <th style="width: 10%;">Year</th>
+            <th style="width: 10%;">Semester</th>
+            <th style="width: 15%;">Status</th>
+            <th style="width: 15%;" class="text-center">Actions</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for form in enrollment_history %}
+            <tr
+              data-id="{{ form.id }}"
+              data-status="{{ form.status }}"
+              data-course="{{ form.course }}"
+              data-year="{{ form.year }}"
+              data-section="{{ form.semester }}"
+            >
+            <td>{{ form.created_at|date:"M d, Y – h:i A" }}</td>
+            <td class="fw-bold">{{ form.course }}</td>
+            <td>{{ form.year }}</td>
+            <td>{{ form.semester }}</td>
+            <td>
+              <span class="
+                fw-semibold
+                {% if form.status|title == 'Pending' %}text-warning
+                {% elif form.status|title == 'Released' %}text-success
+                {% elif form.status|title == 'Draft' %}text-secondary
+                {% else %}text-dark
+                {% endif %}
+              ">
+                {{ form.status|title }}
+              </span>
+            </td>
+              <td class="text-center">
+                <button class="btn btn-outline-secondary btn-sm"
+                        onclick="viewEnrollment('{{ form.id }}')">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="6" class="text-center text-muted">No enrollment forms yet</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+</section>
+
+{% include 'includes/view-enrollment.html' %}

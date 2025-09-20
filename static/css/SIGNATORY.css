@@ -1,0 +1,233 @@
+/* Signatory Base CSS - Sidebar and Layout Styles */
+
+/* Sidebar Styles */
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #f1f1f198
+}
+
+.signatory_sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #183a53;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.signatory_sidebar.collapsed {
+    width: 60px;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.signatory_sidebar .signatory_sidebar-title {
+    white-space: nowrap;
+}
+
+.signatory_sidebar.collapsed .signatory_sidebar-title,
+.signatory_sidebar.collapsed .signatory_sidebar_link-text {
+    display: none;
+}
+
+.signatory_sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    white-space: nowrap;
+}
+
+.signatory_sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.signatory_sidebar a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.signatory_sidebar a i {
+    font-size: 1.2rem;
+    min-width: 1.2rem;
+}
+
+/* Top Bar Styles */
+.signatory_sidebar_top-bar {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    right: 0;
+    height: 60px;
+    background-color: #183a53;
+    color: white;
+    padding: 0 1.5rem;
+    z-index: 1030;
+    transition: left 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.signatory_sidebar.collapsed ~ .signatory_sidebar_top-bar {
+    left: 60px;
+}
+
+.signatory_sidebar_topbarToggle-button,
+.signatory_sidebar_toggle-button,
+.signatory_sidebar_desktopToggle-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+}
+
+.signatory_sidebar_topbarToggle-button:hover,
+.signatory_sidebar_toggle-button:hover,
+.signatory_sidebar_desktopToggle-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.signatory_sidebar_logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.signatory_sidebar_system-title {
+    font-size: 1.1rem;
+}
+
+/* Main Content Area */
+.signatory_dashboard_main-content,
+.signatory_clearance_main-content,
+.signatory_enrollment_main-content,
+.signatory_graduation_main-content,
+.signatory_profile_main-content,
+.signatory_messages_main-content,
+.signatory_reports_main-content,
+.signatory_generate_report_main-content {
+    margin-left: 250px;
+    margin-top: 90px;
+    padding: 1rem 2rem;
+    transition: margin-left 0.3s ease;
+    min-height: calc(100vh - 90px);
+}
+
+.signatory_dashboard_main-content.sidebar-collapsed,
+.signatory_clearance_main-content.sidebar-collapsed,
+.signatory_enrollment_main-content.sidebar-collapsed,
+.signatory_graduation_main-content.sidebar-collapsed,
+.signatory_profile_main-content.sidebar-collapsed,
+.signatory_messages_main-content.sidebar-collapsed,
+.signatory_reports_main-content.sidebar-collapsed {
+    margin-left: 60px;
+}
+
+.signatory_sidebar.collapsed ~ .signatory_dashboard_main-content,
+.signatory_sidebar.collapsed ~ .signatory_clearance_main-content,
+.signatory_sidebar.collapsed ~ .signatory_enrollment_main-content,
+.signatory_sidebar.collapsed ~ .signatory_graduation_main-content,
+.signatory_sidebar.collapsed ~ .signatory_profile_main-content,
+.signatory_sidebar.collapsed ~ .signatory_messages_main-content,
+.signatory_sidebar.collapsed ~ .signatory_reports_main-content {
+    margin-left: 60px;
+}
+
+/* Backdrop for mobile */
+#signatory_sidebar_sidebarBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1020;
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .signatory_sidebar {
+        transform: translateX(-100%);
+        z-index: 1050;
+    }
+    
+    .signatory_sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .signatory_sidebar.collapsed {
+        width: 250px;
+        transform: translateX(-100%);
+    }
+    
+    .signatory_dashboard_main-content,
+    .signatory_clearance_main-content,
+    .signatory_enrollment_main-content,
+    .signatory_graduation_main-content,
+    .signatory_profile_main-content,
+    .signatory_messages_main-content,
+    .signatory_reports_main-content,
+    .signatory_generate_report_main-content {
+        margin-left: 0;
+        padding: 15px;
+        padding-top: 1rem;
+    }
+    
+    .signatory_sidebar_top-bar,
+    .signatory_sidebar.collapsed ~ .signatory_sidebar_top-bar {
+        left: 0;
+    }
+    
+    #signatory_sidebar_sidebarBackdrop.show {
+        display: block;
+    }
+}
+
+/* Notification styles */
+#signatory_sidebar_notification {
+    position: relative;
+    cursor: pointer;
+}
+
+#signatory_sidebar_notification_count {
+    font-size: 0.6rem;
+    top: -5px;
+    right: -5px;
+}
+
+/* User info styles */
+.signatory_sidebar_user-info {
+    font-size: 0.9rem;
+}
+
+/* Animation for sidebar toggle */
+.signatory_sidebar,
+.signatory_sidebar_top-bar,
+.signatory_dashboard_main-content,
+.signatory_clearance_main-content,
+.signatory_enrollment_main-content,
+.signatory_graduation_main-content,
+.signatory_profile_main-content,
+.signatory_messages_main-content,
+.signatory_reports_main-content,
+.signatory_generate_report_main-content {
+    transition: all 0.3s ease;
+} 

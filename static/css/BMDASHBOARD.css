@@ -1,0 +1,312 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #f1f1f198
+}
+
+.bm_sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #183a53;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.bm_sidebar.collapsed {
+    width: 60px;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.bm_sidebar .bm_sidebar-title {
+    white-space: nowrap;
+}
+
+.bm_sidebar.collapsed .bm_sidebar-title,
+.bm_sidebar.collapsed .bm_sidebar_link-text {
+    display: none;
+}
+
+.bm_sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.bm_sidebar a:hover {
+    background-color: #14507d;
+    color: white;
+}
+
+.bm_sidebar a i {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.bm_sidebar a:hover i {
+    color: white;
+}
+
+.bm_sidebar.collapsed a {
+    justify-content: center;
+}
+
+.bm_dashboard_main-content {
+    margin-left: 250px;
+    padding: 2rem;
+    padding-top: 6.2rem;
+    transition: margin-left 0.3s ease;
+}
+
+.bm_sidebar.collapsed ~ .bm_dashboard_main-content {
+    margin-left: 60px;
+}
+
+.bm_sidebar_logo-img {
+    height: 60px;
+    width: auto;
+}
+
+.bm_sidebar_top-bar {
+    position: fixed;
+    left: 250px;
+    right: 0;
+    top: 0;
+    height: 90px;
+    background-color: #183a53;
+    color: white;
+    z-index: 1035;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    transition: left 0.3s ease;
+}
+
+.bm_sidebar.collapsed ~ .bm_sidebar_top-bar {
+    left: 60px;
+}
+
+.bm_sidebar_top-bar .bm_sidebar_user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.bm_sidebar_top-bar .bm_sidebar_user-info i {
+    font-size: 2.5rem;
+}
+
+#bm_sidebar_sidebarBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+}
+
+#bm_sidebar_sidebarBackdrop.active {
+    display: block;
+}
+
+.bm_sidebar_toggle-button,
+.bm_sidebar_desktopToggle-button,
+.bm_sidebar_topbarToggle-button {
+    background-color: #183a53;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.bm_sidebar_toggle-button i,
+.bm_sidebar_desktopToggle-button i,
+.bm_sidebar_topbarToggle-button i {
+    color: white;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.bm_sidebar_toggle-button:hover,
+.bm_sidebar_desktopToggle-button:hover,
+.bm_sidebar_topbarToggle-button:hover {
+    background-color: #14507d;
+}
+
+.bm_sidebar_toggle-button:hover i,
+.bm_sidebar_desktopToggle-button:hover i,
+.bm_sidebar_topbarToggle-button:hover i {
+    color: #d8d8d8;
+}
+
+
+
+
+#bm_dashboard_sidebar_calendar_column {
+    margin-top: 0.5rem; /* ← adjust if needed */
+  }
+
+#bm_dashboard_row > main,
+#bm_dashboard_row > aside {
+  min-height: 100%;
+}
+
+#bm_dashboard_row {
+    min-height: 100%;
+}
+
+#bm_dashboard_main_column,
+#bm_dashboard_sidebar_calendar_column {
+display: flex;
+flex-direction: column;
+}
+
+#bm_dashboard_calendar_card {
+flex-grow: 1;
+}
+  
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+iframe {
+    border-radius: 10px;
+    width: 100%;
+    height: 300px;
+    border: 0;
+}
+
+.event-item {
+    border-left: 4px solid;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    background: #fff;
+    border-radius: 6px;
+}
+
+.event-blue { border-color: #3b82f6; }
+.event-yellow { border-color: #f59e0b; }
+.event-red { border-color: #ef4444; }
+
+.bm_dashboard_search-bar {
+    max-width: 500px;
+}
+.form-select-sm {
+    min-width: 200px;
+    padding: .5rem;
+    }
+
+#bm_dashboard_calendar_iframe {
+    border-radius: 10px;
+    width: 100%;
+    height: 300px;
+    border: 0;
+}
+
+.bm_dashboard_scrollable_events {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.bm_dashboard_table-fixed-container {
+    height: 610px;
+    overflow: hidden;
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.bm_dashboard_table-scroll-wrapper {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    border-radius: 12px;
+    background-color: #f5f4f4;
+}
+
+.bm_dashboard_table-scroll-wrapper table {
+    table-layout: auto;
+    min-width: max-content;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bm_dashboard_table td {
+    background-color: transparent;
+}
+
+.bm_dashboard_table-scroll-wrapper thead th {
+    position: sticky;
+    top: 0;
+    background-color: #183a53;
+    color: white;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    vertical-align: middle;
+    height: 60px !important;
+}
+
+.bm_dashboard_table tbody tr {
+    background-color: #fff;
+    border-bottom: 1px solid #dddddd;
+    transition: background 0.2s ease-in-out;
+}
+
+.bm_dashboard_table tbody tr:hover {
+    background-color: #e9eaeb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    .bm_sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+        left: 0;
+    }
+
+    .bm_sidebar.show {
+        transform: translateX(0%);
+    }
+
+    .bm_sidebar.collapsed {
+        transform: translateX(-100%) !important;
+    }
+
+    .bm_dashboard_main-content {
+        margin-left: 0 !important;
+        padding-top: 6.1rem !important;
+    }
+
+    .bm_sidebar_top-bar,
+    .bm_sidebar.collapsed ~ .bm_sidebar_top-bar {
+        left: 0 !important;
+    }
+
+    .bm_sidebar_top-bar .bm_sidebar_system-title,
+    .bm_sidebar_top-bar .bm_sidebar_user-info span {
+        display: none;
+    }
+}

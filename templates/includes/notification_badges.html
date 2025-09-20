@@ -1,0 +1,55 @@
+<script>
+// Notification badge update script - Works on all pages
+function updateSidebarNotificationCount() {
+  // Use the existing API endpoint or a mock for now
+  // Since the API doesn't exist yet, let's use a simple implementation
+  
+  // For now, let's get the unread count from conversations if available
+  if (typeof conversations !== 'undefined' && conversations) {
+    const unreadCount = conversations.reduce((total, conv) => total + (conv.unread_count || 0), 0);
+    updateBadgesWithCount(unreadCount);
+  } else {
+    // Try to fetch from a simple endpoint that should exist
+    fetch('/api/conversations/')
+      .then(response => response.json())
+      .then(data => {
+        if (data.success && data.conversations) {
+          const unreadCount = data.conversations.reduce((total, conv) => total + (conv.unread_count || 0), 0);
+          updateBadgesWithCount(unreadCount);
+        }
+      })
+      .catch(error => {
+        console.log('Could not fetch conversations for notification count:', error);
+        // Set to 0 if we can't get the count
+        updateBadgesWithCount(0);
+      });
+  }
+}
+
+function updateBadgesWithCount(count) {
+  // Update different sidebar notification badges based on user type
+  const badges = [
+    'student_messages_notification_count',
+    'bm_sidebar_messages_notification_count', 
+    'signatory_sidebar_messages_notification_count',
+    'registrar_sidebar_messages_notification_count'
+  ];
+  
+  badges.forEach(badgeId => {
+    const badge = document.getElementById(badgeId);
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+  });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Update notification count immediately
+  updateSidebarNotificationCount();
+  
+  // Update notification count periodically
+  setInterval(updateSidebarNotificationCount, 30000); // Every 30 seconds
+});
+</script>

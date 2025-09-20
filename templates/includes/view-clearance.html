@@ -1,0 +1,102 @@
+<div class="modal fade" id="viewClearanceModal" tabindex="-1" aria-labelledby="viewClearanceModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewClearanceModalLabel">Clearance Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Loading spinner -->
+        <div id="vc_modal_loading" class="text-center py-4" style="display: block;">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2 text-muted">Loading clearance details...</p>
+        </div>
+        
+        <!-- Clearance details content -->
+        <div id="vc_modal_content" style="display: none;">
+          <!-- Student Information -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <h6 class="mb-0">Student Information</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>Name:</strong> <span id="vc_full_name">-</span></p>
+                  <p><strong>Student Number:</strong> <span id="vc_student_number">-</span></p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Course:</strong> <span id="vc_program">-</span></p>
+                  <p><strong>Year & Section:</strong> <span id="vc_year_level">-</span> - <span id="vc_semester">-</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Clearance Information -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <h6 class="mb-0">Clearance Information</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>Purpose:</strong> <span id="vc_purpose">-</span></p>
+                  <p><strong>Semester:</strong> <span id="vc_semster">-</span></p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Academic Year:</strong> <span id="vc_academic_year">-</span></p>
+                  <p><strong>Date Submitted:</strong> <span id="vc_submitted_at">-</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Signatory Status -->
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">Signatory Status</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Signatory</th>
+                      <th>Status</th>
+                      <th>Date</th>
+                      <th>Comment</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vc_signatory_status">
+                    <!-- Signatory statuses will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Error message -->
+        <div id="vc_modal_error" class="alert alert-danger" style="display: none;">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <span id="vc_modal_error_message">Error loading clearance details</span>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <!-- Left side -->
+        <button type="button" class="btn btn-outline-dark btn-sm" id="btnPrintPdf" disabled>
+          <i class="bi bi-printer me-1"></i> Print / Save PDF
+        </button>
+      
+        <!-- Right side -->
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>

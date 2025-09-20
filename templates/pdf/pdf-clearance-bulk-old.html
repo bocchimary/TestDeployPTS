@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bulk Clearance Forms</title>
+    <style>
+      @page {
+        margin: 0.5in;
+        size: A4;
+      }
+      
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background: white;
+      }
+
+      .title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        color: rgb(0, 0, 0);
+        margin: 0;
+        padding: 0;
+      }
+      .subtitle {
+        margin: 0;
+        text-align: center;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .clearance {
+        margin: 0;
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .year {
+        margin: 0;
+        text-align: center;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .name {
+        font-weight: bold;
+        text-align: left;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .course {
+        font-weight: bold;
+        text-align: left;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+      }
+      .desc {
+        text-align: left;
+        font-size: 12px;
+        color: rgb(0, 0, 0);
+        margin: 10px 0;
+      }
+      .print-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease;
+        z-index: 1000;
+      }
+
+      .print-button:hover {
+        background-color: #2980b9;
+      }
+
+      .print-button:active {
+        transform: translateY(1px);
+      }
+
+      @media print {
+        .print-button {
+          display: none;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+        }
+        .watermark {
+          display: block !important;
+        }
+        .page-break {
+          page-break-before: always !important;
+          break-before: page !important;
+          height: 0;
+          width: 100%;
+          display: block;
+        }
+        .page-wrapper {
+          min-height: 100vh !important;
+          page-break-after: always !important;
+          break-after: page !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+          display: block;
+        }
+        .page-wrapper:last-child {
+          page-break-after: avoid !important;
+          break-after: avoid !important;
+          min-height: auto !important;
+        }
+        .clearance-form {
+          margin-bottom: 0;
+          display: block;
+        }
+        .copy-container {
+          margin-bottom: 20px;
+        }
+      }
+      .row-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+      }
+
+      .row-item {
+        margin-right: 35px;
+      }
+
+      .row-item p {
+        margin: 0;
+      }
+      .row-line-1 {
+        display: inline-block;
+        border-bottom: 0.3px solid #000;
+        min-width: 75px;
+        height: 1em;
+        vertical-align: bottom;
+      }
+      .row-line {
+        display: inline-block;
+        border-bottom: 0.3px solid #000;
+        min-width: 250px;
+        height: 1em;
+        vertical-align: bottom;
+      }
+
+      .dept-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px 0;
+        font-size: 12px;
+        table-layout: fixed;
+      }
+
+      .dept-table th,
+      .dept-table td {
+        border: 0.5px solid #000;
+        padding: 4px;
+        height: 12px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .dept-text {
+        background-color: #f0f0f0;
+        font-weight: bold;
+        text-align: left;
+        width: 70%;
+      }
+      .dept-sign {
+        background-color: #f0f0f0;
+        font-weight: bold;
+        text-align: center;
+        width: 30%;
+      }
+      .watermark {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.4);
+        font-weight: bold;
+        z-index: 1;
+        pointer-events: none;
+        user-select: none;
+      }
+      .copy-container {
+        position: relative;
+        margin-bottom: 15px;
+        padding: 10px 0;
+      }
+      .page-wrapper {
+        min-height: 100vh;
+        page-break-after: always;
+        page-break-inside: avoid;
+        display: block;
+      }
+      .page-wrapper:last-child {
+        page-break-after: avoid;
+        min-height: auto;
+      }
+      .clearance-form {
+        margin-bottom: 40px;
+        display: block;
+      }
+      .approved-signature {
+        color: green;
+        font-weight: bold;
+        font-size: 9px;
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .disapproved-signature {
+        color: red;
+        font-weight: bold;
+        font-size: 9px;
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .pending-signature {
+        color: orange;
+        font-weight: bold;
+        font-size: 9px;
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .separator-line {
+        border: none;
+        border-top: 3px solid black;
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="print-button" onclick="printPage()">Print All Forms</button>
+    
+    {% for form_data in clearance_forms %}
+    <div class="page-wrapper">
+      {% if not forloop.first %}
+      <div class="page-break"></div>
+      {% endif %}
+      <div class="clearance-form">
+      <!-- Student's Copy -->
+      <div class="copy-container">
+        <div class="watermark">Student's Copy</div>
+        <p class="title">PTS COLLEGE & ADVANCED STUDIES</p>
+        <p class="subtitle">Salitran IV, City of Dasmariñas, Cavite</p>
+        <p class="clearance">Clearance</p>
+        <p class="year">
+          <span class="row-line-1">{{ form_data.clearance.semester|default:"1st" }}</span>Semester A.Y.
+          <span class="row-line-1">{{ form_data.clearance.academic_year|default:"2024-2025" }}</span>
+        </p>
+        <div class="row-container">
+          <div class="row-item">
+            <p class="name">NAME: <span class="row-line">{{ form_data.student.full_name }}</span></p>
+          </div>
+          <div class="row-item">
+            <p class="course">COURSE: <span class="row-line">{{ form_data.profile.program }}</span></p>
+          </div>
+        </div>
+        <i class="desc">This certifies that the person named above has been cleared of all obligations as follows:</i>
+
+        <table class="dept-table">
+          <thead>
+            <tr>
+              <th class="dept-text">DEPARTMENT</th>
+              <th class="dept-sign">SIGNATURE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dorm Supervisor</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'dorm_supervisor' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Canteen Concessionaire</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'canteen_concessionaire' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Director of Library & Info.</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'library_director' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Director of Scholarship</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'scholarship_director' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Information Technology</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'it_director' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Dean of Student Affairs</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'student_affairs' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Cashier</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'cashier' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Business Manager</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'business_manager' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Registrar</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'registrar' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Academic Dean</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'academic_dean' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Separator Line -->
+      <hr class="separator-line">
+      
+      <!-- Registrar's Copy -->
+      <div class="copy-container">
+        <div class="watermark">Registrar's Copy</div>
+        <p class="title">PTS COLLEGE & ADVANCED STUDIES</p>
+        <p class="subtitle">Salitran IV, City of Dasmariñas, Cavite</p>
+        <p class="clearance">Clearance</p>
+        <p class="year">
+          <span class="row-line-1">{{ form_data.clearance.semester|default:"1st" }}</span>Semester A.Y.
+          <span class="row-line-1">{{ form_data.clearance.academic_year|default:"2024-2025" }}</span>
+        </p>
+        <div class="row-container">
+          <div class="row-item">
+            <p class="name">NAME: <span class="row-line">{{ form_data.student.full_name }}</span></p>
+          </div>
+          <div class="row-item">
+            <p class="course">COURSE: <span class="row-line">{{ form_data.profile.program }}</span></p>
+          </div>
+        </div>
+        <i class="desc">This certifies that the person named above has been cleared of all obligations as follows:</i>
+
+        <table class="dept-table">
+          <thead>
+            <tr>
+              <th class="dept-text">DEPARTMENT</th>
+              <th class="dept-sign">SIGNATURE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dorm Supervisor</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'dorm_supervisor' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Canteen Concessionaire</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'canteen_concessionaire' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Director of Library & Info.</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'library_director' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Director of Scholarship</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'scholarship_director' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Information Technology</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'it_director' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Dean of Student Affairs</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'student_affairs' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Cashier</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'cashier' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Business Manager</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'business_manager' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Registrar</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'registrar' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td>Academic Dean</td>
+              <td>
+                {% for signatory in form_data.signatories %}
+                  {% if signatory.role == 'academic_dean' %}
+                    {% if signatory.status == 'approved' %}
+                      <span class="approved-signature">✓ Approved</span>
+                    {% elif signatory.status == 'disapproved' %}
+                      <span class="disapproved-signature">✗ Disapproved</span>
+                    {% else %}
+                      <span class="pending-signature">Pending</span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      </div>
+    </div>
+    {% endfor %}
+    
+    <script>
+      function printPage() {
+        window.print();
+      }
+    </script>
+  </body>
+</html> 

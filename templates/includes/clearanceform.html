@@ -1,0 +1,232 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/clearanceform.style.css' %}" />
+  </head>
+  <body>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="clearanceModal"
+      tabindex="-1"
+      aria-labelledby="clearanceModalLabel"
+      role="dialog"
+      data-bs-backdrop="static" 
+  data-bs-keyboard="false"
+    >
+      <div
+        class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+      >
+        <div class="modal-content">
+          <div class="modal-header text-white pb-1">
+            <h5 id="clearanceModalLabel">
+              <i class="bi bi-file-earmark-check me-2"></i> Clearance Form
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- FORM START -->
+            <form id="clearanceForm" method="POST" action="#" novalidate>
+              {% csrf_token %}
+              <div class="row mb-3">             
+                <div class="col-md-4">
+                  <label for="enrollment-appno" class="form-label fw-semibold">
+                    Academic Year: <span class="text-danger">*</span>
+                  </label>
+                  <input type="text" name="clearance-acad-year" id="clearance-acad-year" class="form-control" required placeholder="e.g 2025-2026" aria-required="true" aria-describedby="enrollment-appno-help" />
+                  <div class="invalid-feedback" id="clearance-acad-year">
+                    Invalid application number.
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label for="clearance-student-semester" class="form-label fw-semibold">Semester: <span class="text-danger">*</span></label>
+                  <select name="clearance-student-semester" id="clearance-student-semester" class="form-select" required aria-required="true">
+                    <option value="" selected>None</option>
+                    <option value="1-2425">First Semester</option>
+                    <option value="2-2425">Second Semester</option>
+                  </select>
+                </div>
+              </div>
+              <!-- Personal Information Section -->
+              <div class="mb-4">
+                <div class="row mb-3">
+                  <label for="clearance-fullname" class="form-label fw-semibold">
+                    Full Name: <span class="text-danger">*</span>
+                  </label>
+                  <div class="col-md-12">
+                    <input
+                      type="text"
+                      name="clearance-fullname"
+                      id="clearance-fullname"
+                      class="form-control"
+                      value="{{ request.user.full_name }}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <!-- Year, Section, ID -->
+                <div class="row mb-3">
+                  <div class="col-md-4">
+                    <label for="clearance-year" class="form-label fw-semibold">
+                      Year: <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="clearance-year"
+                      id="clearance-year"
+                      class="form-control"
+                      value="{{ profile.year_level }}"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label for="clearance-section" class="form-label fw-semibold">
+                      Section: <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="clearance-section"
+                      id="clearance-section"
+                      class="form-control"
+                      value="{{ profile.section }}"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label for="clearance-idnum" class="form-label fw-semibold">
+                      ID Number: <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="clearance-idnum"
+                      id="clearance-idnum"
+                      class="form-control"
+                      value="{{ profile.student_number }}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <!-- Course and Date -->
+                <div class="row mb-3">
+                  <div class="col-md-7">
+                    <label for="clearance-course" class="form-label fw-semibold">
+                      Course: <span class="text-danger">*</span>
+                    </label>
+                    <select
+                      name="clearance-course"
+                      id="clearance-course"
+                      class="form-select"
+                      disabled
+                    >
+                      <option value="{{ profile.program }}" selected>{{ profile.program }}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-5">
+                    <label for="clearance-date" class="form-label fw-semibold">
+                      Date: <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      name="clearance-date"
+                      id="clearance-date"
+                      class="form-control"
+                      readonly
+                      value="{{ today }}"
+                    />
+                    <div class="invalid-feedback">Please enter the date.</div>
+                  </div>
+                </div>
+                
+                <!-- Purpose -->
+                <div class="row mb-3">
+                  <div class="col-md-8">
+                    <label for="clearance-purpose" class="form-label fw-semibold">
+                      Purpose: <span class="text-danger">*</span>
+                    </label>
+                    <select
+                      name="clearance-purpose"
+                      id="clearance-purpose"
+                      class="form-select"
+                      required
+                    >
+                      <option value="" selected disabled>Select:</option>
+                      <option value="clearance-request">Request Document</option>
+                      <option value="clearance-enrollment">Enrollment</option>
+                      <option value="clearance-graduation">Graduation</option>
+                    </select>
+                    <div class="invalid-feedback">Please select a purpose.</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Signatories -->
+              <div class="mb-4">
+                <h6 class="text-white p-2 mb-3 modal-sub-header">
+                  <i class="bi bi-people me-2"></i>Signatories
+                </h6>
+                <!-- Signatories table -->
+                <div class="row">
+                  <div class="col-md-6">
+                    <ul class="list-group mb-2">
+                      <li class="list-group-item">Dorm Supervisor</li>
+                      <li class="list-group-item">Canteen Concessionaire</li>
+                      <li class="list-group-item">
+                        Director of Library & Information
+                      </li>
+                      <li class="list-group-item">Director of Scholarship</li>
+                      <li class="list-group-item">Information Technology</li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <ul class="list-group mb-2">
+                      <li class="list-group-item">Dean of Student Affairs</li>
+                      <li class="list-group-item">Cashier</li>
+                      <li class="list-group-item">Business Manager</li>
+                      <li class="list-group-item">Registrar</li>
+                      <li class="list-group-item">Academic Dean</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="alert alert-info" role="alert">
+                <i class="bi bi-clock me-2"></i>
+                <strong>Office Hours Notice:</strong> The Office of the Registrar
+                processes forms on weekdays from 8:00 AM to 4:00 PM. Requests
+                submitted outside these hours will be processed on the next business
+                day.
+              </div>
+
+              <div class="d-flex gap-2 mt-4 justify-content-end">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  <i class="bi bi-x-circle me-1"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-submit text-white" onclick="confirmClearanceSubmit()">
+                  <i class="bi bi-send me-1"></i>Submit
+                </button>
+              </div>
+            </form>
+            <!-- FORM END -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts are already included in the main template -->
+  </body>
+</html>

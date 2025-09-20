@@ -1,0 +1,289 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #f1f1f198
+}
+
+.signatory_sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #183a53;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.signatory_sidebar.collapsed {
+    width: 60px;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.signatory_sidebar .signatory_sidebar-title {
+    white-space: nowrap;
+}
+
+.signatory_sidebar.collapsed .signatory_sidebar-title,
+.signatory_sidebar.collapsed .signatory_sidebar_link-text {
+    display: none;
+}
+
+.signatory_sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.signatory_sidebar a:hover {
+    background-color: #14507d;
+    color: white;
+}
+
+.signatory_sidebar a i {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.signatory_sidebar a:hover i {
+    color: white;
+}
+
+.signatory_sidebar.collapsed a {
+    justify-content: center;
+}
+
+.signatory_generate_report_main-content {
+    margin-left: 250px;
+    margin-top: 90px;
+    padding: 1rem 2rem;
+    transition: margin-left 0.3s ease;
+}
+
+.signatory_sidebar.collapsed ~ .signatory_generate_report_main-content {
+    margin-left: 60px;
+}
+
+.signatory_sidebar_logo-img {
+    height: 60px;
+    width: auto;
+}
+
+.signatory_sidebar_top-bar {
+    position: fixed;
+    left: 250px;
+    right: 0;
+    top: 0;
+    height: 90px;
+    background-color: #183a53;
+    color: white;
+    z-index: 1035;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    transition: left 0.3s ease;
+}
+
+.signatory_sidebar.collapsed ~ .signatory_sidebar_top-bar {
+    left: 60px;
+}
+
+.signatory_sidebar_top-bar .signatory_sidebar_user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.signatory_sidebar_top-bar .signatory_sidebar_user-info i {
+    font-size: 2.5rem;
+}
+
+#signatory_sidebar_sidebarBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+}
+
+#signatory_sidebar_sidebarBackdrop.active {
+    display: block;
+}
+
+.signatory_sidebar_toggle-button,
+.signatory_sidebar_desktopToggle-button,
+.signatory_sidebar_topbarToggle-button {
+    background-color: #183a53;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.signatory_sidebar_toggle-button i,
+.signatory_sidebar_desktopToggle-button i,
+.signatory_sidebar_topbarToggle-button i {
+    color: white;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.signatory_sidebar_toggle-button:hover,
+.signatory_sidebar_desktopToggle-button:hover,
+.signatory_sidebar_topbarToggle-button:hover {
+    background-color: #14507d;
+}
+
+.signatory_sidebar_toggle-button:hover i,
+.signatory_sidebar_desktopToggle-button:hover i,
+.signatory_sidebar_topbarToggle-button:hover i {
+    color: #d8d8d8;
+}
+
+/* Container with shadow and rounded corners */
+.signatory_generate_report_table-fixed-container {
+    height: 565px;
+    overflow: hidden;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Scrollable inner wrapper */
+.signatory_generate_report_table-scroll-wrapper {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+}
+
+/* Table layout */
+.signatory_generate_report_table-scroll-wrapper table {
+    table-layout: auto;
+    min-width: max-content;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Sticky header */
+.signatory_generate_report_table-scroll-wrapper thead th {
+    position: sticky;
+    top: 0;
+    background-color: #183a53;
+    color: white;
+    z-index: 10;
+    text-align: center;
+    vertical-align: middle;
+    height: 60px !important;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Table cell style */
+.signatory_generate_report_table td,
+.signatory_generate_report_table th {
+    padding: 18px;
+    font-size: 14px;
+    vertical-align: middle;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+/* Table body */
+.signatory_generate_report_table tbody tr {
+    background-color: #fff;
+    border-bottom: 1px solid #dee2e6;
+    transition: background 0.2s ease-in-out;
+}
+
+.signatory_generate_report_table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    margin-top: 1rem;
+}
+
+.form-control,
+.form-select {
+    min-width: 200px;
+    font-size: 14px;
+    padding: 0.5rem;
+}
+
+/* Side panel for generated reports */
+.generated-report-panel {
+    position: fixed;
+    top: 90px;
+    right: -400px;
+    width: 350px;
+    height: calc(100% - 90px);
+    background-color: #fff;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    z-index: 1050;
+    transition: right 0.3s ease;
+}
+
+.generated-report-panel.show {
+    right: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    .signatory_sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+        left: 0;
+    }
+
+    .signatory_sidebar.show {
+        transform: translateX(0%);
+    }
+
+    .signatory_sidebar.collapsed {
+        transform: translateX(-100%) !important;
+    }
+
+    .signatory_generate_report_main-content {
+        margin-left: 0 !important;
+        padding-top: 1rem !important;
+    }
+
+    .signatory_sidebar_top-bar,
+    .signatory_sidebar.collapsed ~ .signatory_sidebar_top-bar {
+        left: 0 !important;
+    }
+
+    .signatory_sidebar_top-bar .signatory_sidebar_system-title,
+    .signatory_sidebar_top-bar .signatory_sidebar_user-info span {
+        display: none;
+    }
+}
+
+#signatory_generate_report_panelContent {
+    max-height: 75vh;
+    overflow-y: auto;
+  }

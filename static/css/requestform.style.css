@@ -1,0 +1,277 @@
+/* ===== FORM MODAL STYLES ===== */
+#requestModal .modal-header {
+  border-bottom: none !important;
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+  background-color: #3B4F66 !important;
+  color: white !important;
+}
+
+#requestModal .modal-header h5,
+#requestModal .modal-header .modal-title {
+  color: white !important;
+  background-color: transparent !important;
+}
+
+
+#requestModal .modal-sub-header {
+  border-radius: 0.375rem;
+  background-color: #3B4F66 !important;
+  color: white !important;
+}
+
+#requestModal .modal-content {
+  border: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+
+
+.modal#requestModal .modal-header * {
+  color: white !important;
+}
+
+
+#requestModal .form-label {
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+#requestModal .form-control:focus,
+#requestModal .form-select:focus {
+  border-color: #183A53;
+  box-shadow: 0 0 0 0.2rem rgba(24, 58, 83, 0.25);
+}
+
+#requestModal .form-control.is-invalid,
+#requestModal .form-select.is-invalid {
+  border-color: #dc3545;
+}
+
+#requestModal .form-control.is-valid,
+#requestModal .form-select.is-valid {
+  border-color: #198754;
+}
+
+#requestModal .invalid-feedback {
+  font-size: 0.875rem;
+  color: #dc3545;
+}
+
+#requestModal .valid-feedback {
+  font-size: 0.875rem;
+  color: #198754;
+}
+
+#requestModal .alert {
+  border-radius: 0.375rem;
+  border: none;
+  padding: 1rem;
+}
+
+#requestModal .alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+#requestModal .alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+#requestModal .btn {
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  padding: 0.5rem 1rem;
+}
+
+#requestModal .btn-submit-request{
+  background-color: #3B4F66;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  color: white;
+}
+
+#requestModal .btn-submit-request:hover {
+  background-color: #3B4F66;
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+#requestModal .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+#requestModal .btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Responsive adjustments for the modal */
+@media (max-width: 768px) {
+  #requestModal .modal-dialog {
+    margin: 0.5rem;
+  }
+  
+  #requestModal .col-md-3,
+  #requestModal .col-md-6,
+  #requestModal .col-md-8,
+  #requestModal .col-md-4 {
+    margin-bottom: 1rem;
+  }
+  
+  #requestModal .d-flex.justify-content-end {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  #requestModal .btn {
+    width: 100%;
+  }
+}
+
+/* Animation for form sections */
+#requestModal .mb-4 {
+  animation: fadeInUp 0.7s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar for modal body */
+#requestModal .modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: #2F3F53 #f8f9fa;
+}
+
+#requestModal .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#requestModal .modal-body::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 3px;
+}
+
+#requestModal .modal-body::-webkit-scrollbar-thumb {
+  background: #2F3F53;
+  border-radius: 3px;
+}
+
+#requestModal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #36536E;
+}
+
+.modal-backdrop {
+  background-color: #000000 !important;
+  opacity: 0.05 !important;
+}
+
+/* ===== VIEW REQUEST MODAL STYLES ===== */
+#viewRequestModal .modal-header {
+  border-bottom: none !important;
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+  background-color: #3B4F66 !important;
+  color: white !important;
+}
+
+
+#viewRequestModal .modal-sub-header {
+  border-radius: 0.375rem;
+  background-color: #3B4F66 !important;
+  color: white !important;
+}
+#viewRequestModal .modal-header h5,
+#viewRequestModal .modal-header .modal-title {
+  color: white !important;
+  background-color: transparent !important;
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin: 0;
+
+}
+
+#viewRequestModal .modal-content {
+  border: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.modal#viewRequestModal .modal-header * {
+  color: white !important;
+}
+
+#viewRequestModal .form-label {
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+#viewRequestModal .form-control,
+#viewRequestModal .form-select {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #ced4da;
+  pointer-events: none; /* make them read-only */
+}
+
+#viewRequestModal .form-control:focus,
+#viewRequestModal .form-select:focus {
+  border-color: #ced4da;
+  box-shadow: none;
+}
+
+#viewRequestModal .btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Scrollbar for modal body */
+#viewRequestModal .modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: #2F3F53 #f8f9fa;
+}
+
+#viewRequestModal .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#viewRequestModal .modal-body::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 3px;
+}
+
+#viewRequestModal .modal-body::-webkit-scrollbar-thumb {
+  background: #2F3F53;
+  border-radius: 3px;
+}
+
+#viewRequestModal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #36536E;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #viewRequestModal .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  #viewRequestModal .col-md-3,
+  #viewRequestModal .col-md-6,
+  #viewRequestModal .col-md-8,
+  #viewRequestModal .col-md-4 {
+    margin-bottom: 1rem;
+  }
+}

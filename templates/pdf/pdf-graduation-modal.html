@@ -1,0 +1,403 @@
+<!-- Modal-specific graduation form template - optimized for modal display -->
+<style>
+  .graduation-modal-content {
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+    font-size: 12px;
+    padding: 20px;
+    background: white;
+  }
+
+  .open-sans-title {
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    font-size: 20px;
+    color: #003399;
+    text-align: center;
+    margin: 0;
+  }
+  
+  .title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+    margin: 15px 0 20px 0;
+  }
+  
+  .subtitle {
+    text-align: center;
+    font-size: 9px;
+    color: #003399;
+    font-weight: bold;
+    margin: 2px 0;
+  }
+
+  .header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .pts {
+    width: 80px;
+    height: 80px;
+    margin-right: 30px;
+    flex-shrink: 0;
+  }
+
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+  }
+
+  .motto {
+    text-align: center;
+    font-style: italic;
+    font-size: 11px;
+    margin: 10px 0 20px 0;
+    color: #003399;
+    background-color: #f8f9fa;
+    padding: 5px;
+    border-radius: 3px;
+  }
+
+  .form-content {
+    margin: 20px 0;
+  }
+
+  .row-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: baseline;
+  }
+
+  .row-item {
+    margin-right: 50px;
+    flex: 1;
+  }
+
+  .row-item-name {
+    margin-right: 20px;
+    flex: 2;
+  }
+
+  .row-item p {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .row-line-1 {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    min-width: 70px;
+    height: 1em;
+    vertical-align: bottom;
+    margin-left: 5px;
+  }
+
+  .row-line {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    min-width: 180px;
+    height: 1em;
+    vertical-align: bottom;
+    margin-left: 5px;
+  }
+
+  .footer-line {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    min-width: 100px;
+    height: 1em;
+    vertical-align: bottom;
+    margin-left: 5px;
+  }
+
+  .name-line {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    width: 400px;
+    height: 1em;
+    vertical-align: bottom;
+    margin-left: 5px;
+  }
+
+  .name-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    font-size: 0.8em;
+    margin-top: 2px;
+    margin-left: 30px;
+    color: #666;
+  }
+
+  .label {
+    text-align: center;
+    flex: 1;
+  }
+
+  .instruction, .p-info {
+    font-weight: bold;
+    margin: 15px 0 8px 0;
+    color: #003399;
+    font-size: 13px;
+  }
+
+  .desc {
+    margin: 8px 0;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .indented {
+    text-align: justify;
+    text-indent: 30px;
+  }
+
+  .m-0 {
+    margin: 8px 0;
+    line-height: 1.5;
+  }
+
+  .table-blank {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    border: 1px solid #000;
+  }
+
+  .table-blank th, .table-blank td {
+    border: 1px solid #000;
+    padding: 8px 5px;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .table-blank th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+
+  .underline {
+    border-bottom: none;
+    min-height: 20px;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .sign {
+    margin: 30px 0;
+    text-align: center;
+  }
+
+  .printname {
+    font-size: 10px;
+    margin-top: 5px;
+    font-style: italic;
+  }
+
+  .row-container-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+
+  .row-container-footer .row-item {
+    flex: 1;
+    text-align: center;
+    margin: 0 10px;
+  }
+
+  /* Responsive adjustments for modal */
+  @media (max-width: 768px) {
+    .graduation-modal-content {
+      padding: 10px;
+      font-size: 11px;
+    }
+    
+    .row-container {
+      flex-direction: column;
+    }
+    
+    .row-item, .row-item-name {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+    
+    .name-line {
+      width: 100%;
+    }
+    
+    .name-labels {
+      width: 100%;
+      margin-left: 0;
+    }
+    
+    .header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .pts {
+      margin: 0 auto 15px auto;
+    }
+  }
+</style>
+
+<div class="graduation-modal-content">
+  <div class="header">
+    <img
+      src="https://ptscas.edu.ph/wp-content/uploads/2019/09/logo-blue-1.png"
+      alt="ptslogo"
+      class="pts"
+    />
+    <div class="text-container">
+      <p class="open-sans-title">PTS COLLEGE & ADVANCED STUDIES</p>
+      <div class="info">
+        <p class="subtitle">
+          Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite,
+          Philippines
+        </p>
+        <p class="subtitle">
+          Contact Nos.: 0917 146 6759 (046) 476 0597 | Email:
+          info@ptscas.edu.ph
+        </p>
+        <p class="subtitle">
+          Website: ptscas.edu.ph • FB: facebook.com/ptscas
+        </p>
+      </div>
+    </div>
+  </div>
+  <p class="motto">Spirituality and Academic Excellence</p>
+
+  <div class="form-content">
+    <div class="title">APPLICATION FOR GRADUATION FORM</div>
+    
+    <div class="row-container">
+      <div class="row-item">
+        <p>Date: <span class="row-line">{{ today|default:graduation.grad_date|date:"m-d-Y" }}</span></p>
+      </div>
+      <div class="row-item">
+        <p>Application Number: <span class="row-line">{{ graduation.grad_appno|default:"" }}</span></p>
+      </div>
+    </div>
+    
+    <div class="instruction">INSTRUCTIONS:</div>
+    <p class="desc">1. Complete all information as requested.</p>
+    <p class="desc">2. Print all information legibly.</p>
+    
+    <div class="p-info">PERSONAL INFORMATION:</div>
+    
+    <div class="row-container">
+      <div class="row-item-name">
+        <p>Name: <span class="name-line">{{ user.full_name|default:"" }}</span></p>
+        <div class="name-labels">
+          <span class="label">(LAST NAME)</span>
+          <span class="label">(FIRST NAME)</span>
+          <span class="label">(MIDDLE NAME)</span>
+        </div>
+      </div>
+      <div class="row-item">
+        <p>Sex: <span class="row-line-1">{{ profile.gender|default:"" }}</span></p>
+      </div>
+    </div>
+    
+    <div class="row-container">
+      <div class="row-item">
+        <p>Date of Birth: <span class="row-line">{{ profile.birthdate|date:"m-d-Y"|default:"" }}</span></p>
+      </div>
+      <div class="row-item">
+        <p>Phone no.: <span class="row-line">{{ user.contact_number|default:"" }}</span></p>
+      </div>
+    </div>
+    
+    <p class="m-0">Place of Birth: <span class="name-line">{{ graduation.place_of_birth|default:"" }}</span></p>
+    <p class="m-0">Present Address: <span class="name-line">{{ graduation.present_address|default:profile.address|default:"" }}</span></p>
+    <p class="m-0">Permanent Address: <span class="name-line">{{ graduation.permanent_address|default:profile.address|default:"" }}</span></p>
+    <p class="m-0">Email Address: <span class="name-line">{{ user.email|default:"" }}</span></p>
+    
+    <div class="p-info">ACADEMIC INFORMATION:</div>
+    
+    <p class="m-0">Degree/Program: <span class="name-line">{{ profile.program|default:"" }}</span></p>
+    <p class="m-0">Major (if applicable): <span class="name-line">{{ graduation.major|default:"" }}</span></p>
+    <p class="m-0">Thesis Title (if applicable): <span class="name-line">{{ graduation.thesis_title|default:"" }}</span></p>
+    
+    <p class="m-0">Subjects Currently Enrolled:</p>
+     <table class="table-blank">
+       <thead>
+         <tr>
+           <th>Course No.</th>
+           <th>Course Title</th>
+           <th>Units</th>
+           <th>Remarks</th>
+         </tr>
+       </thead>
+       <tbody>
+         {% if graduation.subjects %}
+           {% for subject in graduation.subjects %}
+           <tr>
+             <td><span class="underline">{{ subject.course_no|default:"" }}</span></td>
+             <td><span class="underline">{{ subject.title|default:"" }}</span></td>
+             <td><span class="underline">{{ subject.units|default:"" }}</span></td>
+             <td><span class="underline">{{ subject.remarks|default:"" }}</span></td>
+           </tr>
+           {% endfor %}
+         {% endif %}
+         {% for i in "1234" %}
+           {% if forloop.counter > graduation.subjects|length %}
+           <tr>
+             <td><span class="underline"></span></td>
+             <td><span class="underline"></span></td>
+             <td><span class="underline"></span></td>
+             <td><span class="underline"></span></td>
+           </tr>
+           {% endif %}
+         {% endfor %}
+       </tbody>
+     </table>
+     
+     <hr style="border: none; border-top: 3px solid black; margin-top: 15px; margin-bottom: 15px;" />
+    
+    <p class="desc indented">
+      I have the honor to apply for graduation in the course leading to the
+      degree of <span class="row-line">{{ profile.program|default:"" }}</span> Major in
+      <span class="footer-line">{{ graduation.major|default:"" }}</span> this Graduation 20
+      <span class="row-line-1">{{ graduation.grad_date.year|default:"" }}</span>.
+    </p>
+    
+    <p class="desc indented">
+      It is understood that I shall be entitled to a diploma / certificate if
+      and after I have satisfactorily completed all the requirements for
+      graduation including but not limited to the submission of my bound
+      manuscript/ special problem/ narrative reports and clearance for my
+      graduation in this University.
+    </p>
+    
+    <div class="sign">
+      <span class="row-line"></span>
+      <div class="printname">Printed name and Signature of Applicant</div>
+    </div>
+    
+    <div class="row-container-footer">
+      <div class="row-item">
+        <p class="m-0">Evaluated by: <span class="footer-line"></span></p>
+      </div>
+      <div class="row-item">
+        <p class="m-0">Approved by: <span class="footer-line"></span></p>
+      </div>
+      <div class="row-item">
+        <p class="m-0">Noted by: <span class="footer-line"></span></p>
+      </div>
+    </div>
+  </div>
+</div>

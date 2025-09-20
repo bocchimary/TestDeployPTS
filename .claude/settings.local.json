@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm:*)",
+      "Bash(python manage.py:*)",
+      "Bash(python test_reports.py:*)",
+      "Bash(python test_form_type_fix.py:*)",
+      "Bash(timeout 5 python manage.py runserver:*)",
+      "Bash(python:*)",
+      "Bash(grep:*)",
+      "Bash(pip install:*)",
+      "Bash(wc:*)",
+      "Bash(timeout 10 python manage.py runserver:*)",
+      "Bash(mkdir:*)",
+      "Bash(move:*)",
+      "Bash(mv:*)",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(tail:*)",
+      "Bash(sed:*)",
+      "Bash(/bashes)",
+      "Bash(taskkill:*)",
+      "Bash(claude doctor)",
+      "Bash(wsl:*)",
+      "Bash(docker:*)",
+      "Bash(set DJANGO_SETTINGS_MODULE=mysite.settings)",
+      "Bash(chcp 65001)",
+      "Bash(pkill:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\d C:\\Users\\Kian Gabriel Perlado\\Desktop\\THESIS\\request-cred(UPDATE#4)"
+    ]
+  }
+}
