@@ -35,10 +35,7 @@
               <i class="bi bi-file-earmark-person-fill me-2"></i> Temporary Enrollment
               Form
             </h5>
-<<<<<<< HEAD
             <button type="button" class="btn-close btn-close-white mb-1" data-bs-dismiss="modal" aria-label="Close"></button>
-=======
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
           </div>
           <div class="modal-body">
             <!-- FORM START -->
@@ -49,7 +46,6 @@
               novalidate
             >
               {% csrf_token %}
-<<<<<<< HEAD
               <h6 class="text-white p-2 mb-3 modal-sub-header">
                 <i class="bi bi-person-fill me-2"></i>Personal Information
               </h6>
@@ -108,13 +104,6 @@
               </h6>
               <div class="row">
                 <div class="col-md-4 mb-3 mt-0">
-=======
-
-              <!-- Personal Information Section -->
-              <div class="mb-1">
-                <div class="row mb-3">
-                  <div class="col-md-4 mb-3 mt-0">
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                     <label for="enrollment-date" class="form-label fw-semibold">
                       Date of Enrollment: <span class="text-danger">*</span>
                     </label>
@@ -127,7 +116,6 @@
                     <label for="enrollment-appno" class="form-label fw-semibold">
                       Academic Year: <span class="text-danger">*</span>
                     </label>
-<<<<<<< HEAD
                     <div class="input-group">
                       <button type="button" class="btn btn-outline-secondary" id="decrease-appno">-</button>
                       <input 
@@ -143,11 +131,6 @@
                     </div>
                     <div class="invalid-feedback" id="enrollment-appno-help">
                       Please select a valid academic year.
-=======
-                    <input type="text" name="enrollment-appno" id="enrollment-appno" class="form-control" required placeholder="e.g 2025-2026" aria-required="true" aria-describedby="enrollment-appno-help" />
-                    <div class="invalid-feedback" id="enrollment-appno-help">
-                      Invalid application number.
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                     </div>
                   </div>
                   <div class="col-md-4">
@@ -158,34 +141,8 @@
                       <option value="2-2425">Second Semester</option>
                     </select>
                   </div>
-<<<<<<< HEAD
 
                   <div class="col-md-6">
-=======
-                </div>
-                <h6 class="text-white p-2 mb-3 modal-sub-header">
-                  <i class="bi bi-person-fill me-2"></i>Personal Information
-                </h6>
-                <div class="row mb-3">
-                  <div class="col-md-6 mb-3">
-                    <label for="enrollment-idnum" class="form-label fw-semibold">
-                      Student no : <span class="text-danger">*</span>
-                    </label>
-                    <input type="text" name="enrollment-idnum" id="enrollment-idnum" class="form-control" required placeholder="Type your ID number" aria-required="true" aria-describedby="enrollment-idnum-help" />
-                    <div class="invalid-feedback" id="enrollment-idnum-help">
-                      Please enter your ID number.
-                    </div>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <label for="enrollment-fullName" class="form-label fw-semibold">
-                      Full Name: <span class="text-danger">*</span>
-                    </label>
-                    <input type="text" name="full_name" id="enrollment-fullName" class="form-control" value="{{ enrollment_prefill.full_name }}" readonly aria-readonly="true" />
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-md-12">
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                     <label for="enrollment-course" class="form-label fw-semibold">
                       Degree/Program: <span class="text-danger">*</span>
                     </label>
@@ -194,20 +151,7 @@
                     </select>
                     <div class="invalid-feedback">Please select your course.</div>
                   </div>
-<<<<<<< HEAD
                   <div class="col-md-3">
-=======
-                </div>
-                <div class="row mb-3 mt-3">
-                  <div class="col-md-5">
-                    <label for="enrollment-major" class="form-label fw-semibold">
-                      Major (optional):
-                    </label>
-                    <input type="text" name="enrollment-major" id="enrollment-major" class="form-control" placeholder="Major" aria-describedby="enrollment-major-help" />
-                    <div class="form-text" id="enrollment-major-help">Leave blank if not applicable.</div>
-                  </div>
-                  <div class="col-md-4">
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                     <label for="enrollment-year" class="form-label fw-semibold">
                       Year Level: <span class="text-danger">*</span>
                     </label>
@@ -221,54 +165,11 @@
                       Section:
                     </label>
                     <input type="text" name="enrollment-section" id="enrollment-section" class="form-control" placeholder="e.g. A, B, C" aria-describedby="enrollment-section-help" />
-<<<<<<< HEAD
                     <p class="form-text" id="enrollment-section-help">Leave blank if not applicable.</p>
                   </div>
             </div>
 
               <h6 class="text-white p-2 mb-3 modal-sub-header">
-=======
-                    <div class="form-text" id="enrollment-section-help">Leave blank if not applicable.</div>
-                  </div>
-                </div>
-                <h6 class="text-white p-2 mt-3 mb-3 modal-sub-header">
-                  <i class="bi bi-person-fill me-2"></i>Basic Details
-                </h6>
-                <div class="row mb-3">
-                  <div class="col-md-4">
-                    <label for="enrollment-birthdate" class="form-label fw-semibold">
-                      Date of Birth: <span class="text-danger">*</span>
-                    </label>
-                    <input type="date" name="enrollment-birthdate" id="enrollment-birthdate" class="form-control" value="{{ enrollment_prefill.birthdate }}" required aria-required="true" aria-describedby="enrollment-birthdate-help" />
-                    <div class="invalid-feedback" id="enrollment-birthdate-help">Please enter your date of birth</div>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="enrollment-phoneno" class="form-label fw-semibold">
-                      Contact number: <span class="text-danger">*</span>
-                    </label>
-                    <input type="tel" name="enrollment-phoneno" id="enrollment-phoneno" class="form-control" value="{{ enrollment_prefill.contact_number }}" readonly aria-readonly="true" />
-                    <div class="invalid-feedback">Please enter your phone no.</div>
-                  </div>
-                  <div class="col-md-5">
-                    <label for="enrollment-email" class="form-label fw-semibold">
-                      Email: <span class="text-danger">*</span>
-                    </label>
-                    <input type="email" name="enrollment-email" class="form-control" id="enrollment-email" value="{{ enrollment_prefill.email }}" readonly aria-readonly="true" />
-                    <div class="invalid-feedback">Please enter your email.</div>
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <div class="col-md-12">
-                    <label for="enrollment-presentadd" class="form-label fw-semibold">
-                      Current Address: <span class="text-danger">*</span>
-                    </label>
-                    <input type="text" name="enrollment-presentadd" id="enrollment-presentadd" class="form-control" value="{{ enrollment_prefill.address }}" required aria-required="true" aria-describedby="enrollment-presentadd-help" />
-                    <div class="invalid-feedback" id="enrollment-presentadd-help">Please enter your present address.</div>
-                  </div>
-                </div>
-              </div>
-              <h6 class="text-white p-2 mb-3 mt-3 modal-sub-header">
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                 <i class="bi bi-person-lines-fill me-2"></i>Courses/Subjects
               </h6>
               <section class="intro">
@@ -277,16 +178,11 @@
                     <div class="col-12">
                       <div class="card">
                         <div class="card-body">
-<<<<<<< HEAD
                           <div class="fs-6 mb-3">List of subjects for enrollment:</div>
-=======
-                          <div class="fs-6"> Please input your subjects below.</div>
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                           <div class="table-responsive">
                             <table class="table table-hover mb-0" id="enrollmentSubjectsTable">
                               <thead>
                                 <tr>
-<<<<<<< HEAD
                                   <th >Code</th>
                                   <th >Subjects</th>
                                   <th>Professor</th>
@@ -304,45 +200,20 @@
                                 {% empty %}
                                 <tr>
                                   <td colspan="4" class="text-center">No subjects loaded</td>
-=======
-                                  <th scope="col">Code</th>
-                                  <th scope="col">Subjects</th>
-                                  <th scope="col">Professor</th>
-                                  <th scope="col">Units</th>
-                                </tr>
-                              </thead>
-                              <tbody id="enrollmentSubjectsTableBody">
-                                {% for i in "12345" %}
-                                <tr>
-                                  <td><input type="text" name="subject_code[]" class="form-control" aria-label="Code {{ forloop.counter }}"></td>
-                                  <td><input type="text" name="subject_name[]" class="form-control" aria-label="Subject {{ forloop.counter }}"></td>
-                                  <td><input type="text" name="subject_professor[]" class="form-control" aria-label="Professor {{ forloop.counter }}"></td>
-                                  <td><input type="number" name="subject_units[]" class="form-control" aria-label="Units {{ forloop.counter }}" min="0" step="1" inputmode="numeric" pattern="\d*"></td>
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                                 </tr>
                                 {% endfor %}
                               </tbody>
                             </table>
-<<<<<<< HEAD
                           </div>
                           
-=======
-                            <button type="button" class="btn btn-outline-primary mt-2" onclick="addEnrollmentSubjectRow()">
-                              <i class="bi bi-plus-lg"></i> Add 1 Subject
-                            </button>
-                          </div>
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </section>
-<<<<<<< HEAD
               
               
-=======
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
               <div class="d-flex justify-content-end gap-2 mt-4">
                 <button
                   class="btn btn-secondary"
@@ -366,7 +237,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- enrollment.js is loaded in the main page -->
   </body>
-<<<<<<< HEAD
   <script>
     const accYearInput = document.getElementById('enrollment-appno');
     const decreaseBtn = document.getElementById('decrease-appno');
@@ -392,6 +262,4 @@
       updateYear(startYear);
     });
   </script>
-=======
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
 </html>

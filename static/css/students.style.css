@@ -1,10 +1,7 @@
 body {
     margin: 0;
     overflow-x: hidden;
-<<<<<<< HEAD
     background-color: #f1f1f198
-=======
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
   }
 
   .sidebar {
@@ -159,7 +156,6 @@ body {
 
   @media (max-width: 768px) {
     .sidebar {
-<<<<<<< HEAD
         transform: translateX(-100%);
         width: 250px;
         left: 0;
@@ -205,43 +201,6 @@ body {
         font-size: 1.5rem;
     }}
 
-
-=======
-      transform: translateX(-100%);
-      width: 250px;
-      left: 0;
-    }
-
-    .sidebar.show {
-      transform: translateX(0%);
-    }
-
-    .sidebar.collapsed {
-      transform: translateX(-100%) !important;
-    }
-
-    .main-content,
-    .sidebar.collapsed ~ .main-content {
-      margin-left: 0 !important;
-      padding-top: 4rem;
-    }
-
-    .top-bar,
-    .sidebar.collapsed ~ .top-bar {
-      left: 0 !important;
-    }
-
-    .top-bar .system-title,
-    .top-bar .user-info span {
-      display: none;
-    }
-
-    .top-bar #toggleBtn {
-      display: inline-block;
-    }
-  }
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
-  /* ===== FORM ELEMENTS ===== */
 .form-check-input:checked {
   background-color: rgb(10, 25, 36);
   border-color: #183A53;
