@@ -58,6 +58,10 @@
       <a href="#enrollment" class="nav-link"><i class="bi bi-file-earmark-person"></i><span class="link-text">Enrollment</span></a>
       <a href="#graduation" class="nav-link"><i class="bi bi-mortarboard"></i><span class="link-text">Graduation</span></a>
       {% endif %}
+<<<<<<< HEAD
+=======
+      <a href="#settings" class="nav-link"><i class="bi bi-gear"></i><span class="link-text">Settings</span></a>
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
       <a href="{% url 'logout' %}" class="nav-link"><i class="bi bi-box-arrow-right"></i><span class="link-text">Logout</span></a>
     </div>
 
@@ -93,7 +97,11 @@
         </div>
     
   
+<<<<<<< HEAD
         <div class="fw-bold student_dashboard_user-info d-flex align-items-center gap-2 text-white">
+=======
+        <div class="fw-bold registrar_dashboard_user-info d-flex align-items-center gap-2 text-white">
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
           {% if profile.profile_picture_url %}
             <img src="{{ profile.profile_picture_url }}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;" alt="Profile Picture">
           {% else %}
@@ -257,8 +265,12 @@
                           <div class="card border border-2 border-dashed text-center p-4 shadow-sm" style="border-style: dashed;">
                             <div class="card-body">
                               <h5 class="card-title fw-semibold mb-3">Clearance Form Required</h5>
+<<<<<<< HEAD
                               <p class="card-text text-muted">The Clearance Form helps confirm that all your academic, financial, and departmental obligations are complete for the semester. 
                                 Fill it out carefully to make sure you’ve met all the requirements before the term ends.</p>
+=======
+                              <p class="card-text text-muted">You must complete the clearance form before proceeding to enrollment or graduation.</p>
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                               <button class="btn text-white" style="background-color: #183A53;" data-bs-toggle="modal" data-bs-target="#clearanceModal">
                                 Fill Out Clearance Form
                               </button>
@@ -295,14 +307,22 @@
                     <section class="container my-5">
                       <div class="text-center mb-4">
                         <h2 class="fw-bold">Request Form</h2>
+<<<<<<< HEAD
                         <p class="text-muted"></p>
+=======
+                        <p class="text-muted">Click the button below to fill out the request form.</p>
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                       </div>
                       <div class="row justify-content-center">
                         <div class="col-md-8">
                           <div class="card border border-2 border-dashed text-center p-4 shadow-sm">
                             <div class="card-body">
+<<<<<<< HEAD
                               <p class="card-title mb-3">Use this form to request official school documents like your Transcript of Records (TOR), Certificate of Registration (COR), Diploma, and more. 
                                 Make sure all the information you provide is correct to avoid any delays in processing your request.</p>
+=======
+                              <h5 class="card-title fw-semibold mb-3">Request Documents here</h5>
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                               <button class="btn text-white"
                                       style="background-color: #183A53;"
                                       data-bs-toggle="modal"
@@ -349,13 +369,22 @@
                     <section class="container my-5">
                       <div class="text-center mb-4">
                         <h2 class="fw-bold">Graduation Form</h2>
+<<<<<<< HEAD
   
+=======
+                        <p class="text-muted">Click the button below to fill out your graduation form</p>
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                       </div>
                       <div class="row justify-content-center">
                         <div class="col-md-8">
                           <div class="card border border-2 border-dashed text-center p-4 shadow-sm" style="border-style: dashed;">
                             <div class="card-body">
+<<<<<<< HEAD
                               <p class="card-title mb-3">The Graduation Form lets you apply for your official graduation. Make sure all your information is correct before submitting so there are no delays in getting your credentials or certificate.</p>
+=======
+                              <h5 class="card-title fw-semibold mb-3">Graduation Form</h5>
+                              <p class="card-text text-muted">Please fill up the graduation form.</p>
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                               {% if can_submit_new_graduation %}
                                 <button class="btn text-white" style="background-color: #183A53;"
                                  data-bs-toggle="modal" data-bs-target="#graduationModal">
@@ -395,12 +424,21 @@
                     <section class="container my-5">
                       <div class="text-center mb-4">
                         <h2 class="fw-bold">Enrollment Form</h2>
+<<<<<<< HEAD
+=======
+                        <p class="text-muted">Click the button below to fill out your enrollment form</p>
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                       </div>
                       <div class="row justify-content-center">
                         <div class="col-md-8">
                           <div class="card border border-2 border-dashed text-center p-4 shadow-sm" style="border-style: dashed;">
                             <div class="card-body">
+<<<<<<< HEAD
                               <p class="card-text mb-3">Use this form to enroll temporarily. Fill it out carefully to ensure your enrollment is properly recorded.</p>
+=======
+                              <h5 class="card-title fw-semibold mb-3">Enrollment Form</h5>
+                              <p class="card-text text-muted">Please fill up the enrollment form to finish enrollment process.</p>
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
                               <button class="btn text-white" style="background-color: #183A53;" data-bs-toggle="modal" data-bs-target="#enrollmentModal">
                                 Fill Out Enrollment Form
                               </button>
@@ -433,6 +471,18 @@
 
       
 
+<<<<<<< HEAD
+=======
+              <div id="settings" class="content-section">
+                <div class="text-end text-muted mb-2 small">
+                  <strong>Date:</strong> <span id="student_settings_dateToday">Loading...</span>
+                </div>
+
+                <h1>Settings</h1>
+                <p>Update your preferences here.</p>
+              </div>
+              
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
             
               <div id="logout" class="content-section d-none">
                 <h1>Logout</h1>
@@ -982,7 +1032,11 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="modal fade" id="profileCompletionModal" tabindex="-1" aria-labelledby="profileCompletionModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
+<<<<<<< HEAD
           <div class="modal-header text-white" style="background-color: #2B5C76;">
+=======
+          <div class="modal-header bg-primary text-white">
+>>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
             <h5 class="modal-title" id="profileCompletionModalLabel">
               <i class="bi bi-person-fill-check me-2"></i>Complete Your Profile
             </h5>
