@@ -1,0 +1,1301 @@
+{% extends 'main-registrar.html' %}
+{% load static %}
+
+{% block title %}REGISTRAR USER MANAGEMENT{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/RUSERMANAGEMENT.css' %}">
+{% endblock %}
+
+{% block main_content %}
+
+  <!-- Main Content -->
+  <div class="registrar_user_manager_main-content">
+    <form id="registrar_user_manager_form">
+      <div class="text-end text-muted mb-2 small"><strong>Date:</strong> <span id="registrar_user_manager_dateToday"></span></div>
+      <h1 class="fw-bold">User Management</h1>
+
+      <!-- Tab Navigation -->
+      <ul class="nav nav-tabs mb-3" id="userManagementTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="existing-users-tab" data-bs-toggle="tab" data-bs-target="#existing-users" type="button" role="tab">
+            <i class="bi bi-people me-2"></i>Existing Users
+          </button>
+        </li>
+        <!-- Pending users now integrated into existing users tab above -->
+        <li class="nav-item" role="presentation" style="display: none;">
+          <button class="nav-link position-relative" id="pending-users-tab" data-bs-toggle="tab" data-bs-target="#pending-users" type="button" role="tab">
+            <i class="bi bi-clock me-2"></i>Pending Approval
+            <span class="badge bg-warning text-dark ms-1" id="pendingUsersCount" style="display: none;">0</span>
+          </button>
+        </li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content" id="userManagementTabContent">
+        <!-- Existing Users Tab -->
+        <div class="tab-pane fade show active" id="existing-users" role="tabpanel">
+          <!-- Filter + Search Row -->
+      <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+          <select class="form-select form-select-sm" style="width: auto;" id="registrar_user_manager_userType">
+            <option value="">All Roles</option>
+            {% for user_type in user_types %}
+            <option value="{{ user_type }}">{{ user_type|title }}</option>
+            {% endfor %}
+          </select>
+          <select class="form-select form-select-sm" style="width: auto;" id="registrar_user_manager_course">
+            <option value="">All Courses</option>
+            {% for course in courses %}
+            <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+          </select>
+          <select class="form-select form-select-sm" style="width: auto;" id="registrar_user_manager_year">
+            <option value="">All Years</option>
+            {% for year in years %}
+            <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+          </select>
+          <select class="form-select form-select-sm" style="width: auto;" id="registrar_user_manager_status">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+    
+          <!-- Search input right next to filters -->
+          <div class="registrar_user_manager_search-bar input-group">
+            <input type="text" class="form-control" placeholder="Search by name, email, or username" id="registrar_user_manager_search_input">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+          </div>
+
+          <!-- Reset Filters Button -->
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="registrar_user_manager_resetFilters">
+            <i class="bi bi-arrow-clockwise"></i> Reset Filters
+          </button>
+
+          <div class="table-actions" id="registrar_user_manager_tableActions">
+            <button type="button" class="btn btn-primary add-user-btn" data-bs-toggle="modal" data-bs-target="#registrar_user_manager_addUserModal">
+              <i class="bi bi-person-plus-fill"></i> Add User
+            </button>
+          </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="registrar_user_manager_loading" class="text-center py-4" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading users...</p>
+      </div>
+
+      <div class="registrar_user_manager_table-fixed-container">
+        <div class="registrar_user_manager_table-scroll-wrapper">
+          <table class="table registrar_user_manager_table align-middle" id="registrar_user_manager_userTable">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Email</th>
+                <th>Created</th>
+                <th>Last Login</th>
+              </tr>
+            </thead>
+            <tbody id="registrar_user_manager_tableBody">
+              <!-- User rows will be populated by JavaScript -->
+            </tbody>
+          </table>
+      
+          <!-- Backdrop overlay -->
+          <div class="user-panel-backdrop" id="registrar_user_manager_backdrop"></div>
+      
+          <!-- Admin Panel -->
+          <div class="user-panel" id="registrar_user_manager_adminPanel">
+            <button type="button" class="btn-close" onclick="hideUser()" aria-label="Close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="text-center mt-4">
+              <img src="" alt="Profile" class="user-img mb-3" id="registrar_user_manager_adminImg">
+              <h5 id="registrar_user_manager_adminName">Name</h5>
+              <h6 id="registrar_user_manager_adminNotes" class="text-secondary">-</h6>
+              <p class="text-muted mb-1"><i class="bi bi-envelope"></i> <span id="registrar_user_manager_adminEmail"></span></p>
+              <p><span id="registrar_user_manager_adminStatus" class="user-status"></span></p>
+            </div>
+            <hr>
+            <div class="px-3">
+              <p><strong>Role:</strong> <span id="registrar_user_manager_adminRole">-</span></p>     
+              <p><strong>Username:</strong> <span id="registrar_user_manager_adminUsername">-</span></p>  
+              <p><strong>Phone:</strong> <span id="registrar_user_manager_adminPhone">-</span></p>
+              <p><strong>Address:</strong> <span id="registrar_user_manager_adminAddress">-</span></p>
+              <p><strong>Gender:</strong> <span id="registrar_user_manager_adminGender">-</span></p>
+              <p><strong>Created:</strong> <span id="registrar_user_manager_adminCreated">-</span></p>
+              <p><strong>Last Login:</strong> <span id="registrar_user_manager_adminLastLogin">-</span></p>            
+              
+              <div class="bg-light p-3 rounded mt-3">
+                <p class="mb-1"><strong>Notes:</strong></p>
+                <p id="registrar_user_manager_adminNotes" class="mb-0 small">-</p>
+              </div>
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-outline-danger w-100" onclick="deleteUser()">Delete User</button>
+              </div>
+            </div>
+          </div>
+      
+          <!-- Student Panel -->
+          <div class="user-panel" id="registrar_user_manager_studentPanel">
+            <button type="button" class="btn-close" onclick="hideUser()" aria-label="Close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+            <div class="text-center mt-4">
+              <img src="" alt="Profile" class="user-img mb-3" id="registrar_user_manager_studentImg">
+            
+              <!-- Name -->
+              <h5 class="mb-1" id="registrar_user_manager_studentName">Name</h5>
+              <h6 id="registrar_user_manager_studentRole"
+                  class="mb-2 {% if role == 'student' %}text-primary{% elif role == 'alumni' %}text-success{% else %}text-muted{% endif %}">
+                {{ role|default:"-" }}
+              </h6>
+              <p class="mb-1 fw-medium" id="registrar_user_manager_studentCourse">-</p>  
+              <p class="mt-2 mb-0">
+                <span id="registrar_user_manager_studentStatus" class="user-status"></span>
+              </p>
+            </div>
+
+            <hr>
+            <div class="px-3">
+              <p><strong>Email:</strong> <span id="registrar_user_manager_studentEmailDetail">-</span></p>
+              <p><strong>ID number:</strong> <span id="registrar_user_manager_studentNotes">-</span></p>
+              <p><strong>Year:</strong> <span id="registrar_user_manager_studentYear">-</span></p>
+              <p><strong>Gender:</strong> <span id="registrar_user_manager_studentGender">-</span></p>
+              <p><strong>Birthdate:</strong> <span id="registrar_user_manager_studentBirthdate">-</span></p>
+              <p><strong>Address:</strong> <span id="registrar_user_manager_studentAddress">-</span></p>            
+              <p><strong>Phone:</strong> <span id="registrar_user_manager_studentPhone">-</span></p>
+              <p><strong>Last Login:</strong> <span id="registrar_user_manager_studentLastLogin">-</span></p>     
+              <p><strong>Created:</strong> <span id="registrar_user_manager_studentCreated">-</span></p>
+              
+              <div class="text-center mt-4">
+                <button type="button" class="btn btn-outline-danger w-100" onclick="deleteUser()">Delete User</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div> <!-- End Existing Users Tab -->
+
+        <!-- Pending Users Tab -->
+        <div class="tab-pane fade" id="pending-users" role="tabpanel">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">
+              <i class="bi bi-clock me-2"></i>Accounts Awaiting Approval
+            </h5>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="refreshPendingUsers()">
+              <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+            </button>
+          </div>
+
+          <!-- Pending Users Table -->
+          <div class="table-responsive">
+            <table class="table pending_table text-center align-middle" id="pendingUsersTable">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 200px; min-width: 200px;">Full Name</th>
+                  <th style="width: 200px; min-width: 200px;">User Type</th>
+                  <th style="width: 100px">Email</th>
+                  <th style="width: 200px; min-width: 200px;">Contact</th>
+                  <th style="width: 200px; min-width: 200px;">Submitted</th>
+                  <th style="width: 200px; min-width: 200px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="pendingUsersTableBody">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State -->
+          <div id="pendingUsersEmpty" class="text-center py-5" style="display: none;">
+            <div class="mb-3">
+              <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="text-muted">No Pending Applications</h5>
+            <p class="text-muted">All user registrations have been processed.</p>
+          </div>
+
+          <!-- Loading State -->
+          <div id="pendingUsersLoading" class="text-center py-4" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading pending applications...</p>
+          </div>
+        </div> <!-- End Pending Users Tab -->
+      </div> <!-- End Tab Content -->
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Add User Modal -->
+  <div class="modal fade" id="registrar_user_manager_addUserModal" tabindex="-1" aria-labelledby="registrar_user_manager_addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registrar_user_manager_addUserModalLabel">Add New User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-light">
+          <form id="registrar_user_manager_addUserForm">
+            <!-- Section: Basic Info -->
+            <h6 class="mt-3 mb-2">Basic Information</h6>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Email Address *</label>
+                <input type="email" class="form-control" id="registrar_user_manager_username" required placeholder="Enter email address">
+                <small class="form-text text-muted">A secure password will be auto-generated and sent to this email</small>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">User Type *</label>
+                <select class="form-select" id="registrar_user_manager_userTypeSelect" required>
+                  <option selected disabled>Select User Type</option>
+                  <option value="student">Student</option>
+                  <option value="alumni">Alumni</option>
+                  <option value="signatory">Signatory</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="registrar_user_manager_isActive">
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Section: Personal Info -->
+            <h6 class="mt-4 mb-2">Personal Information</h6>
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <label class="form-label">Last Name *</label>
+                <input type="text" class="form-control" id="registrar_user_manager_lastName" required>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">First Name *</label>
+                <input type="text" class="form-control" id="registrar_user_manager_firstName" required>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Middle Name</label>
+                <input type="text" class="form-control" id="registrar_user_manager_middleName">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Suffix</label>
+                <input type="text" class="form-control" id="registrar_user_manager_suffix">
+              </div>
+            </div>
+    
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label class="form-label">Birth Date</label>
+                <input type="date" class="form-control" id="registrar_user_manager_birthDate">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Gender</label>
+                <select class="form-select" id="registrar_user_manager_gender">
+                  <option selected disabled>Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" class="form-control" id="registrar_user_manager_contactNumber" 
+                       placeholder="+639XXXXXXXXX" 
+                       pattern="^\+63[0-9]{10}$"
+                       maxlength="13"
+                       aria-label="Contact Number">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control" id="registrar_user_manager_address">
+              </div>
+            </div>
+
+            <!-- Section: Student/Alumni Specific Info -->
+            <div id="registrar_user_manager_studentFields" style="display: none;">
+              <h6 class="mt-4 mb-2">Student Information</h6>
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Student Number</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_studentNumber">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Program/Course</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_program">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Year Level</label>
+                  <select class="form-select" id="registrar_user_manager_yearLevel">
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="registrar_user_manager_isGraduating">
+                    <label class="form-check-label" for="registrar_user_manager_isGraduating">
+                      Is Graduating
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="registrar_user_manager_alumniFields" style="display: none;">
+              <h6 class="mt-4 mb-2">Alumni Information</h6>
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <label class="form-label">Alumni ID</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_alumniId">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Course Graduated</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_courseGraduated">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Year Graduated</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_yearGraduated" placeholder="YYYY">
+                </div>
+              </div>
+            </div>
+
+            <div id="registrar_user_manager_signatoryFields" style="display: none;">
+              <h6 class="mt-4 mb-2">Signatory Information</h6>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Signatory Type *</label>
+                  <select class="form-select" id="registrar_user_manager_signatoryType" required>
+                    <option selected disabled>Select Signatory Type</option>
+                    <option value="dorm_supervisor">Dorm Supervisor</option>
+                    <option value="canteen_concessionaire">Canteen Concessionaire</option>
+                    <option value="library_director">Library Director</option>
+                    <option value="scholarship_director">Scholarship Director</option>
+                    <option value="it_director">IT Director</option>
+                    <option value="student_affairs">Student Affairs</option>
+                    <option value="cashier">Cashier</option>
+                    <option value="business_manager">Business Manager</option>
+                    <option value="registrar">Registrar</option>
+                    <option value="academic_dean">Academic Dean</option>
+                    <option value="president">President</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Department</label>
+                  <input type="text" class="form-control" id="registrar_user_manager_signatoryDepartment" placeholder="e.g., IT Department">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <label class="form-label">Signatory Notes</label>
+                  <textarea class="form-control" id="registrar_user_manager_signatoryNotes" rows="3" placeholder="Additional notes about this signatory's role and responsibilities"></textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="registrar_user_manager_saveBtn">Save User</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="registrar_user_manager_cancelBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete User Confirmation Modal -->
+  <div class="modal fade" id="registrar_user_manager_deleteModal" tabindex="-1" aria-labelledby="registrar_user_manager_deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="registrar_user_manager_deleteModalLabel">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Delete User
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-3">
+            <i class="bi bi-person-x-fill text-danger" style="font-size: 3rem;"></i>
+          </div>
+          <h6 class="text-center mb-3">Are you sure you want to delete this user?</h6>
+          <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Warning:</strong> This action cannot be undone. All user data, including:
+            <ul class="mb-0 mt-2">
+              <li>User profile and settings</li>
+              <li>Associated forms and records</li>
+              <li>Login history and permissions</li>
+            </ul>
+          </div>
+          <div class="user-delete-info p-3 bg-light rounded">
+            <p class="mb-1"><strong>User:</strong> <span id="registrar_user_manager_deleteUserName">-</span></p>
+            <p class="mb-1"><strong>Role:</strong> <span id="registrar_user_manager_deleteUserRole">-</span></p>
+            <p class="mb-0"><strong>Email:</strong> <span id="registrar_user_manager_deleteUserEmail">-</span></p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i> Cancel
+          </button>
+          <button type="button" class="btn btn-danger" id="registrar_user_manager_confirmDeleteBtn">
+            <i class="bi bi-trash me-1"></i> Delete User
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending User Details Modal -->
+  <div class="modal fade" id="pendingUserDetailsModal" tabindex="-1" aria-labelledby="pendingUserDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pendingUserDetailsModalLabel">
+            <i class="bi bi-person-plus me-2"></i>Review Application
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-4 text-center">
+              <img id="pendingUserPhoto" src="/static/images/default-profile.png" alt="Profile" class="img-fluid rounded-circle mb-3" style="width: 200px; height: 120px; object-fit: cover;">
+              <h5 id="pendingUserName">-</h5>
+              <span class="badge bg-primary" id="pendingUserType">-</span>
+            </div>
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-6 mb-2">
+                  <strong>Email:</strong><br>
+                  <span id="pendingUserEmail">-</span>
+                </div>
+                <div class="col-6 mb-2">
+                  <strong>Contact:</strong><br>
+                  <span id="pendingUserContact">-</span>
+                </div>
+                <div class="col-6 mb-2">
+                  <strong>Address:</strong><br>
+                  <span id="pendingUserAddress">-</span>
+                </div>
+                <div class="col-6 mb-2">
+                  <strong>Gender:</strong><br>
+                  <span id="pendingUserGender">-</span>
+                </div>
+                <div class="col-6 mb-2">
+                  <strong>Birthdate:</strong><br>
+                  <span id="pendingUserBirthdate">-</span>
+                </div>
+                <div class="col-6 mb-2">
+                  <strong>Submitted:</strong><br>
+                  <span id="pendingUserSubmitted">-</span>
+                </div>
+              </div>
+              
+              <!-- Student/Alumni specific fields -->
+              <div id="pendingUserStudentFields" style="display: none;">
+                <hr>
+                <div class="row">
+                  <div class="col-6 mb-2">
+                    <strong>Student ID:</strong><br>
+                    <span id="pendingUserStudentId">-</span>
+                  </div>
+                  <div class="col-6 mb-2">
+                    <strong>Program:</strong><br>
+                    <span id="pendingUserProgram">-</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div id="pendingUserAlumniFields" style="display: none;">
+                <hr>
+                <div class="row">
+                  <div class="col-6 mb-2">
+                    <strong>Alumni ID:</strong><br>
+                    <span id="pendingUserAlumniId">-</span>
+                  </div>
+                  <div class="col-6 mb-2">
+                    <strong>Course Graduated:</strong><br>
+                    <span id="pendingUserCourseGraduated">-</span>
+                  </div>
+                  <div class="col-6 mb-2">
+                    <strong>Year Graduated:</strong><br>
+                    <span id="pendingUserYearGraduated">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" onclick="declinePendingUser()">
+            <i class="bi bi-x-circle me-1"></i>Decline
+          </button>
+          <button type="button" class="btn btn-success" onclick="approvePendingUser()">
+            <i class="bi bi-check-circle me-1"></i>Approve
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decline Reason Modal -->
+  <div class="modal fade" id="declineReasonModal" tabindex="-1" aria-labelledby="declineReasonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="declineReasonModalLabel">
+            <i class="bi bi-x-circle text-danger me-2"></i>Decline Application
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Are you sure you want to decline this application?</strong>
+          </div>
+          <div class="mb-3">
+            <label for="declineReason" class="form-label">
+              <strong>Reason for decline:</strong> <span class="text-danger">*</span>
+            </label>
+            <textarea class="form-control" id="declineReason" rows="4" placeholder="Please provide a reason for declining this application..." required></textarea>
+            <div class="form-text">This reason will be included in the email notification to the applicant.</div>
+          </div>
+          <div class="mb-3">
+            <p class="mb-1"><strong>Applicant:</strong> <span id="declineUserName">-</span></p>
+            <p class="mb-0"><strong>Email:</strong> <span id="declineUserEmail">-</span></p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-arrow-left me-1"></i>Cancel
+          </button>
+          <button type="button" class="btn btn-danger" onclick="confirmDeclinePendingUser()">
+            <i class="bi bi-x-circle me-1"></i>Decline Application
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/RUSERMANAGEMENT.js' %}?v=3.9"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<!-- Pending Users Management Script -->
+<script>
+let currentPendingUserId = null;
+
+// SIMPLE SOLUTION: Add pending users section directly to existing users tab
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Adding pending users section to existing users tab...');
+    
+    // Find the existing users content area
+    const existingUsersContent = document.getElementById('existing-users');
+    if (existingUsersContent) {
+        // Add a collapsible pending users section at the top
+        const pendingSection = document.createElement('div');
+        pendingSection.id = 'pendingUsersSection';
+        pendingSection.style.display = 'none'; // Hidden by default
+        pendingSection.innerHTML = `
+            <div style="margin-bottom: 20px; border-radius: 8px; border: 1px solid #ffc107; overflow: hidden;">
+                <div style="background-color: #fff3cd; padding: 12px 20px; border-bottom: 1px solid #ffc107; cursor: pointer;" onclick="togglePendingUsers()">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 style="color: #856404; margin: 0; font-weight: 600;">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span id="pendingUsersTitle">Pending User Approvals</span>
+                        </h6>
+                        <div>
+                            <span class="badge bg-warning text-dark me-2" id="pendingUsersCountBadge">0</span>
+                            <i class="bi bi-chevron-down" id="pendingUsersChevron"></i>
+                        </div>
+                    </div>
+                </div>
+                <div id="pendingUsersContent" style="display: none; background-color: #fff; max-height: 400px; overflow-y: auto;">
+                    <div id="simplePendingUsersTable" style="padding: 15px;">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-warning" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2 mb-0">Loading pending users...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Insert at the beginning of existing users content
+        existingUsersContent.insertBefore(pendingSection, existingUsersContent.firstChild);
+        
+        console.log('Pending users section added - loading data...');
+        loadSimplePendingUsers();
+    }
+    
+    // Load badge count
+    loadPendingUsersCount();
+    setInterval(loadPendingUsersCount, 30000);
+});
+
+function loadSimplePendingUsers() {
+    console.log('Loading simple pending users...');
+    const container = document.getElementById('simplePendingUsersTable');
+    const section = document.getElementById('pendingUsersSection');
+    const countBadge = document.getElementById('pendingUsersCountBadge');
+    const title = document.getElementById('pendingUsersTitle');
+    
+    if (!container) return;
+    
+    fetch('/api/pending-users/')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Simple pending users API response:', data);
+            
+            if (data.success && data.users && data.users.length > 0) {
+                // Show the section
+                section.style.display = 'block';
+                
+                // Update count and title
+                countBadge.textContent = data.users.length;
+                title.textContent = `${data.users.length} Pending User Approval${data.users.length > 1 ? 's' : ''}`;
+                
+                // Add bulk actions header
+                let bulkActionsHTML = `
+                    <div class="d-flex justify-content-between align-items-center mb-2 p-2" style="background-color: #f8f9fa; border-radius: 4px;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectAllPending" onchange="toggleAllPendingUsers()">
+                            <label class="form-check-label fw-medium" for="selectAllPending">
+                                Select All (${data.users.length})
+                            </label>
+                        </div>
+                        <div>
+                            <button class="btn btn-success b_btn-sm me-1" onclick="bulkApprovePendingUsers()" disabled id="bulkApproveBtn">
+                                <i class="bi bi-check-all me-1"></i>Approve Selected
+                            </button>
+                            <button class="btn btn-danger b_btn-sm" onclick="bulkDeclinePendingUsers()" disabled id="bulkDeclineBtn">
+                                <i class="bi bi-x-octagon me-1"></i>Decline Selected
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Create compact table with checkboxes
+                let tableHTML = bulkActionsHTML + `
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="40"><input type="checkbox" class="form-check-input" disabled></th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Type</th>
+                                    <th>Submitted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                data.users.forEach(user => {
+                    tableHTML += `
+                        <tr>
+                            <td>
+                                <input class="form-check-input pending-user-checkbox" type="checkbox" value="${user.id}" onchange="updateBulkButtons()">
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 10px;">
+                                        <span class="text-white fw-bold">${(user.full_name || 'U').charAt(0)}</span>
+                                    </div>
+                                    <span class="fw-medium">${user.full_name || 'Unknown'}</span>
+                                </div>
+                            </td>
+                            <td class="text-muted">${user.email || 'N/A'}</td>
+                            <td>
+                                <span class="badge ${user.user_type === 'student' ? 'bg-primary' : 'bg-success'} badge-sm">
+                                    ${user.user_type ? user.user_type.charAt(0).toUpperCase() + user.user_type.slice(1) : 'Unknown'}
+                                </span>
+                            </td>
+                            <td class="text-muted small">${user.submitted_at || 'Unknown'}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-success btn-sm" onclick="instantApprovePendingUser('${user.id}', '${user.full_name}')" title="Approve Application">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="instantDeclinePendingUser('${user.id}', '${user.full_name}')" title="Decline Application">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                tableHTML += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = tableHTML;
+                console.log('Simple pending users table created successfully!');
+            } else {
+                // Hide the section when no pending users
+                section.style.display = 'none';
+                console.log('No pending users - section hidden');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading simple pending users:', error);
+            // Show error but keep section visible
+            section.style.display = 'block';
+            countBadge.textContent = '!';
+            title.textContent = 'Error Loading Pending Users';
+            container.innerHTML = '<p class="text-danger mb-0"><i class="bi bi-exclamation-triangle me-1"></i>Error loading pending users</p>';
+        });
+}
+
+function togglePendingUsers() {
+    const content = document.getElementById('pendingUsersContent');
+    const chevron = document.getElementById('pendingUsersChevron');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        chevron.className = 'bi bi-chevron-up';
+    } else {
+        content.style.display = 'none';
+        chevron.className = 'bi bi-chevron-down';
+    }
+}
+
+// Instant approval without confirmation
+function instantApprovePendingUser(userId, userName) {
+    const btn = event.target.closest('button');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+    
+    fetch(`/api/pending-users/${userId}/approve/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success message briefly
+            btn.innerHTML = '<i class="bi bi-check-circle text-success"></i>';
+            setTimeout(() => {
+                loadSimplePendingUsers(); // Refresh the table
+            }, 500);
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+        console.error('Error:', error);
+    });
+}
+
+// Instant decline without confirmation
+function instantDeclinePendingUser(userId, userName) {
+    const btn = event.target.closest('button');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+    
+    // For decline, we might want a quick reason
+    const reason = prompt(`Decline reason for ${userName}:`) || 'No reason provided';
+    
+    fetch(`/api/pending-users/${userId}/decline/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reason: reason })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            btn.innerHTML = '<i class="bi bi-x-circle text-danger"></i>';
+            setTimeout(() => {
+                loadSimplePendingUsers(); // Refresh the table
+            }, 500);
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-x-lg"></i>';
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-x-lg"></i>';
+        console.error('Error:', error);
+    });
+}
+
+// Bulk actions
+function toggleAllPendingUsers() {
+    const selectAll = document.getElementById('selectAllPending');
+    const checkboxes = document.querySelectorAll('.pending-user-checkbox');
+    
+    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    updateBulkButtons();
+}
+
+function updateBulkButtons() {
+    const selectedCount = document.querySelectorAll('.pending-user-checkbox:checked').length;
+    const approveBtn = document.getElementById('bulkApproveBtn');
+    const declineBtn = document.getElementById('bulkDeclineBtn');
+    
+    if (selectedCount > 0) {
+        approveBtn.disabled = false;
+        declineBtn.disabled = false;
+        approveBtn.innerHTML = `<i class="bi bi-check-all me-1"></i>Approve ${selectedCount}`;
+        declineBtn.innerHTML = `<i class="bi bi-x-octagon me-1"></i>Decline ${selectedCount}`;
+    } else {
+        approveBtn.disabled = true;
+        declineBtn.disabled = true;
+        approveBtn.innerHTML = '<i class="bi bi-check-all me-1"></i>Approve Selected';
+        declineBtn.innerHTML = '<i class="bi bi-x-octagon me-1"></i>Decline Selected';
+    }
+}
+
+function bulkApprovePendingUsers() {
+    const selectedIds = Array.from(document.querySelectorAll('.pending-user-checkbox:checked')).map(cb => cb.value);
+    if (selectedIds.length === 0) return;
+    
+    const approveBtn = document.getElementById('bulkApproveBtn');
+    approveBtn.disabled = true;
+    approveBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Processing...';
+    
+    // Process all approvals
+    Promise.all(selectedIds.map(userId => 
+        fetch(`/api/pending-users/${userId}/approve/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+    ))
+    .then(results => {
+        const successful = results.filter(r => r.success).length;
+        console.log(`Bulk approved ${successful} out of ${selectedIds.length} users`);
+        loadSimplePendingUsers(); // Refresh the table
+    })
+    .catch(error => {
+        console.error('Bulk approve error:', error);
+        loadSimplePendingUsers(); // Refresh anyway
+    });
+}
+
+function bulkDeclinePendingUsers() {
+    const selectedIds = Array.from(document.querySelectorAll('.pending-user-checkbox:checked')).map(cb => cb.value);
+    if (selectedIds.length === 0) return;
+    
+    const reason = prompt(`Decline reason for ${selectedIds.length} users:`) || 'Bulk decline - no reason provided';
+    
+    const declineBtn = document.getElementById('bulkDeclineBtn');
+    declineBtn.disabled = true;
+    declineBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Processing...';
+    
+    // Process all declines
+    Promise.all(selectedIds.map(userId => 
+        fetch(`/api/pending-users/${userId}/decline/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ reason: reason })
+        }).then(response => response.json())
+    ))
+    .then(results => {
+        const successful = results.filter(r => r.success).length;
+        console.log(`Bulk declined ${successful} out of ${selectedIds.length} users`);
+        loadSimplePendingUsers(); // Refresh the table
+    })
+    .catch(error => {
+        console.error('Bulk decline error:', error);
+        loadSimplePendingUsers(); // Refresh anyway
+    });
+}
+
+function loadPendingUsers() {
+    console.log('=== LOADING PENDING USERS ===');
+    const loading = document.getElementById('pendingUsersLoading');
+    const tbody = document.getElementById('pendingUsersTableBody');
+    const emptyState = document.getElementById('pendingUsersEmpty');
+    const table = document.getElementById('pendingUsersTable');
+    
+    // Show loading
+    if (loading) loading.style.display = 'block';
+    if (tbody) tbody.innerHTML = '';
+    if (emptyState) emptyState.style.display = 'none';
+    
+    fetch('/api/pending-users/')
+        .then(response => {
+            console.log('API Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('API Response data:', data);
+            if (loading) loading.style.display = 'none';
+            
+            if (data.success && data.users && data.users.length > 0) {
+                console.log(`Found ${data.users.length} pending users - populating table`);
+                
+                // Hide empty state, show table
+                if (emptyState) emptyState.style.display = 'none';
+                if (table) {
+                    table.style.display = 'table';
+                    table.style.visibility = 'visible';
+                }
+                
+                populatePendingUsersTable(data.users);
+                
+                console.log('Table populated successfully');
+            } else {
+                console.log('No pending users found');
+                if (emptyState) emptyState.style.display = 'block';
+                if (table) table.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading pending users:', error);
+            if (loading) loading.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'block';
+            
+            // Show error message in empty state
+            if (emptyState) {
+                const errorMsg = emptyState.querySelector('h5');
+                if (errorMsg) errorMsg.textContent = 'Error Loading Applications';
+                const errorDesc = emptyState.querySelector('p');
+                if (errorDesc) errorDesc.textContent = 'There was an error loading pending applications. Please check the console for details.';
+            }
+        });
+}
+
+function loadPendingUsersCount() {
+    fetch('/api/pending-users/')
+        .then(response => response.json())
+        .then(data => {
+            const badge = document.getElementById('pendingUsersCount');
+            if (badge && data.success) {
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading pending users count:', error);
+        });
+}
+
+function populatePendingUsersTable(users) {
+    console.log('=== POPULATING TABLE ===');
+    console.log('Users to populate:', users);
+    
+    const tbody = document.getElementById('pendingUsersTableBody');
+    
+    if (!tbody) {
+        console.error('pendingUsersTableBody element not found!');
+        return;
+    }
+    
+    console.log('Found tbody element:', tbody);
+    tbody.innerHTML = '';
+    
+    users.forEach((user, index) => {
+        console.log(`Processing user ${index + 1}:`, user.full_name);
+        // Safe access to nested properties
+        const studentId = user.signup_data ? (user.signup_data.student_id || user.signup_data.alumni_id) : null;
+        const idDisplay = studentId || 'N/A';
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                            <span class="text-white fw-bold">${user.full_name ? user.full_name.charAt(0) : 'U'}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="fw-semibold">${user.full_name || 'Unknown User'}</div>
+                        <small class="text-muted">${idDisplay}</small>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="badge ${user.user_type === 'student' ? 'bg-primary' : 'bg-success'}">
+                    <i class="bi ${user.user_type === 'student' ? 'bi-mortarboard' : 'bi-award'} me-1"></i>
+                    ${user.user_type ? user.user_type.charAt(0).toUpperCase() + user.user_type.slice(1) : 'Unknown'}
+                </span>
+            </td>
+            <td>${user.email || 'N/A'}</td>
+            <td>${user.contact_number || 'N/A'}</td>
+            <td>
+                <small class="text-muted">${user.submitted_at || 'Unknown'}</small>
+            </td>
+            <td>
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="viewPendingUser('${user.id}')" title="Review Application">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-success btn-sm" onclick="quickApprovePendingUser('${user.id}', '${user.full_name || 'User'}')" title="Quick Approve">
+                        <i class="bi bi-check-circle"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="quickDeclinePendingUser('${user.id}', '${user.full_name || 'User'}')" title="Quick Decline">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+        console.log(`Row ${index + 1} appended. Total rows now: ${tbody.children.length}`);
+    });
+    
+    console.log('=== TABLE POPULATION COMPLETE ===');
+    console.log('Total rows in table:', tbody.children.length);
+    console.log('Table HTML:', tbody.outerHTML.substring(0, 200) + '...');
+}
+
+function refreshPendingUsers() {
+    loadPendingUsers();
+    loadPendingUsersCount();
+    
+    // Also refresh the simple pending users section
+    loadSimplePendingUsers();
+}
+
+function viewPendingUser(userId) {
+    fetch(`/api/pending-users/${userId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                populatePendingUserModal(data.user);
+                currentPendingUserId = userId;
+                const modal = new bootstrap.Modal(document.getElementById('pendingUserDetailsModal'));
+                modal.show();
+            }
+        })
+        .catch(error => {
+            console.error('Error loading pending user details:', error);
+        });
+}
+
+function populatePendingUserModal(user) {
+    // Basic info
+    document.getElementById('pendingUserName').textContent = user.full_name;
+    document.getElementById('pendingUserEmail').textContent = user.email;
+    document.getElementById('pendingUserContact').textContent = user.contact_number || 'N/A';
+    document.getElementById('pendingUserAddress').textContent = user.signup_data.address || 'N/A';
+    document.getElementById('pendingUserGender').textContent = user.signup_data.gender || 'N/A';
+    document.getElementById('pendingUserBirthdate').textContent = user.signup_data.birthdate || 'N/A';
+    document.getElementById('pendingUserSubmitted').textContent = user.submitted_at;
+    document.getElementById('pendingUserType').textContent = user.user_type.charAt(0).toUpperCase() + user.user_type.slice(1);
+    
+    // Type-specific fields
+    const studentFields = document.getElementById('pendingUserStudentFields');
+    const alumniFields = document.getElementById('pendingUserAlumniFields');
+    
+    if (user.user_type === 'student') {
+        studentFields.style.display = 'block';
+        alumniFields.style.display = 'none';
+        document.getElementById('pendingUserStudentId').textContent = user.signup_data.student_id || 'N/A';
+        document.getElementById('pendingUserProgram').textContent = user.signup_data.course || 'N/A';
+    } else {
+        studentFields.style.display = 'none';
+        alumniFields.style.display = 'block';
+        document.getElementById('pendingUserAlumniId').textContent = user.signup_data.alumni_id || 'N/A';
+        document.getElementById('pendingUserCourseGraduated').textContent = user.signup_data.course || 'N/A';
+        document.getElementById('pendingUserYearGraduated').textContent = user.signup_data.year_graduated || 'N/A';
+    }
+}
+
+function approvePendingUser() {
+    if (!currentPendingUserId) return;
+    
+    if (confirm('Are you sure you want to approve this application? This will create a new user account.')) {
+        fetch(`/api/pending-users/${currentPendingUserId}/approve/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Application approved successfully!');
+                const modal = bootstrap.Modal.getInstance(document.getElementById('pendingUserDetailsModal'));
+                modal.hide();
+                refreshPendingUsers();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error approving user:', error);
+            alert('An error occurred while approving the application.');
+        });
+    }
+}
+
+function quickApprovePendingUser(userId, userName) {
+    if (confirm(`Are you sure you want to approve ${userName}'s application?`)) {
+        fetch(`/api/pending-users/${userId}/approve/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Application approved successfully!');
+                refreshPendingUsers();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error approving user:', error);
+            alert('An error occurred while approving the application.');
+        });
+    }
+}
+
+function declinePendingUser() {
+    if (!currentPendingUserId) return;
+    
+    const userName = document.getElementById('pendingUserName').textContent;
+    const userEmail = document.getElementById('pendingUserEmail').textContent;
+    
+    document.getElementById('declineUserName').textContent = userName;
+    document.getElementById('declineUserEmail').textContent = userEmail;
+    document.getElementById('declineReason').value = '';
+    
+    const detailsModal = bootstrap.Modal.getInstance(document.getElementById('pendingUserDetailsModal'));
+    detailsModal.hide();
+    
+    const declineModal = new bootstrap.Modal(document.getElementById('declineReasonModal'));
+    declineModal.show();
+}
+
+function quickDeclinePendingUser(userId, userName) {
+    currentPendingUserId = userId;
+    document.getElementById('declineUserName').textContent = userName;
+    document.getElementById('declineUserEmail').textContent = ''; // Will be filled by the decline modal
+    document.getElementById('declineReason').value = '';
+    
+    const declineModal = new bootstrap.Modal(document.getElementById('declineReasonModal'));
+    declineModal.show();
+}
+
+function confirmDeclinePendingUser() {
+    const reason = document.getElementById('declineReason').value.trim();
+    
+    if (!reason) {
+        alert('Please provide a reason for declining the application.');
+        return;
+    }
+    
+    if (!currentPendingUserId) return;
+    
+    fetch(`/api/pending-users/${currentPendingUserId}/decline/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCsrfToken(),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            reason: reason
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Application declined successfully.');
+            const modal = bootstrap.Modal.getInstance(document.getElementById('declineReasonModal'));
+            modal.hide();
+            refreshPendingUsers();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error declining user:', error);
+        alert('An error occurred while declining the application.');
+    });
+}
+
+function getCsrfToken() {
+    // Try multiple methods to get CSRF token
+    
+    // Method 1: From cookie
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+        if (name === 'csrftoken') {
+            return value;
+        }
+    }
+    
+    // Method 2: From meta tag
+    const metaToken = document.querySelector('meta[name="csrf-token"]');
+    if (metaToken) {
+        return metaToken.getAttribute('content');
+    }
+    
+    // Method 3: From hidden input (if available)
+    const hiddenInput = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    if (hiddenInput) {
+        return hiddenInput.value;
+    }
+    
+    console.warn('CSRF token not found');
+    return '';
+}
+
+
+
+
+// For admin user status
+const adminStatus = document.getElementById('registrar_user_manager_adminStatus').textContent;
+console.log('Admin status:', adminStatus);
+// For student user status
+const studentStatus = document.getElementById('registrar_user_manager_studentStatus').textContent;
+console.log('Student status:', studentStatus);
+
+</script>
+{% endblock %}

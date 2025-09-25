@@ -1,0 +1,563 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}BUSINESS MANAGER DASHBOARD{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="bm_sidebar" id="bm_sidebar">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <span class="fw-bold fs-5 bm_sidebar-title">My Sidebar</span>
+      <button class="bm_sidebar_toggle-button d-md-none" onclick="toggleSidebar()" id="bm_sidebar_toggleBtn">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <button class="bm_sidebar_desktopToggle-button d-none d-md-block" onclick="toggleSidebar()" id="bm_sidebar_desktopToggleBtn">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+    <a href="{% url 'business_manager_dashboard' %}" class="{% if request.resolver_match.url_name == 'business_manager_dashboard' %}active{% endif %}">
+      <i class="bi bi-speedometer2"></i><span class="bm_sidebar_link-text">Dashboard</span>
+    </a>
+    <a href="{% url 'business_manager_clearance' %}" class="{% if request.resolver_match.url_name == 'business_manager_clearance' %}active{% endif %}">
+      <i class="bi bi-card-checklist"></i><span class="bm_sidebar_link-text">Clearance</span>
+    </a>
+    <a href="{% url 'business_manager_enrollment' %}" class="{% if request.resolver_match.url_name == 'business_manager_enrollment' %}active{% endif %}">
+      <i class="bi bi-clipboard2-minus"></i><span class="bm_sidebar_link-text">Enrollment</span>
+    </a>
+    <a href="{% url 'business_manager_graduation' %}" class="{% if request.resolver_match.url_name == 'business_manager_graduation' %}active{% endif %}">
+      <i class="bi bi-mortarboard"></i><span class="bm_sidebar_link-text">Graduation</span>
+    </a>
+    <a href="{% url 'business_manager_credential_request' %}" class="{% if request.resolver_match.url_name == 'business_manager_credential_request' %}active{% endif %}">
+      <i class="bi bi-file-earmark-check"></i><span class="bm_sidebar_link-text">Credential Request</span>
+    </a>
+    <a href="{% url 'business_manager_reports' %}" class="{% if request.resolver_match.url_name == 'business_manager_reports' %}active{% endif %}">
+      <i class="bi bi-table"></i><span class="bm_sidebar_link-text">Reports</span>
+    </a>
+    <a href="{% url 'business_manager_profile' %}" class="{% if request.resolver_match.url_name == 'business_manager_profile' %}active{% endif %}">
+      <i class="bi bi-person"></i><span class="bm_sidebar_link-text">Profile</span>
+    </a>
+    <a href="{% url 'business_manager_messages' %}" class="{% if request.resolver_match.url_name == 'business_manager_messages' %}active{% endif %} position-relative">
+      <i class="bi bi-chat-dots"></i><span class="bm_sidebar_link-text">Messages</span>
+    
+      <span id="bm_sidebar_messages_notification_count" 
+      class="badge rounded-pill bg-danger ms-auto" 
+      style="font-size: 0.6rem; display: none;">
+  0
+</span>
+    </a>
+    <a href="#" class="position-relative" onclick="openNotificationModal()">
+      <i class="bi bi-bell"></i><span class="bm_sidebar_link-text">Notifications</span>
+      
+      <span id="business_manager_notification_badge" 
+      class="badge rounded-pill bg-danger ms-auto" 
+      style="font-size: 0.6rem; display: none;">
+  0
+</span>
+    </a>
+    <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i><span class="bm_sidebar_link-text">Logout</span></a>
+  </div>
+
+  <!-- Backdrop for mobile -->
+  <div id="bm_sidebar_sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+  <!-- Top Bar -->
+  <div class="bm_sidebar_top-bar d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+      <button class="bm_sidebar_topbarToggle-button d-md-none" onclick="toggleSidebar()" id="bm_sidebar_topbarToggleBtn">
+        <i class="bi bi-list"></i>
+      </button>
+      <span class="fw-bold bm_sidebar_system-title d-flex align-items-center gap-2">
+        <img src="{% static 'images/ptslogo.png' %}" alt="ptslogo.png" class="bm_sidebar_logo-img">
+        PTS College & Advanced Studies
+      </span>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <div class="position-relative" id="bm_sidebar_notification">
+        <i class="bi bi-bell-fill fs-5 text-white" style="cursor: pointer;"></i>
+        <span id="bm_sidebar_notification_count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; display: none;">0</span>
+      </div>
+
+      <div class="fw-bold bm_sidebar_user-info d-flex align-items-center gap-2 text-white">
+        {% if user.businessmanagerprofile.profile_picture_url %}
+          <img src="{{ user.businessmanagerprofile.profile_picture_url }}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;" alt="Profile Picture">
+        {% else %}
+          <i class="bi bi-person-circle fs-4"></i>
+        {% endif %}
+        <span>{{ user.full_name|default:"Business Manager" }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content Area -->
+  {% block main_content %}
+  <!-- This block will be overridden by child templates -->
+  {% endblock %}
+
+  <!-- Mandatory First-Time Setup Modal -->
+  <div class="modal fade" id="bm_first_time_setup_modal" tabindex="-1" aria-labelledby="bm_first_time_setup_modal_label" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="bm_first_time_setup_modal_label">
+            <i class="bi bi-shield-lock me-2"></i>First Time Setup Required
+          </h5>
+        </div>
+        <div class="modal-body">
+          <!-- Error/Success Alert Container -->
+          <div id="bm_setup_alert_container" style="display: none;">
+            <div class="alert" id="bm_setup_alert" role="alert">
+              <i class="bi me-2" id="bm_setup_alert_icon"></i>
+              <span id="bm_setup_alert_message"></span>
+            </div>
+          </div>
+          
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Security Notice:</strong> For your account security, you must change your password and set a PIN before accessing the system.
+          </div>
+          
+          <form id="bm_first_time_setup_form">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-key me-2"></i>Password Change
+                </h6>
+                <div class="mb-3">
+                  <label for="bm_current_password" class="form-label">Current Password</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="bm_current_password" placeholder="Enter current password" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('bm_current_password')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="bm_new_password" class="form-label">New Password</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="bm_new_password" placeholder="Enter new password (min 8 characters)" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('bm_new_password')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                  <div class="password-strength mt-2" id="password_strength_indicator" style="display: none;">
+                    <small class="text-muted">Password strength: <span id="password_strength_text">Weak</span></small>
+                    <div class="progress mt-1" style="height: 4px;">
+                      <div class="progress-bar" id="password_strength_bar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="bm_confirm_password" class="form-label">Confirm New Password</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="bm_confirm_password" placeholder="Confirm new password" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('bm_confirm_password')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-shield-lock me-2"></i>PIN Setup
+                </h6>
+                <div class="mb-3">
+                  <label for="bm_pin_input" class="form-label">Set Your PIN</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="bm_pin_input" maxlength="8" placeholder="Enter PIN (min 6 characters)" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('bm_pin_input')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                  <small class="text-muted">This PIN will be used for clearance, enrollment, graduation, and credential release actions</small>
+                </div>
+                <div class="mb-3">
+                  <label for="bm_pin_confirm" class="form-label">Confirm PIN</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="bm_pin_confirm" maxlength="8" placeholder="Confirm PIN" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('bm_pin_confirm')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              <small>All fields are required. You cannot proceed without completing this setup.</small>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="bm_first_time_setup_submit">
+            <i class="bi bi-check-circle me-2"></i>Complete Setup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'js/notifications.js' %}?v=2025082106"></script>
+  
+  <!-- Base JavaScript functionality -->
+  <script>
+    // Sidebar toggle functionality
+    function toggleSidebar() {
+      const sidebar = document.getElementById('bm_sidebar');
+      const backdrop = document.getElementById('bm_sidebar_sidebarBackdrop');
+      
+      sidebar.classList.toggle('show');
+      backdrop.classList.toggle('show');
+    }
+
+    // CSRF token handling
+    function getCSRFToken() {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]');
+      return csrfToken ? csrfToken.getAttribute('content') : '';
+    }
+
+    // Password visibility toggle
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      const button = input.nextElementSibling;
+      const icon = button.querySelector('i');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'bi bi-eye';
+      }
+    }
+
+    // Password strength checker
+    function updatePasswordStrength() {
+      const password = document.getElementById('bm_new_password').value;
+      const strengthIndicator = document.getElementById('password_strength_indicator');
+      const strengthText = document.getElementById('password_strength_text');
+      const strengthBar = document.getElementById('password_strength_bar');
+      
+      if (password.length === 0) {
+        strengthIndicator.style.display = 'none';
+        return;
+      }
+      
+      strengthIndicator.style.display = 'block';
+      
+      let strength = 0;
+      let strengthLabel = 'Weak';
+      let strengthColor = 'bg-danger';
+      
+      if (password.length >= 8) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+      
+      switch (strength) {
+        case 0:
+        case 1:
+          strengthLabel = 'Very Weak';
+          strengthColor = 'bg-danger';
+          break;
+        case 2:
+          strengthLabel = 'Weak';
+          strengthColor = 'bg-warning';
+          break;
+        case 3:
+          strengthLabel = 'Fair';
+          strengthColor = 'bg-info';
+          break;
+        case 4:
+          strengthLabel = 'Good';
+          strengthColor = 'bg-success';
+          break;
+        case 5:
+          strengthLabel = 'Strong';
+          strengthColor = 'bg-success';
+          break;
+      }
+      
+      strengthText.textContent = strengthLabel;
+      strengthBar.className = `progress-bar ${strengthColor}`;
+      strengthBar.style.width = `${(strength / 5) * 100}%`;
+    }
+
+    // Password match validation
+    function validatePasswordMatch() {
+      const newPassword = document.getElementById('bm_new_password').value;
+      const confirmPassword = document.getElementById('bm_confirm_password').value;
+      const confirmInput = document.getElementById('bm_confirm_password');
+      
+      if (confirmPassword.length > 0) {
+        if (newPassword === confirmPassword) {
+          confirmInput.classList.remove('is-invalid');
+          confirmInput.classList.add('is-valid');
+        } else {
+          confirmInput.classList.remove('is-valid');
+          confirmInput.classList.add('is-invalid');
+        }
+      }
+    }
+
+    // PIN match validation
+    function validatePinMatch() {
+      const pin = document.getElementById('bm_pin_input').value;
+      const confirmPin = document.getElementById('bm_pin_confirm').value;
+      const confirmInput = document.getElementById('bm_pin_confirm');
+      
+      if (confirmPin.length > 0) {
+        if (pin === confirmPin) {
+          confirmInput.classList.remove('is-invalid');
+          confirmInput.classList.add('is-valid');
+        } else {
+          confirmInput.classList.remove('is-valid');
+          confirmInput.classList.add('is-invalid');
+        }
+      }
+    }
+
+    // First-time setup functionality
+    function checkFirstTimeSetup() {
+      fetch('/business-manager/check-setup-status/')
+        .then(response => response.json())
+        .then(data => {
+          if (data.requires_setup) {
+            showFirstTimeSetupModal();
+          }
+        })
+        .catch(error => {
+          console.error('Error checking setup status:', error);
+        });
+    }
+
+    function showFirstTimeSetupModal() {
+      const modal = new bootstrap.Modal(document.getElementById('bm_first_time_setup_modal'));
+      modal.show();
+      
+      // Disable all navigation and content
+      disableAllNavigation();
+      
+      // Add event listener for setup submission
+      document.getElementById('bm_first_time_setup_submit').addEventListener('click', handleFirstTimeSetup);
+      
+      // Add password strength checker
+      document.getElementById('bm_new_password').addEventListener('input', updatePasswordStrength);
+      
+      // Add real-time validation
+      document.getElementById('bm_confirm_password').addEventListener('input', validatePasswordMatch);
+      document.getElementById('bm_pin_confirm').addEventListener('input', validatePinMatch);
+      
+      // Clear any previous alerts
+      hideSetupAlert();
+    }
+
+    function disableAllNavigation() {
+      // Disable sidebar links
+      const sidebarLinks = document.querySelectorAll('.bm_sidebar a');
+      sidebarLinks.forEach(link => {
+        link.style.pointerEvents = 'none';
+        link.style.opacity = '0.5';
+      });
+      
+      // Disable main content area
+      const mainContent = document.querySelector('[class*="main-content"]');
+      if (mainContent) {
+        mainContent.style.pointerEvents = 'none';
+        mainContent.style.opacity = '0.5';
+      }
+    }
+
+    function enableAllNavigation() {
+      // Enable sidebar links
+      const sidebarLinks = document.querySelectorAll('.bm_sidebar a');
+      sidebarLinks.forEach(link => {
+        link.style.pointerEvents = 'auto';
+        link.style.opacity = '1';
+      });
+      
+      // Enable main content area
+      const mainContent = document.querySelector('[class*="main-content"]');
+      if (mainContent) {
+        mainContent.style.pointerEvents = 'auto';
+        mainContent.style.opacity = '1';
+      }
+    }
+
+    function handleFirstTimeSetup() {
+      const currentPassword = document.getElementById('bm_current_password').value;
+      const newPassword = document.getElementById('bm_new_password').value;
+      const confirmPassword = document.getElementById('bm_confirm_password').value;
+      const pin = document.getElementById('bm_pin_input').value;
+      const confirmPin = document.getElementById('bm_pin_confirm').value;
+      
+      // Clear previous alerts
+      hideSetupAlert();
+      
+      // Validation
+      if (!currentPassword || !newPassword || !confirmPassword || !pin || !confirmPin) {
+        showSetupAlert('All fields are required', 'danger');
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        showSetupAlert('New passwords do not match', 'danger');
+        return;
+      }
+      
+      if (pin !== confirmPin) {
+        showSetupAlert('PINs do not match', 'danger');
+        return;
+      }
+      
+      if (newPassword.length < 8) {
+        showSetupAlert('Password must be at least 8 characters', 'danger');
+        return;
+      }
+      
+      if (pin.length < 6) {
+        showSetupAlert('PIN must be at least 6 characters', 'danger');
+        return;
+      }
+      
+      // Show loading state
+      const submitBtn = document.getElementById('bm_first_time_setup_submit');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Setting up...';
+      submitBtn.disabled = true;
+      
+      // Submit setup
+      const formData = new FormData();
+      formData.append('current_password', currentPassword);
+      formData.append('new_password', newPassword);
+      formData.append('confirm_password', confirmPassword);
+      formData.append('pin', pin);
+      formData.append('confirm_pin', confirmPin);
+      
+      // Set PIN first (this won't log out the user)
+      fetch('/business-manager/set-pin/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRFToken': getCSRFToken()
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(data => {
+            throw new Error(data.error || 'Failed to set PIN');
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          // Then change password (this will log out the user, but that's expected)
+          return fetch('/business-manager/change-password/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-CSRFToken': getCSRFToken()
+            }
+          });
+        } else {
+          throw new Error(data.error || 'Failed to set PIN');
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(data => {
+            throw new Error(data.error || 'Failed to change password');
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          showSetupAlert('Setup completed successfully! You will be redirected to login.', 'success');
+          setTimeout(() => {
+            window.location.href = '/log-in/';
+          }, 2000);
+        } else {
+          throw new Error(data.error || 'Failed to change password');
+        }
+      })
+      .catch(error => {
+        console.error('Setup error:', error);
+        showSetupAlert('Error: ' + error.message, 'danger');
+        // Reset button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      });
+    }
+
+    function showSetupAlert(message, type) {
+      const alertContainer = document.getElementById('bm_setup_alert_container');
+      const alert = document.getElementById('bm_setup_alert');
+      const alertIcon = document.getElementById('bm_setup_alert_icon');
+      const alertMessage = document.getElementById('bm_setup_alert_message');
+      
+      // Set alert type and content
+      alert.className = `alert alert-${type}`;
+      alertIcon.className = `bi ${type === 'success' ? 'bi-check-circle' : 'bi-exclamation-triangle'} me-2`;
+      alertMessage.textContent = message;
+      
+      // Show alert
+      alertContainer.style.display = 'block';
+      
+      // Auto-hide after 5 seconds for non-error messages
+      if (type !== 'danger') {
+        setTimeout(hideSetupAlert, 5000);
+      }
+    }
+
+    function hideSetupAlert() {
+      const alertContainer = document.getElementById('bm_setup_alert_container');
+      if (alertContainer) {
+        alertContainer.style.display = 'none';
+      }
+    }
+
+    // Close mobile sidebar when clicking outside
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check for first-time setup requirement
+      checkFirstTimeSetup();
+      
+      const backdrop = document.getElementById('bm_sidebar_sidebarBackdrop');
+      if (backdrop) {
+        backdrop.addEventListener('click', toggleSidebar);
+      }
+    });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+  
+  <!-- Include notification system -->
+  {% include 'includes/notification_modal.html' %}
+  {% include 'includes/notification_badges.html' %}
+  
+  <!-- jQuery and Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Notification System loaded above -->
+  
+  <!-- Set user type for notification preferences -->
+  <script>
+    document.body.dataset.userType = 'business_manager';
+  </script>
+</body>
+</html>

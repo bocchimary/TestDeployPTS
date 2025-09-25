@@ -1,0 +1,364 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #f1f1f198
+  }
+
+  .sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #183a53;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar.collapsed {
+    width: 60px;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .sidebar .sidebar-title {
+    white-space: nowrap;
+  }
+
+  .sidebar.collapsed .sidebar-title,
+  .sidebar.collapsed .link-text {
+    display: none;
+  }
+
+  .sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .sidebar a:hover {
+    background-color: #14507d;
+    color: white;
+  }
+
+  .sidebar a i {
+    color: #ffffff;
+    transition: color 0.3s ease;
+  }
+
+  .sidebar a:hover i {
+    color: white;
+  }
+
+  .sidebar.collapsed a {
+    justify-content: center;
+  }
+
+  .sidebar a.active {
+    background-color: #14507d;
+    color: white;
+  }
+  
+  .sidebar a.active i {
+    color: white;
+  }
+  
+  .main-content {
+    margin-left: 250px;
+    padding: 2rem;
+    padding-top: 6.2rem;
+    transition: margin-left 0.3s ease;
+  }
+
+  .sidebar.collapsed ~ .main-content {
+    margin-left: 60px;
+  }
+
+  .logo-img {
+    height: 60px;
+    width: auto;
+  }
+
+  .top-bar {
+    position: fixed;
+    left: 250px;
+    right: 0;
+    top: 0;
+    height: 90px;
+    background-color: #183a53;
+    color: white;
+    z-index: 1035;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.collapsed ~ .top-bar {
+    left: 60px;
+  }
+
+  .top-bar .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .top-bar .user-info i {
+    font-size: 2.5rem;
+  }
+
+  #sidebarBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+  }
+
+  #sidebarBackdrop.active {
+    display: block;
+  }
+
+  .toggle-button {
+    background-color: #183a53;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  .toggle-button i {
+    color: white;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+  }
+
+  .toggle-button:hover {
+    background-color: #14507d;
+  }
+
+  .toggle-button:hover i {
+    color: #d8d8d8;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+        left: 0;
+    }
+    
+    .sidebar.show {
+        transform: translateX(0%);
+    }
+    
+    .sidebar.collapsed {
+        transform: translateX(-100%) !important;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+        padding-top: 6.1rem !important; /* enough to clear top-bar */
+    }
+    
+    .top-bar,
+    .sidebar.collapsed ~ .top-bar {
+        left: 0 !important;
+    }
+    
+    .top-bar,
+        .top-bar .sidebar-title,
+        .top-bar .student_dashboard_user-info {
+            left: 0;
+            font-size: 0.9rem;
+        }
+    
+    .top-bar .sidebar-title,
+    .top-bar .student_dashboard_user-info span {
+        display: none;
+    }
+    
+    
+    
+    .main-content.sidebar-collapsed {
+        margin-left: 0;
+    }
+    
+    .main-content h1 {
+        font-size: 1.5rem;
+    }}
+
+
+  /* ===== FORM ELEMENTS ===== */
+.form-check-input:checked {
+  background-color: rgb(10, 25, 36);
+  border-color: #183A53;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(24, 58, 83, 0.25);
+}
+
+.form-check-input.custom-size {
+  width: 20px;
+  height: 20px;
+}
+
+
+
+.custom-table-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+  background-color: #fdfdfd;
+}
+
+.custom-table {
+  border-collapse: separate;
+  border-spacing: 0 0.6rem;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+.custom-table thead th {
+  background-color:#183A53;
+  color: white;
+  text-align: center;
+  padding: 0.75rem;
+}
+
+.custom-table tbody tr {
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f5faff;
+}
+
+.custom-table tbody td {
+  padding: 0.9rem;
+  text-align: center;
+  border: none;
+}
+
+.custom-table tbody tr td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.custom-table tbody tr td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.custom-btn {
+  background-color: #183A53;
+  color: white;
+  font-size: 0.85rem;
+  padding: 5px 12px;
+  border: none;
+  border-radius: 4px;
+}
+
+.custom-btn:hover {
+  background-color: #14506b;
+}
+
+/* Tab transitions */
+.content-section {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.content-section.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Profile specific styles */
+.profile-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+#studentProfileDisplay,
+#studentProfileEdit {
+    transition: opacity 0.3s ease-in-out;
+    width: 100%;
+}
+
+.profile-fade-out {
+    opacity: 0;
+}
+
+#studentProfileDisplay {
+    opacity: 1;
+}
+
+#studentProfileEdit {
+    opacity: 1;
+}
+
+/* Request section styles */
+#requestHistorySection {
+    display: none;
+}
+
+#requestHistorySection.d-none {
+    display: none !important;
+}
+
+#requestHistorySection:not(.d-none) {
+    display: block !important;
+}
+
+.custom-table-wrapper {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.custom-btn {
+    background-color: #183A53;
+    margin-right: 0.5rem;
+}
+
+.custom-btn-danger {
+    background-color: #dc3545;
+}
+
+.view-form {
+  background-color: transparent;
+  color: #183A53;
+  font-size: 0.85rem;
+  padding: 5px 12px;
+  border: 1px solid #183A53;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Hover & focus (same as Bootstrap outline buttons) */
+.view-form:hover,
+.view-form:focus {
+  background-color: #183A53;
+  color: #ffffff;
+}

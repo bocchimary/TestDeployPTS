@@ -1,0 +1,641 @@
+  /* Custom CSS for clean + minimal look */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+
+
+  .navbar .nav-link {
+    position: relative;
+    font-weight: 400;
+  }
+  
+  .navbar .nav-link::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    left: 0;
+    bottom: -2px;
+    background-color: #ffffff; /* white underline */
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .navbar .nav-link:hover::after {
+    width: 100%;
+  }
+  
+  .navbar-brand {
+    color: #ffffff !important;
+    font-weight: bold;
+  }
+
+  .main-title {
+    font-size: 5rem;
+    color:#F8F8F8;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+ 
+
+
+  .school-tagline {
+    color:#F8F8F8;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+   
+  }
+      
+  /* Underline effect for tagline */
+.taglines {
+  position: relative;
+  display: inline-block; /* ensure underline width matches text */
+}
+
+.taglines::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px; /* adjust distance from text */
+  width: 0;
+  height: 2px;
+  background-color: #ffffff; /* underline color */
+  transition: width 0.5s ease;
+  color:bisque;
+}
+
+/* On hover or slide-in */
+.taglines.slide-in-right::after {
+  animation: underlineFade 1s forwards;
+}
+
+/* Keyframes for animated underline */
+@keyframes underlineFade {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  50% {
+    width: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0; /* fade out after appearing */
+  }
+}
+
+  .btn-login {
+    background: transparent;                 /* No fill */
+    color: #ffffff;                          /* White text */
+    font-weight: 400;
+    padding: 0.3rem 1rem;
+    border: 1.5px solid #ffffff;               /* White outline */
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .btn-login:hover {
+    background-color: #ffffff;               /* Fill on hover */
+    color: rgba(24, 58, 83, 1);              /* Dark text (from gradient) */
+    transform: scale(0.95);                  /* Soft zoom out */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);  /* Subtle depth */
+  }
+  
+  /* Elegant outline button */
+.gs-btn {
+  background-color: #0f3b5f;
+  color: #FAFAFA; 
+  border: 2px solid #0f3b5f;
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.gs-btn:hover {
+  
+  background-color:  #FAFAFA; 
+  color: #0f3b5f;      /* text becomes soft white on hover */
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+
+  .bg-tagline {
+    padding: 0.25rem;
+    color:  #FAFAFA; 
+  }
+  
+  /* Mobile adjustments */
+@media (max-width: 576px) {
+    .carousel-item h1 {
+      font-size: 2rem !important;  /* shrink heading */
+    }
+    .carousel-item div.fs-6 {
+      font-size: 0.9rem !important; /* smaller subtitle/tagline */
+    }
+    .carousel-item button {
+      font-size: 0.9rem !important;
+      padding: 0.5rem 1rem;
+    }
+    .carousel-item > div {
+      padding: 1rem !important; /* less padding on small screens */
+    }
+    .btn-outline-light {
+        justify-content: center;
+    }
+  }
+  
+  /* Fade-in for heading */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  
+  /* Apply animation */
+  .carousel-item .fade-in {
+    animation: fadeIn 1.2s ease-in-out forwards;
+  }
+  
+  .carousel-item .slide-in-right {
+    animation: slideInRight 1.2s ease-in-out forwards;
+  }
+  
+ 
+  
+  /* Push controls to extreme ends but keep them vertically centered */
+.carousel-control-prev.custom-control {
+    left: 0;
+  }
+  
+  .carousel-control-next.custom-control {
+    right: 0;
+  }
+  
+  /* Make sure they stay aligned vertically in the middle */
+  .carousel-control-prev,
+  .carousel-control-next {
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto; /* shrink width so they're not too far inside */
+  }
+
+ /* Elegant Note Card */
+.note-card {
+  background: #fafafa;                 /* soft off-white for elegance */
+  color: #0f3b5f;                      /* dark text for readability */              /* rounded corners */
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2); /* soft, floating shadow */
+  border: 1px solid #E0E0E0;           /* subtle border for polish */
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for subtle interaction */
+.note-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 35px rgba(0,0,0,0.25);
+}
+
+/* Title styling */
+.note-title {
+  color:#F8F8F8;
+  font-weight: 500;
+  font-size: 2rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Text styling */
+.note-text {
+  color: #F8F8F8;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Elegant outline button */
+.note-btn {
+  background-color: transparent;
+  color:#f8f9fa;
+  border: 2px solid  #F8F8F8;
+  padding: 0.6rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.note-btn:hover {
+  background-color: #0f3b5f;
+  color: #FAFAFA;       /* text becomes soft white on hover */
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .note-card {
+    padding: 2rem 1.5rem;
+  }
+  .note-title {
+    font-size: 1.6rem;
+  }
+  .note-text {
+    font-size: 0.95rem;
+  }
+  .note-btn {
+    font-size: 0.95rem;
+    padding: 0.5rem 1.2rem;
+  }
+}
+
+
+/* Optional: fade-in animation for the card on slide appear */
+.carousel-item .note-title {
+  opacity: 0;
+  animation: cascadeIn 1.2s ease forwards;
+}
+/* Optional: fade-in animation for the card on slide appear */
+.carousel-item .note-text .note-btn{
+  opacity: 0;
+  animation: slideInRight 1.2s ease forwards;
+}
+
+@keyframes noteFadeIn {
+  to {
+    opacity: 1;
+    transform: rotate(-1deg) translateY(0);
+  }
+}
+
+
+/* Cascading animation */
+.cascade {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cascadeIn 1s ease forwards;
+}
+
+.cascade[data-delay] {
+  animation-delay: attr(data-delay);
+}
+
+@keyframes cascadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide-in-right for optional lateral movement */
+.slide-in-right {
+  animation: slideInRight 1s ease forwards;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Underline animation for tagline */
+.underline {
+  position: relative;
+}
+
+.underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: #ffffff;
+  transition: width 0.5s ease;
+}
+
+.underline:hover::after,
+.underline.animate::after {
+  width: 100%;
+}
+
+/* Button base */
+.gs-btn {
+  background-color: #0f3b5f; /* solid background */
+  color: #fff;
+  border: none; /* remove outline border */
+  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.gs-btn:hover {
+  background-color: #09314c; /* darker shade for hover */
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+
+
+/* Overlay with animated gradient */
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    -45deg,
+    rgba(18, 43, 61, 0.35),   /* darker blue */
+    rgba(41, 51, 59, 0.35),    /* deep navy */
+    rgba(15, 15, 15, 0.75),    /* near black */
+    rgba(5, 10, 15, 0.65)       /* almost black */
+  );
+  
+  background-size: 400% 400%;
+  animation: gradientMove 10s ease infinite;
+  z-index: 0;
+}
+
+/* Make text appear above overlay */
+.text-start {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+.theme-text {
+  color: rgba(24, 58, 83, 1);
+}
+.service-card i {
+  color: rgba(24, 58, 83, 1);
+}
+
+.card-img-top {
+height: 200px;
+width: 100%;
+}
+.card {
+  z-index: 1;
+  overflow: hidden;
+  transition: 0.5s;
+  height: 100%; /* instead of fixed px height */
+}
+
+.card:hover {
+color: white;
+}
+.card::before {
+content: "";
+position: absolute;
+left: -100%;
+top: 0%;
+width: 100%;
+height: 100%;
+transition: 0.5s;
+z-index: -1;
+}
+.card:hover::before {
+left: 0%;
+color: white;
+}
+.container-fluid {
+background-image: url("blob-scene-haikei.svg");
+background-position: center;
+background-size: cover;
+}
+
+.card {
+  z-index: 1;
+  overflow: hidden;
+  transition: 0.5s;
+  height: 100%; /* instead of fixed px height */
+}
+
+/* Base ::before effect */
+.service-card::before {
+  content: "";
+  position: absolute;
+  left: -100%;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: 0.5s ease;
+  z-index: -1;
+}
+
+/* Hover animation */
+.service-card:hover::before {
+  left: 0;
+}
+
+/* Different colors per card */
+.row > div:nth-child(1) .service-card::before {
+  background: #183A53; /* Bootstrap primary (blue) */
+}
+.row > div:nth-child(2) .service-card::before {
+  background: #3B6A84; /* Bootstrap success (green) */
+}
+.row > div:nth-child(3) .service-card::before {
+  background: #254B70; /* Bootstrap warning (yellow) */
+}
+.row > div:nth-child(4) .service-card::before {
+  background:#3B4F66; /* Bootstrap danger (red) */
+}
+
+/* Optional: make text white when hovered */
+.service-card:hover,
+.service-card:hover h3,
+.service-card:hover h4,
+.service-card:hover p,
+.service-card:hover a
+{
+  color: #fff !important;
+  transform: scale(1.1); /* optional: grow slightly */
+}
+.service-card:hover a.btn {
+  border-color: #fff;
+}
+
+.service-card:hover i {
+  color: #242121 !important;
+}
+.service-card {
+  transition: all 0.4s ease;  /* smooth animation */
+}
+
+.service-card:hover {
+  transform: translateY(-8px); /* slight lift */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* deeper shadow */
+}
+
+/* Section-specific styles */
+.carousel-section {
+  position: relative;
+}
+
+.services-section {
+  position: relative;
+  z-index: 10;
+}
+
+.guidelines-section {
+  background-color: #f8f9fa;
+}
+
+.contact-section {
+  background-color: #f8f9fa;
+}
+
+.social-section {
+  background: linear-gradient(90deg, rgba(24, 58, 83, 1) 47%, rgba(49, 93, 125, 1) 91%);
+}
+
+.about-section {
+  background-color: #f8f9fa;
+}
+
+.team-section {
+  background-color: #f8fafc;
+}
+
+/* Hero slide styling */
+.hero-slide {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Modern note card styling */
+.modern-note-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modern-note-title {
+  color: #1d4e89;
+  font-weight: 700;
+}
+
+.modern-note-text {
+  color: #333;
+  line-height: 1.6;
+}
+
+.modern-note-btn {
+  background: linear-gradient(45deg, #1d4e89, #3b6a84);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.modern-note-btn:hover {
+  background: linear-gradient(45deg, #0f3b5f, #254b70);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(29, 78, 137, 0.3);
+  color: white;
+  text-decoration: none;
+}
+
+
+
+/* Focus styles for better accessibility */
+.btn:focus,
+.nav-link:focus,
+button:focus {
+  outline: 2px solid #1d4e89;
+  outline-offset: 2px;
+}
+
+/* Icon circle styling */
+.icon-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.icon-circle i {
+  font-size: 2rem;
+  color: #1d4e89;
+}
+
+/* Back to top button improvements */
+#backToTopBtn {
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#backToTopBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+#backToTopBtn:focus {
+  outline: 2px solid #1d4e89;
+  outline-offset: 2px;
+}
+
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .hero-slide {
+    padding: 1rem !important;
+  }
+  
+  .main-title {
+    font-size: 2.5rem !important;
+  }
+  
+  .school-tagline {
+    font-size: 1rem !important;
+  }
+  
+  .service-card {
+    margin-bottom: 1rem;
+  }
+  
+  .icon-circle {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .icon-circle i {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .main-title {
+    font-size: 2rem !important;
+  }
+  
+  .note-card,
+  .modern-note-card {
+    margin: 0 1rem;
+  }
+  
+  .team-section .card {
+    margin-bottom: 1rem;
+  }
+}
+

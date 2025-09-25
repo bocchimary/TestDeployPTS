@@ -1,0 +1,510 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.registrar_sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #183a53;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.registrar_sidebar.collapsed {
+    width: 60px;
+    align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.registrar_sidebar .registrar_sidebar-title {
+    white-space: nowrap;
+}
+
+.registrar_sidebar.collapsed .registrar_sidebar-title,
+.registrar_sidebar.collapsed .registrar_sidebar_link-text {
+    display: none;
+}
+
+.registrar_sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.registrar_sidebar a:hover {
+    background-color: #14507d;
+    color: white;
+}
+
+.registrar_sidebar a i {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.registrar_sidebar a:hover i {
+    color: white;
+}
+.registrar_sidebar a.active {
+  background-color: #14507d;
+  color: white;
+}
+.registrar_sidebar.collapsed a {
+    justify-content: center;
+}
+
+.registrar_generate_report_main-content {
+    margin-left: 250px;
+    padding: 2rem;
+    padding-top: 6.2rem;
+    transition: margin-left 0.3s ease;
+}
+
+.registrar_sidebar.collapsed ~ .registrar_generate_report_main-content {
+    margin-left: 60px;
+}
+
+.registrar_sidebar_logo-img {
+    height: 60px;
+    width: auto;
+}
+
+.registrar_sidebar_top-bar {
+    position: fixed;
+    left: 250px;
+    right: 0;
+    top: 0;
+    height: 90px;
+    background-color: #183a53;
+    color: white;
+    z-index: 1035;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    transition: left 0.3s ease;
+}
+
+.registrar_sidebar.collapsed ~ .registrar_sidebar_top-bar {
+    left: 60px;
+}
+
+.registrar_sidebar_top-bar .registrar_sidebar_user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.registrar_sidebar_top-bar .registrar_sidebar_user-info i {
+    font-size: 2.5rem;
+}
+
+#registrar_sidebar_sidebarBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+}
+
+#registrar_sidebar_sidebarBackdrop.active {
+    display: block;
+}
+
+.registrar_sidebar_toggle-button,
+.registrar_sidebar_desktopToggle-button,
+.registrar_sidebar_topbarToggle-button {
+    background-color: #183a53;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.registrar_sidebar_toggle-button i,
+.registrar_sidebar_desktopToggle-button i,
+.registrar_sidebar_topbarToggle-button i {
+    color: white;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.registrar_sidebar_toggle-button:hover,
+.registrar_sidebar_desktopToggle-button:hover,
+.registrar_sidebar_topbarToggle-button:hover {
+    background-color: #14507d;
+}
+
+.registrar_sidebar_toggle-button:hover i,
+.registrar_sidebar_desktopToggle-button:hover i,
+.registrar_sidebar_topbarToggle-button:hover i {
+    color: #d8d8d8;
+}
+
+
+.registrar_generate_report_main-content h1 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+#registrar_generate_report_filters {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 8px 8px;
+  margin: 2px;
+}
+
+
+.form-select {
+  min-width: 150px;
+  padding: .5rem;
+}
+
+
+/* Container with shadow and rounded corners */
+.registrar_generate_report_table-fixed-container {
+    height: 565px;
+    overflow: hidden;
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Scrollable inner wrapper */
+  .registrar_generate_report_table-scroll-wrapper {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+  }
+  
+  /* Table layout */
+  .registrar_generate_report_table-scroll-wrapper table {
+    table-layout: auto;
+    min-width: max-content;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  /* Sticky header */
+  .registrar_generate_report_table-scroll-wrapper thead th {
+    position: sticky;
+    top: 0;
+    background-color: #183a53;
+    color: white;
+    z-index: 10;
+    text-align: center;
+    vertical-align: middle;
+    height: 60px !important;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  
+  /* Table cell style */
+  .registrar_generate_report_table td,
+  .registrar_generate_report_table th {
+    padding: 12px 8px;
+    font-size: 14px;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  
+  /* Allow wrapping for specific columns */
+  .registrar_generate_report_table td.text-wrap {
+    white-space: normal;
+    word-wrap: break-word;
+    min-width: 150px;
+  }
+  
+  /* Maintain nowrap for other columns */
+  .registrar_generate_report_table td:not(.text-wrap) {
+    white-space: nowrap;
+  }
+  
+  /* Table body */
+  .registrar_generate_report_table tbody tr {
+    background-color: #fff;
+    border-bottom: 1px solid #dee2e6;
+    transition: background 0.2s ease-in-out;
+    min-height: 50px;
+  }
+  
+  .registrar_generate_report_table tbody tr:hover {
+    background-color: #f1f3f5;
+  }
+  
+  /* Consistent spacing for table cells */
+  .registrar_generate_report_table tbody td {
+    border-right: 1px solid #f0f0f0;
+  }
+  
+  .registrar_generate_report_table tbody td:last-child {
+    border-right: none;
+  }
+  
+  /* Badge styling */
+  .registrar_generate_report_table .badge {
+    font-size: 12px;
+    padding: 4px 8px;
+    font-weight: 500;
+  }
+  
+  .form-label {
+    font-weight: 500;
+
+
+  }
+  
+  .form-control,
+  .form-select {
+    min-width: 200px;
+    font-size: 14px;
+    padding: 0.5rem;
+  }
+  
+  
+
+  .generated-report-panel {
+    position: fixed;
+    top: 90px;
+    right: -420px;
+    width: 400px;
+    height: calc(100% - 90px);
+    background-color: #fff;
+    box-shadow: -2px 0 12px rgba(0,0,0,0.15);
+    z-index: 1050;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .generated-report-panel.show {
+    right: 0;
+  }
+  
+  .generated-report-panel > .d-flex {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 20;
+  }
+  /* Sticky header */
+
+  
+  .generated-report-panel h5 {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+
+  }
+  
+  /* Filter controls sticky */
+  .generated-report-panel .row.mb-3,
+  .generated-report-panel .card.mb-3 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  #packWeekStart {
+    width: 100%;
+    min-width: 150px;
+    padding: .5rem;
+  }
+  
+  
+  /* Scrollable reports container */
+  .reports-list-container {
+    border: 1px solid #e9ecef;
+    border-radius: 0.375rem;
+    background-color: #f8f9fa;
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 290px);
+    margin-bottom: 20px;
+  }
+  
+  .reports-list-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .reports-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+  
+  .reports-list-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+  
+  .reports-list-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+  
+  /* Enhanced list item styling */
+  .generated-report-panel .list-group-item {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    font-size: 14px;
+  }
+  
+  .generated-report-panel .list-group-item:first-child {
+    border-top: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+  }
+  
+  .generated-report-panel .list-group-item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 0.375rem 0.375rem;
+  }
+
+@media (max-width: 768px) {
+.registrar_sidebar {
+    transform: translateX(-100%);
+    width: 250px;
+    left: 0;
+}
+
+.registrar_sidebar.show {
+    transform: translateX(0%);
+}
+
+.registrar_sidebar.collapsed {
+    transform: translateX(-100%) !important;
+}
+
+.registrar_sidebar_top-bar .registrar_sidebar_system-title,
+.registrar_sidebar_top-bar .registrar_sidebar_user-info span {
+    display: none;
+}
+
+.registrar_generate_report_table-fixed-container {
+  height: calc(100vh - 290px);
+} 
+
+.registrar_sidebar_top-bar,
+.registrar_sidebar_top-bar .registrar_sidebar_system-title,
+.registrar_sidebar_top-bar .registrar_sidebar_user-info {
+    left: 0;
+    font-size: 0.9rem;
+}
+
+.registrar_generate_report_main-content {
+    margin-left: 0 !important;
+    padding-top: 6.1rem !important; /* enough to clear top-bar */
+}
+
+.registrar_generate_report_main-content h1 {
+  font-size: 1.5rem;
+}
+.registrar_generate_report_main-content.sidebar-collapsed {
+  margin-left: 0;
+}
+
+
+.registrar_sidebar_top-bar,
+.registrar_sidebar.collapsed ~ .registrar_sidebar_top-bar {
+    left: 0 !important;
+}
+
+.registrar_sidebar_top-bar .registrar_sidebar_system-title,
+.registrar_sidebar_top-bar .registrar_sidebar_user-info span {
+    display: none;
+}
+
+/* Mobile drawer adjustments */
+.generated-report-panel {
+    width: 90%;
+    right: -90%;
+}
+
+.generated-report-panel.show {
+    right: 0;
+}
+
+.form-select, .form-control {
+  min-width: 150px;
+  padding: .5rem;
+}
+
+}
+
+/* Optimized layout for desktop screens ≥1280×720 */
+@media (min-width: 1280px) and (min-height: 720px) {
+  .generated-report-panel {
+    width: 450px;
+    right: -470px;
+  }
+  
+  .generated-report-panel.show {
+    right: 0;
+  }
+  
+  /* Better spacing for larger screens */
+  .reports-list-container {
+    max-height: calc(100vh - 350px);
+  }
+  
+  /* Enhanced card layout for pack generation */
+  .generated-report-panel .card.mb-3 .card-body .row {
+    align-items: end;
+  }
+  
+  /* Ensure date input has proper spacing and z-index */
+  .generated-report-panel .card.mb-3 .card-body .row .col-md-4 {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Fix z-index for date picker calendar */
+  .generated-report-panel input[type="date"]::-webkit-calendar-picker-indicator {
+    z-index: 1060;
+  }
+  
+  /* Ensure date input calendar dropdown has higher z-index */
+  .generated-report-panel input[type="date"] {
+    position: relative;
+    z-index: 1055;
+  }
+  
+  /* Prevent button overlap with date input */
+  .generated-report-panel .card.mb-3 .card-body {
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Better typography on larger screens */
+  .generated-report-panel .list-group-item {
+    font-size: 15px;
+    padding: 1rem;
+  }
+  
+  .generated-report-panel h5 {
+    font-size: 1.25rem;
+  }
+}
+

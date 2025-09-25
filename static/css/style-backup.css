@@ -1,0 +1,257 @@
+/* ===== RESET & BASE STYLES ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background-color: #183A53;
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
+    font-size: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, p {
+    text-align: center;
+}
+
+.title {
+    font-family: Arial;
+}
+
+.title h1 {
+    font-size: 5rem;
+    color: rgb(253, 253, 253);
+}
+
+.title h2 {
+    font-size: 2rem;
+    color: #f5faff;
+}
+
+/* ===== LINKS ===== */
+a {
+    text-decoration: none;
+    color: #81dbb8;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    opacity: 0.85;
+}
+
+/* ===== NAVIGATION ===== */
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 1rem;
+    background: linear-gradient(90deg, rgba(24, 58, 83, 1) 47%, rgba(49, 93, 125, 1) 91%);
+    font-size: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+nav .logo {
+    max-height: 50px;
+    height: auto;
+    width: auto;
+}
+
+nav a {
+    color: white;
+    margin: 0 0.25rem;
+    font-weight: 500;
+    position: relative;
+    padding: 0.3rem 0.7rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    background: rgba(15, 43, 63, 1);
+    transform: scale(1.05);
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+    flex-grow: 1;
+    display: grid;
+    place-content: center;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes dimIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in-left {
+    opacity: 0;
+    margin-left: 20px;
+    position: relative;
+    z-index: 2;
+    animation: fadeInLeft 1s ease-out forwards;
+}
+
+.dim-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: dimIn 0.5s ease-out forwards;
+    animation-delay: 0.1s;
+    z-index: 1;
+}
+
+/* ===== AUTHENTICATION BOXES ===== */
+.auth-box {
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.login-box {
+    margin-top: -4rem;
+    width: 350px;
+    height: auto;
+    background-color: rgba(252, 252, 252, 0.9);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.login-box.active {
+    display: block;
+}
+
+.login-title {
+    margin-bottom: -20px;
+    color: #183A53;
+}
+
+.login-btn {
+    background-color: #183A53 !important;
+}
+
+.signup-box {
+    margin: 2rem;
+    border-radius: 8px;
+    max-width: 650px;
+    height: auto;
+    background-color: rgba(252, 252, 252, 0.9);
+    padding: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.signup-box.active {
+    display: block;
+}
+
+.signup-box-alumni {
+    margin: 2rem;
+    border-radius: 8px;
+    max-width: 650px;
+    height: auto;
+    background-color: rgba(252, 252, 252, 0.9);
+    padding: 1rem;
+}
+
+.signup-title {
+    margin-bottom: -20px;
+    color: #183A53;
+}
+
+.signup-btn {
+    background-color: #2E5978 !important;
+}
+
+/* ===== SIGNUP SECTION ===== */
+.signup {
+    margin-top: -70px;
+    margin-left: 50px;
+    text-align: center;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.section-up {
+    margin-top: -50px;
+}
+
+.section-signup {
+    margin-top: -10px;
+}
+
+/* ===== BUTTONS ===== */
+.users-btn {
+    background-color: #183A53 !important;
+}
+
+.users-btn:hover {
+    opacity: 0.85;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.mb {
+    margin-bottom: -15px;
+}
+
+.fixed-left {
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 0px;
+    background: rgba(252, 252, 252, 0.9);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    nav a {
+        margin: 0.5rem 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .auth-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

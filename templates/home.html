@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PTS Registrar</title>
+
+  <!-- ✅ Website Logo on Tab for Django -->
+  <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+  <style>
+    body {
+      margin: 0;
+      scroll-behavior: smooth;
+      /* ✅ Seamless scrolling */
+    }
+
+    /* Navbar base with gradient */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 1rem;
+      background: linear-gradient(90deg,
+          rgba(24, 58, 83, 1) 47%,
+          rgba(49, 93, 125, 1) 91%);
+      font-size: 1.5rem;
+      flex-wrap: wrap;
+      transition: all 0.3s ease;
+    }
+
+    /* Scrolled navbar effect */
+    .navbar-scrolled {
+      padding:2rem;
+      background: rgba(0, 0, 0, 0.6) !important;
+      /* subtle dark overlay */
+      border-bottom: 2px solid rgba(0, 0, 0, 0.7);
+    }
+
+
+    .nav-pills .nav-link.active {
+      background-color: #1d4e89;
+    }
+
+    .tab-content {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      color: #1d4e89;
+    }
+
+    h3 {
+      color: #1d4e89;
+    }
+
+    .nav-pills .nav-link {
+      color: #1d4e89;
+    }
+
+    /* Service cards overlap effect */
+    .container .service-card {
+      border-radius: 0.75rem;
+      transition: transform 0.3s ease;
+    }
+
+    .container .service-card:hover {
+      transform: translateY(-10px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ Navigation Bar -->
+  <nav id="navbar" class="navbar navbar-expand-lg navbar-dark fixed-top navbar-transparent p-4">
+    <div class="container-fluid px-4">
+      <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo ms-3" style="height: 40px;" />
+      <div class="ms-2 text-white fs-5">PTSCAS</div>
+
+      <!-- Hamburger button for mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Right: Nav items -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav mb-2 mb-lg-0 fs-5">
+          <li class="nav-item">
+            <a class="nav-link text-white capitalize" href="#services">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#howto">How To</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#mail">Mail</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#facebook">Facebook</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#about-us">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#ourteam">Our Team</a>
+          </li>
+          <li class="nav-item">
+            <!-- Login Button -->
+            <button type="button" class="btn-login ms-lg-3 mt-1 fs-6"
+              data-url="{% url 'login' %}" onclick="window.location.href=this.dataset.url">
+              Log in
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dummy Sections for scrolling -->
+
+  <!-- Hero Carousel Section -->
+  <section id="hero" class="carousel-section">
+    <div id="ptsCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+      <div class="carousel-inner text-center text-white">
+        <!-- Slide 1: Office of the Registrar -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center align-items-center text-white text-shadow animated-gradient hero-slide hero-slide-registrar" 
+               style="height: 90vh; padding: 3rem;">
+            <!-- Gradient overlay -->
+            <div class="gradient-overlay"></div>
+            <div class="text-center position-relative">
+              <!-- Main Title -->
+              <h1 class="fw-bold display-4 display-md-2 display-lg-1 cascade main-title main-title-delay">
+                Office of the Registrar
+              </h1>
+              <!-- School Name -->
+              <div class="fs-5 fs-md-4 mb-3 text-uppercase school-tagline slide-in-right">
+                PTS College & Advanced Studies
+              </div>
+              <!-- Button -->
+              <div class="cascade button-delay">
+                <button class="btn gs-btn" data-url="{% url 'login' %}"
+                  onclick="event.stopPropagation(); window.location.href=this.dataset.url;">
+                  Get Started
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+<!-- Slide 2: Credential Requests -->
+<div class="carousel-item">
+  <div class="d-flex justify-content-center align-items-center hero-slide hero-slide-credentials bg-dark" 
+       style="height: 90vh; padding: 3rem;">
+    <div class="container">
+      <div class="row align-items-center">
+        
+        <!-- Left Column: Heading -->
+        <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
+          <h2 class="note-title mb-3">
+            Online Credential Requests are now available for both Students and Alumni
+          </h2>
+        </div>
+
+        <!-- Right Column: Content + Button -->
+        <div class="col-md-6 text-center text-md-start">
+          <p class="note-text lead mb-4 slide-in-right">
+            Students from PTSCAS can quickly and securely submit requests for transcripts, diplomas, certificates, 
+            and other academic credentials directly through our online request credential system, 
+            reducing long queues and manual processing.
+          </p>
+          <div class="cascade">
+            <a href="{% url 'login' %}" class="note-btn btn-lg">
+            Request Credentials
+          </a>
+          </div>
+          
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        <!-- Slide 3: Main Website -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center align-items-center hero-slide hero-slide-website bg-dark" 
+               style="height: 90vh; padding: 3rem;">
+            <div class="modern-note-card text-center p-4 p-md-5" style="max-width: 650px;">
+              <h2 class="modern-note-title fw-bold mb-3">PTS College & Advanced Studies Website</h2>
+              <p class="fs-5 mb-4 text-dark">
+                Discover all the latest news, academic programs, events, and resources for students, faculty, and alumni.
+              </p>
+              <a href="https://ptscas.edu.ph/" target="_blank" class="modern-note-btn btn-lg text-white">
+                Visit Website
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel Controls -->
+      <button class="carousel-control-prev custom-control" type="button" data-bs-target="#ptsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next custom-control" type="button" data-bs-target="#ptsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#ptsCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#ptsCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#ptsCarousel" data-bs-slide-to="2"></button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Services Section -->
+  <section id="services" class="services-section">
+    <div class="container position-relative" style="margin-top:-80px; z-index:10;">
+      <div class="row mb-5 g-4">
+        <!-- Service Card 1: Request -->
+        <div class="col-12 col-sm-6 col-md-3 m-auto" data-aos="fade-up" data-aos-delay="100">
+          <article class="card service-card shadow text-center p-4 h-100">
+            <div class="icon-circle mb-3">
+              <i class="bi bi-file-earmark-medical display-2" aria-hidden="true"></i>
+            </div>
+            <div class="card-body p-0">
+              <h3 class="mb-3">Request</h3>
+              <p class="text-secondary mb-4 fs-6">
+                Easily request academic credentials such as transcripts, certifications, and TOR online.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <!-- Service Card 2: Clearance -->
+        <div class="col-12 col-sm-6 col-md-3 m-auto" data-aos="fade-up" data-aos-delay="200">
+          <article class="card service-card shadow text-center p-4 h-100">
+            <div class="icon-circle mb-3">
+              <i class="bi bi-clipboard-check display-2" aria-hidden="true"></i>
+            </div>
+            <div class="card-body p-0">
+              <h3 class="mb-3">Clearance</h3>
+              <p class="text-secondary mb-4 fs-6">
+                Apply for your school clearance online without the need to visit every department manually.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <!-- Service Card 3: Enrollment -->
+        <div class="col-12 col-sm-6 col-md-3 m-auto" data-aos="fade-up" data-aos-delay="300">
+          <article class="card service-card shadow text-center p-4 h-100">
+            <div class="icon-circle mb-3">
+              <i class="bi bi-file-earmark-person display-2" aria-hidden="true"></i>
+            </div>
+            <div class="card-body p-0">
+              <h3 class="mb-3">Enrollment</h3>
+              <p class="text-secondary mb-4 fs-6">
+                Complete your enrollment process online, including subject registration.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <!-- Service Card 4: Graduation -->
+        <div class="col-12 col-sm-6 col-md-3 m-auto" data-aos="fade-up" data-aos-delay="400">
+          <article class="card service-card shadow text-center p-4 h-100">
+            <div class="icon-circle mb-3">
+              <i class="bi bi-mortarboard display-2" aria-hidden="true"></i>
+            </div>
+            <div class="card-body p-0">
+              <h3 class="mb-3">Graduation</h3>
+              <p class="text-secondary mb-4 fs-6">
+                Submit your graduation application online and stay updated on your graduation status.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+<!-- Guidelines Section -->
+<section id="howto" class="guidelines-section py-5" style="min-height: 80vh;">
+  <div class="container bg-white shadow p-4">
+    <!-- Section Title -->
+    <header class="text-center mb-4">
+      <h2 class="fw-bold" style="color: #183A53;">Guidelines</h2>
+    </header>
+
+    <!-- Creating Account Section -->
+    <div>
+      <h3 class="text-dark">Creating Account</h3>
+
+      <!-- Current Students and Alumni with Google account -->
+      <h6>For Current Students and Alumni with a Google account:</h6>
+      <ul>
+        <li>Current students and alumni are required to sign in with Google using their institutional email account.</li>
+        <li>Step 1: Go to <a href="http://127.0.0.1:8000/log-in/" class="text-dark fw-bold">Login</a>.</li>
+        <li>Step 2: Click <strong>Sign in with Google</strong>.</li>
+        <li>Step 3: Sign in using your institutional email (<em>@pts.edu.ph</em>).</li>
+        <li>Step 4: Complete your profile information to finish the registration process.</li>
+      </ul>      
+
+      <!-- New Students and Alumni from 2020 and earlier -->
+      <h6>For New Students and Alumni from 2020 and earlier:</h6>  
+      <ul>
+        <li>Step 1: Go to <a href="http://127.0.0.1:8000/log-in/" class="text-dark fw-bold">Login</a>.</li>
+        <li>Step 2: Select <strong>Sign Up as Student</strong> or <strong>Sign Up as Alumni</strong>, depending on your status.</li>
+        <li>Step 3: Fill out the signup form using a valid and active email address.</li>
+        <li>Step 4: After signing up, a 4-digit OTP code will be sent to your email.</li>
+        <li>Step 5: Enter the OTP code to verify your account.</li>
+        <li>Step 6: ✅ Wait for your account to be verified. An email notification will be sent once your account is approved.</li>
+      </ul>
+    </div>
+    
+  </div>
+</section>
+
+
+
+
+
+
+  <!-- Contact Section -->
+  <section id="mail" class="contact-section bg-light d-flex align-items-center position-relative overflow-hidden scroll-section"
+    style="min-height: 50vh">
+    <!-- Decorative Wave Lines -->
+    <div class="position-absolute top-0 end-0 d-none d-md-block" style="opacity:0.15; z-index:0;">
+      <svg width="180" height="120" viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 60 C40 20, 80 100, 120 60 C150 30, 180 90, 220 60" stroke="#0d6efd" stroke-width="3" fill="none" />
+      </svg>
+    </div>
+
+    <div class="position-absolute bottom-0 start-0 d-none d-md-block" style="opacity:0.15; z-index:0;">
+      <svg width="200" height="120" viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 60 C40 20, 80 100, 120 60 C150 30, 200 90, 240 60" stroke="#183a53" stroke-width="3" fill="none" />
+      </svg>
+    </div>
+
+    <!-- Contact Content -->
+    <div class="container text-center position-relative" style="z-index:1;" data-aos="fade-in" data-aos-duration="1000">
+      <header>
+        <h1 class="mb-4">Mail us at:</h1>
+      </header>
+
+      <div class="row justify-content-center mb-3">
+        <div class="col-auto d-flex align-items-center bg-white rounded-pill px-3 py-2 shadow-sm">
+          <p class="mb-0 me-2 fw-semibold text-dark">info@ptscas.edu.ph</p>
+          <button class="btn btn-sm btn-outline-dark rounded-circle copy-btn" onclick="copyText(this)" 
+                  aria-label="Copy email address">
+            <i class="bi bi-clipboard" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-auto d-flex align-items-center bg-white rounded-pill px-3 py-2 shadow-sm">
+          <p class="mb-0 me-2 fw-semibold text-dark">registrar@ptscas.edu.ph</p>
+          <button class="btn btn-sm btn-outline-dark rounded-circle copy-btn" onclick="copyText(this)"
+                  aria-label="Copy email address">
+            <i class="bi bi-clipboard" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Media Section -->
+  <section id="facebook" class="social-section text-dark d-flex align-items-center scroll-section" 
+           style="min-height: 50vh; background: linear-gradient(90deg, rgba(24, 58, 83, 1) 47%, rgba(49, 93, 125, 1) 91%);">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Left Column: Image -->
+        <div class="col-md-6 text-center" data-aos="fade-right" data-aos-duration="1000">
+          <img src="{% static 'images/facebook.png' %}" alt="Facebook Logo" 
+               style="width: 200px; height: 200px;" class="img-fluid" />
+        </div>
+
+        <!-- Right Column: Text -->
+        <div class="col-md-6">
+          <div class="text-center">
+            <h1 class="fw-bold text-white" data-aos="fade-in" data-aos-duration="1000">
+              FACEBOOK
+            </h1>
+            <h2 class="fw-light text-white h3" data-aos="fade-in" data-aos-duration="1000">
+              PTS College & Advanced Studies - Official
+            </h2>
+            <button class="btn btn-outline-light bg-transparent border-1 text-white mt-3"
+              onclick="window.location.href='https://web.facebook.com/ptscas';"
+              aria-label="Visit our Facebook page">
+              Visit Facebook
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section id="about-us" class="about-section py-5" style="background-color: #f8f9fa;">
+    <div class="container">
+      <div class="row justify-content-center align-items-center">
+        <!-- About Us Text -->
+        <div class="col-lg-6 mb-4" data-aos="fade-right">
+          <div class="fs-5 text-justify">
+            At <strong>PTS College & Advanced Studies (PTSCAS)</strong>, we aim to
+            <strong>streamline and simplify the credential request process</strong>
+            through a reliable and user-friendly system. This platform is primarily
+            designed for the <strong>Office of the Registrar</strong> to efficiently handle
+            credential requests from both <strong>students and alumni</strong>.
+          </div>
+        </div>
+
+        <!-- Google Map -->
+        <div class="col-lg-6" data-aos="fade-left">
+          <div class="ratio ratio-4x3 shadow rounded">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3865.469842771518!2d120.95912340994035!3d14.342199483294447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397d440f3fe9a0d%3A0x1a5af770e5eaa5!2sPTS%20College%20%26%20Advanced%20Studies!5e0!3m2!1sen!2sph!4v1756982324231!5m2!1sen!2sph"
+              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade" title="PTS College & Advanced Studies Location">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Team Section -->
+  <section id="our-team" class="team-section py-5" style="min-height:50vh; background-color:#f8fafc;">
+    <div class="container">
+      <!-- Section Title -->
+      <header class="row justify-content-center text-center">
+        <div class="col-12 col-md-10 col-lg-8">
+          <h2 class="mb-4 display-6 fw-semibold" style="color:#1d4e89;">Our Team</h2>
+          <p class="text-muted">
+            The <strong>PTSCAS Request Credentials Form System</strong> was developed by a group
+            of researchers from the <strong>Bachelor of Engineering Technology major in Computer
+              Engineering Technology</strong> program at <strong>TUP Cavite</strong>. The system
+            further aims to <strong>streamline and simplify</strong> the process of requesting
+            essential documents such as <em>transcripts of records, diplomas, certifications</em>,
+            and more. In line with the credential requests, the system is also
+            capable of handling the clearance, graduation, and enrollment process.
+            By integrating these services into one platform, it helps students save time
+            and reduces the hassle of manual transactions.
+          </p>
+          <hr class="w-50 mx-auto mb-5 border-dark-subtle">
+        </div>
+      </header>
+
+      
+    </div>
+  </section>
+
+
+
+
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center text-lg-start">
+    <div class="text-center fs-6 py-2" style="background-color:black;">
+      © 2025 PTS Request Credential Form System. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button id="backToTopBtn" class="btn btn-dark position-fixed rounded-circle"
+    style="bottom: 40px; right: 30px; z-index: 9999; display: none; width: 50px; height: 50px;">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- JavaScript for Prev/Next -->
+
+  <script>
+    // ✅ Change navbar style on scroll
+    const navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 50) {
+        navbar.classList.add("navbar-scrolled");
+      } else {
+        navbar.classList.remove("navbar-scrolled");
+      }
+    });
+  </script>
+  <script>
+    function copyText(button) {
+      const text = button.previousElementSibling.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        button.innerHTML = '<i class="bi bi-check2"></i>'; // ✅ success feedback
+        setTimeout(() => {
+          button.innerHTML = '<i class="bi bi-clipboard"></i>'; // reset icon
+        }, 1500);
+      });
+    }
+  </script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000, // animation duration
+      once: true      // run only once
+    });
+  </script>
+
+</body>
+
+</html>
+
+
+
+
+<!-- ✅ Toggle "Other" Input Field -->
+<script>
+  function toggleInput() {
+    const checkbox = document.getElementById('inlineCheckbox6');
+    const input = document.getElementById('otherInput');
+    input.disabled = !checkbox.checked;
+  }
+</script>
+
+<!-- ✅ Sign-up Role Switcher Logic -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const loginBox = document.querySelector(".login-box");
+    const allSignupForms = document.querySelectorAll(".user-form");
+
+    document.querySelectorAll(".users-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const role = this.getAttribute("data-role");
+
+        // Hide modal
+        bootstrap.Modal.getInstance(
+          document.getElementById("testModal")
+        ).hide();
+
+        // Hide login form
+        loginBox.classList.remove("active");
+
+        // Hide all signup forms
+        allSignupForms.forEach((form) => form.classList.add("d-none"));
+
+        // Show the selected one
+        const selectedForm = document.getElementById(`signup-${role}`);
+        if (selectedForm) {
+          selectedForm.classList.remove("d-none");
+          selectedForm.classList.add("active");
+        }
+      });
+    });
+
+    // Go back to login
+    document.querySelectorAll(".back-to-login").forEach((btn) => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        loginBox.classList.add("active");
+        allSignupForms.forEach((form) => {
+          form.classList.add("d-none");
+          form.classList.remove("active");
+        });
+      });
+    });
+  });
+</script>
+
+<!-- ✅ Back to Top Button Logic -->
+<script>
+  const backToTopBtn = document.getElementById("backToTopBtn");
+
+  window.addEventListener("scroll", () => {
+    backToTopBtn.style.display = window.scrollY > 200 ? "block" : "none";
+  });
+
+  backToTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+
+</body>
+</html>

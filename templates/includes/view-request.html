@@ -1,0 +1,177 @@
+{% load static %}
+<div class="modal fade" id="viewRequestModal" tabindex="-1" aria-labelledby="viewRequestModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <!-- Header -->
+      <div class="modal-header text-white">
+        <h6 class="modal-title fw-semibold" id="viewRequestModalLabel">
+          <i class="bi bi-mortarboard me-2"></i> Request Form
+        </h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-4" id="requestPrintArea">
+        <!-- ✅ FORM START -->
+        <form id="viewrequestForm" method="GET" action="/request/" novalidate>
+          {% csrf_token %}
+
+   <!-- Personal Information Section -->
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-light fw-semibold">
+    <i class="bi bi-person"></i> Personal Information
+  </div>
+  <div class="card-body">
+
+    <!-- Full Name -->
+    <div class="row mb-2">
+      <label class="col-md-3 col-form-label">Full Name:</label>
+      <div class="col-md-9 d-flex mt-2">
+        <span class="fw-semibold me-2" id="view_first_name"></span>
+        <span class="fw-semibold me-2" id="view_middle_name"></span>
+        <span class="fw-semibold me-2" id="view_last_name"></span>
+        <span class="fw-semibold" id="view_suffix"></span>
+      </div>
+    </div>
+
+    <!-- Course -->
+    <div class="row mb-2">
+      <label class="col-md-3 col-form-label">Course:</label>
+      <div class="col-md-9 mt-2">
+        <span class="fw-semibold" id="view_course"></span>
+      </div>
+    </div>
+
+    <!-- Date of Birth -->
+    <div class="row mb-2">
+      <label class="col-md-3 col-form-label">Date of Birth:</label>
+      <div class="col-md-9 mt-2">
+        <span class="fw-semibold" id="view_birthdate"></span>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="row mb-2">
+      <label class="col-md-3 col-form-label">Address:</label>
+      <div class="col-md-9 mt-2">
+        <span class="fw-semibold" id="view_address"></span>
+      </div>
+    </div>
+
+    <!-- Contact Number -->
+    <div class="row">
+      <label class="col-md-3 col-form-label">Contact Number:</label>
+      <div class="col-md-9 mt-2">
+        <span class="fw-semibold" id="view_contact"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+        <!-- Request Credentials Section -->
+        <div class="card shadow-sm mb-4">
+          <h6 class="card-header bg-light fw-semibold">
+            <i class="bi bi-file-earmark-check me-2"></i>Request Credentials (Please Check)
+          </h6>
+          <div class="card-body">
+                <div class="row">
+            <div class="col-md-6">
+              <div class="form-check d-flex align-items-center mb-2">
+                <input class="form-check-input custom-size" type="checkbox" id="diploma" value="Diploma" disabled>
+                <label class="form-check-label fw-semibold ms-2" for="diploma">Diploma</label>
+              </div>
+              <div class="form-check d-flex align-items-center mb-2">
+                <input class="form-check-input custom-size" type="checkbox" id="transcript" value="Transcript of Records" disabled>
+                <label class="form-check-label fw-semibold ms-2" for="transcript">Transcript of Records</label>
+              </div>
+              <div class="form-check d-flex align-items-center mb-2">
+                <input class="form-check-input custom-size" type="checkbox" id="dismissal" value="Honorable Dismissal" disabled>
+                <label class="form-check-label fw-semibold ms-2" for="dismissal">Honorable Dismissal</label>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-check d-flex align-items-center mb-2">
+                <input class="form-check-input custom-size" type="checkbox" id="cor" value="COR" disabled>
+                <label class="form-check-label fw-semibold ms-2" for="cor">COR</label>
+              </div>
+              <div class="form-check d-flex align-items-center mb-2">
+                <input class="form-check-input custom-size" type="checkbox" id="certification" value="Certification" disabled>
+                <label class="form-check-label fw-semibold ms-2" for="certification">Certification</label>
+              </div>
+              <div class="form-check d-flex align-items-center mb-2">
+                <input class="form-check-input custom-size" type="checkbox" id="others" value="Others" onchange="toggleOtherInput()" disabled>
+                <label class="form-check-label fw-semibold ms-2" for="others">Others:</label>
+              </div>
+              <input type="text" class="form-control mt-1" id="otherInput" placeholder="Please specify" disabled>
+            </div>
+          </div>
+          </div>
+      
+        </div>
+
+
+          <!-- Additional Information Section -->
+          <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light fw-semibold">
+              <i class="bi bi-info-circle me-2"></i> Additional Information
+            </div>
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Semester Currently Enrolled:</label>
+                  <select id="view_semester" class="form-select" disabled>
+                    <option value="0" selected>None</option>
+                    <option value="1">First Semester</option>
+                    <option value="2">Second Semester</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Purpose of Request:</label>
+                  <input type="text" id="view_purpose" class="form-control" disabled>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info mb-0">
+            <i class="bi bi-clock me-2"></i>
+            <strong>Office Hours Notice:</strong> The Office of the Campus Registrar processes forms on weekdays from 8:00 AM to 4:00 PM. Requests submitted outside these hours will be processed on the next business day.
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <!-- Left side -->
+            <button type="button" class="btn btn-outline-dark btn-sm" id="btnPrintPdf" disabled>
+              <i class="bi bi-printer me-1"></i> Print / Save PDF
+            </button>
+          
+            <!-- Right side -->
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+          </div>
+          
+        </form>
+        <!-- ✅ FORM END -->
+      </div>
+
+    
+    </div>
+  </div>
+</div>
+
+<script>
+  function printRequestForm() {
+    let printContents = document.getElementById("requestPrintArea").innerHTML;
+    let originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    location.reload(); // restore page
+  }
+</script>

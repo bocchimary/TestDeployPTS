@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ report_title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; color: #333; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #183a53; padding-bottom: 20px; }
+        .school-name { font-size: 24px; font-weight: bold; color: #183a53; margin-bottom: 5px; }
+        .report-title { font-size: 20px; font-weight: bold; margin: 20px 0; text-align: center; color: #183a53; }
+        .report-info { margin-bottom: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #183a53; color: white; }
+        .workflow-summary { margin: 20px 0; padding: 15px; background-color: #e9f3ff; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="school-name">Educational Institution</div>
+        <div class="report-title">{{ report_title }}</div>
+    </div>
+    <div class="report-info">
+        <strong>Period:</strong> {{ period_start }} to {{ period_end }}<br>
+        <strong>Generated:</strong> {{ generated_at|date:"F j, Y g:i A" }}
+    </div>
+    <div class="workflow-summary">
+        <h3>Business Manager Workflow Statistics</h3>
+        <p><strong>Total Processed:</strong> {{ workflow_stats.total_processed }}</p>
+        <p><strong>Approvals:</strong> {{ workflow_stats.approvals }}</p>
+        <p><strong>Disapprovals:</strong> {{ workflow_stats.disapprovals }}</p>
+        
+        <h4>By Form Type:</h4>
+        <table>
+            <thead><tr><th>Form Type</th><th>Count</th><th>Approved</th><th>Disapproved</th></tr></thead>
+            <tbody>
+                {% for type, data in workflow_stats.by_form_type.items %}
+                <tr><td>{{ type|capfirst }}</td><td>{{ data.count }}</td><td>{{ data.approved }}</td><td>{{ data.disapproved }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <h4>By Day of Week:</h4>
+        <table>
+            <thead><tr><th>Day</th><th>Activities</th></tr></thead>
+            <tbody>
+                {% for day, count in workflow_stats.by_day.items %}
+                <tr><td>{{ day }}</td><td>{{ count }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

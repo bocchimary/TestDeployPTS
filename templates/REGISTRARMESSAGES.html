@@ -1,0 +1,19 @@
+{% extends 'main-registrar.html' %}
+{% load static %}
+
+{% block title %}REGISTRAR MESSAGES{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/RMESSAGES.css' %}">
+<link rel="stylesheet" href="{% static 'css/enhanced_messaging.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<div class="registrar_messages_main-content">
+  <div class="text-end text-muted mb-2 small"><strong>Date:</strong> <span id="registrar_messages_dateToday"></span></div>
+  {% include 'includes/universal_messages.html' %}
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/RMESSAGES.js' %}"></script>
+{% endblock %}

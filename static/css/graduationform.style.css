@@ -1,0 +1,384 @@
+/* ===== GRADUATION MODAL STYLES ===== */
+#graduationModal .modal-header {
+  border-bottom: none !important;
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+  background-color: #3B4F66 !important;
+  color: white !important;
+}
+
+#graduationModal .modal-header h5,
+#graduationModal .modal-header .modal-title {
+  color: white !important;
+  background-color: transparent !important;
+}
+
+
+#viewgraduationModal .modal-header {
+  background-color: #3B4F66 !important;
+  border-bottom: none !important;
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+  color: white !important;
+  padding: 1rem 1.5rem;
+  min-height: 56px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#viewgraduationModal .modal-title {
+  color: white !important;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 0;
+  color: white !important;
+  background-color: transparent !important;
+}
+
+#viewgraduationModal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 1;
+}
+
+
+#graduationModal .modal-title {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+#graduationModal .modal-sub-header {
+  border-radius: 0.375rem;
+  background-color: #3B4F66 !important;
+  color: white;
+}
+#viewgraduationModal .modal-sub-header {
+  border-radius: 0.375rem;
+  background-color: #3B4F66;
+  color: white;
+}
+#graduationModal .modal-content {
+  border: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Force modal header background */
+.modal#graduationModal .modal-header {
+  background-color: #3B4F66 !important;
+  border-bottom: none !important;
+}
+
+.modal#graduationModal .modal-header * {
+  color: white !important;
+}
+
+
+#graduationModal .form-label {
+  color: #495057;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+#graduationModal .form-control:focus,
+#graduationModal .form-select:focus {
+  border-color: #183A53;
+  box-shadow: 0 0 0 0.2rem rgba(24, 58, 83, 0.25);
+}
+
+#graduationModal .form-control.is-invalid,
+#graduationModal .form-select.is-invalid {
+  border-color: #dc3545;
+}
+
+#graduationModal .form-control.is-valid,
+#graduationModal .form-select.is-valid {
+  border-color: #198754;
+}
+
+#graduationModal .invalid-feedback,
+#graduationModal .valid-feedback {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+#graduationModal .invalid-feedback {
+  color: #dc3545;
+}
+
+#graduationModal .valid-feedback {
+  color: #198754;
+}
+
+/* Underline input styles */
+#graduationModal .underline-input,
+#graduationModal .underline-input-year {
+  border: none;
+  border-bottom: 2px solid #183A53;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.25rem 0;
+  font-style: italic;
+  min-width: 120px;
+  text-align: center;
+}
+
+#graduationModal .underline-input:focus,
+#graduationModal .underline-input-year:focus {
+  border-bottom-color: #506A87;
+  box-shadow: none;
+  outline: none;
+}
+
+#graduationModal .underline-input-year {
+  min-width: 80px;
+}
+
+/* Table styles */
+#graduationModal .table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 0.375rem;
+  overflow: hidden;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+#graduationModal .table thead th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  color: #495057;
+  font-weight: 600;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+#graduationModal .table tbody td {
+  padding: 0.5rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #dee2e6;
+}
+
+#graduationModal .table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+#graduationModal .table .form-control {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+#graduationModal .table .form-control:focus {
+  border-color: #183A53;
+  box-shadow: 0 0 0 0.2rem rgba(24, 58, 83, 0.25);
+}
+
+/* Alert styles */
+#graduationModal .alert {
+  border-radius: 0.375rem;
+  border: none;
+  padding: 1rem;
+}
+
+#graduationModal .alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+#graduationModal .alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+/* Button styles */
+#graduationModal .btn {
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  padding: 0.5rem 1rem;
+}
+
+#graduationModal .btn-submit {
+  background-color: #506A87;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+#graduationModal .btn-submit:hover {
+  background-color: #3B4F66;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+#graduationModal .btn-addrow {
+  background-color: #506A87;
+  color: white;
+  border: 1px solid #506A87;
+  border-radius: 0.375rem;
+  font-weight: 500;
+ 
+}
+
+
+#graduationModal .btn-outline-primary {
+  color: #506A87;
+  border-color: #506A87;
+}
+
+#graduationModal .btn-outline-primary:hover {
+  background-color: #506A87;
+  border-color: #506A87;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+#graduationModal .btn-secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+#graduationModal .btn-close-white {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Form validation styles */
+#graduationModal .was-validated .form-control:invalid {
+  border-color: #dc3545;
+}
+
+#graduationModal .was-validated .form-control:valid {
+  border-color: #198754;
+}
+
+#graduationModal .was-validated .form-check-input:invalid {
+  border-color: #dc3545;
+}
+
+#graduationModal .was-validated .form-check-input:valid {
+  border-color: #198754;
+}
+
+/* Checkbox styles */
+#graduationModal .form-check-input:checked {
+  background-color: #506A87;
+  border-color: #506A87;
+}
+
+#graduationModal .form-check-input:focus {
+  border-color: #183A53;
+  box-shadow: 0 0 0 0.2rem rgba(24, 58, 83, 0.25);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  #graduationModal .modal-dialog {
+    margin: 0.5rem;
+  }
+  
+  #graduationModal .col-md-3,
+  #graduationModal .col-md-6,
+  #graduationModal .col-md-8,
+  #graduationModal .col-md-4 {
+    margin-bottom: 1rem;
+  }
+  
+  #graduationModal .d-flex.justify-content-end {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  #graduationModal .btn {
+    width: 100%;
+  }
+  
+  #graduationModal .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  #graduationModal .underline-input,
+  #graduationModal .underline-input-year {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 576px) {
+  #graduationModal .modal-dialog {
+    margin: 0.25rem;
+  }
+  
+  #graduationModal .underline-input,
+  #graduationModal .underline-input-year {
+    min-width: 80px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Animation */
+#graduationModal .mb-4 {
+  animation: fadeInUp 0.7s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar styles */
+#graduationModal .modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: #2F3F53 #f8f9fa;
+}
+
+#graduationModal .modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#graduationModal .modal-body::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 3px;
+}
+
+#graduationModal .modal-body::-webkit-scrollbar-thumb {
+  background: #2F3F53;
+  border-radius: 3px;
+}
+
+#graduationModal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #36536E;
+}
+
+/* Loading state */
+#graduationModal .btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Focus management */
+#graduationModal .form-control:focus,
+#graduationModal .btn:focus {
+  outline: none;
+}
+
+/* Accessibility */
+#graduationModal .form-label .text-danger {
+  color: #dc3545 !important;
+}
+
+#graduationModal .invalid-feedback.d-block {
+  display: block !important;
+}

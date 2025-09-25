@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduation Forms - Bulk Print</title>
+    <style>
+        @page {
+            margin: 0.25in;
+            size: A4;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .graduation-form {
+            page-break-after: always;
+            padding: 20px 0;
+        }
+        
+        .graduation-form:last-child {
+            page-break-after: avoid;
+        }
+
+        .open-sans-title {
+            font-family: "Open Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 800;
+            font-style: normal;
+            font-variation-settings: "wdth" 100;
+            font-size: 24px;
+            color: #003399;
+        }
+        
+        .title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: rgb(0, 0, 0);
+            margin-top: -5px;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            margin-top: -12px;
+            text-align: center;
+            font-size: 10px;
+            color: #003399;
+            font-weight: bold;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            padding-top: 10px;
+        }
+
+        .pts {
+            width: 80px;
+            height: 80px;
+            margin-right: 30px;
+        }
+
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: -20px;
+        }
+
+        .info {
+            margin-top: -15px;
+        }
+
+        .motto {
+            font-family: "Segoe Script", cursive;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #003399;
+            width: 100%;
+            text-align: center;
+            margin-top: -5px;
+            padding: 5px 0;
+        }
+
+        .form-content {
+            font-size: 11px;
+            margin: 0.15in;
+            font-family: 'Century Gothic', 'Montserrat', 'Arial', sans-serif;
+        }
+
+        .row-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .row-item {
+            gap: 40px;
+            font-weight: bold;
+        }
+
+        .row-line {
+            display: inline-block;
+            border-bottom: 0.3px solid #000;
+            min-width: 180px;
+            height: 1em;
+            vertical-align: bottom;
+            padding: 0 5px;
+        }
+
+        .row-line-1 {
+            display: inline-block;
+            border-bottom: 0.3px solid #000;
+            min-width: 80px;
+            height: 1em;
+            vertical-align: bottom;
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .name-line {
+            display: inline-block;
+            border-bottom: 0.3px solid #000;
+            min-width: 400px;
+            height: 1em;
+            vertical-align: bottom;
+            padding: 0 5px;
+        }
+
+        .footer-line {
+            display: inline-block;
+            border-bottom: 0.3px solid #000;
+            min-width: 200px;
+            height: 1em;
+            vertical-align: bottom;
+            padding: 0 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            border: 0.5px solid #000;
+            padding: 6px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 10px;
+        }
+
+        .m-0 {
+            margin: 5px 0;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .motto {
+                background-color: #003399 !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% for form_data in graduation_forms %}
+    <div class="graduation-form">
+        <div class="header">
+            <img src="https://ptscas.edu.ph/wp-content/uploads/2019/09/logo-blue-1.png" alt="ptslogo" class="pts" />
+            <div class="text-container">
+                <p class="open-sans-title">PTS COLLEGE & ADVANCED STUDIES</p>
+                <div class="info">
+                    <p class="subtitle">Carlos Trinidad Ave., Salitran IV, Dasmariñas City, 4114 Cavite, Philippines</p>
+                    <p class="subtitle">Contact Nos.: 0917 146 6759 (046) 476 0597 | Email: info@ptscas.edu.ph</p>
+                    <p class="subtitle">Website: ptscas.edu.ph • FB: facebook.com/ptscas</p>
+                </div>
+            </div>
+        </div>
+        <p class="motto">Spirituality and Academic Excellence</p>
+
+        <div class="form-content">
+            <div class="title">Application for Graduation</div>
+
+            <div class="row-container">
+                <div class="row-item">
+                    <p>Date: {{ form_data.graduation.grad_date|date:"m-d-Y" }}</p>
+                </div>
+                <div class="row-item">
+                    <p>Application Number: <strong style="font-size: 14px;">{{ form_data.graduation.grad_appno }}</strong></p>
+                </div>
+            </div>
+
+            <div class="row-container">
+                <div class="row-item">
+                    <p>Name:</p>
+                    <div style="display: flex; justify-content: space-between; width: 300px; margin-left: 20px;">
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 10px; font-weight: bold; color: black; margin-bottom: 2px; min-height: 15px;">
+                                <script>
+                                  document.addEventListener('DOMContentLoaded', function() {
+                                    const fullName = '{{ form_data.student.full_name|default:"" }}';
+                                    const nameParts = fullName.split(' ');
+                                    const lastNames = document.querySelectorAll('.bulk-last-name-{{ forloop.counter0 }}');
+                                    const firstNames = document.querySelectorAll('.bulk-first-name-{{ forloop.counter0 }}');
+                                    const middleNames = document.querySelectorAll('.bulk-middle-name-{{ forloop.counter0 }}');
+                                    if (lastNames[0]) lastNames[0].textContent = (nameParts[nameParts.length - 1] || '').toUpperCase();
+                                    if (firstNames[0]) firstNames[0].textContent = (nameParts[0] || '').toUpperCase();
+                                    if (middleNames[0]) middleNames[0].textContent = (nameParts[1] || '').toUpperCase();
+                                  });
+                                </script>
+                                <span class="bulk-last-name-{{ forloop.counter0 }}"></span>
+                            </div>
+                            <div style="font-size: 6px; color: #666;">(LAST NAME)</div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 10px; font-weight: bold; color: black; margin-bottom: 2px; min-height: 15px;">
+                                <span class="bulk-first-name-{{ forloop.counter0 }}"></span>
+                            </div>
+                            <div style="font-size: 6px; color: #666;">(FIRST NAME)</div>
+                        </div>
+                        <div style="flex: 1; text-align: center;">
+                            <div style="font-size: 10px; font-weight: bold; color: black; margin-bottom: 2px; min-height: 15px;">
+                                <span class="bulk-middle-name-{{ forloop.counter0 }}"></span>
+                            </div>
+                            <div style="font-size: 6px; color: #666;">(MIDDLE NAME)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-item">
+                    <p>Sex: <strong>{{ form_data.profile.gender|default:"" }}</strong></p>
+                </div>
+            </div>
+
+            <div class="row-container">
+                <div class="row-item">
+                    <p>Date of Birth: <strong>{{ form_data.profile.birthdate|date:"m-d-Y"|default:"" }}</strong></p>
+                </div>
+            </div>
+
+            <p class="m-0">Place of Birth: <strong>{{ form_data.graduation.place_of_birth }}</strong></p>
+            <p class="m-0">Present Address: <strong>{{ form_data.graduation.present_address|default:form_data.profile.address|default:"" }}</strong></p>
+            <p class="m-0">Permanent Address: <strong>{{ form_data.graduation.permanent_address|default:form_data.profile.address|default:"" }}</strong></p>
+
+            <p class="m-0">Degree/Program: <strong>{{ form_data.profile.program|default:"" }}</strong></p>
+            <p class="m-0">Major (if applicable): <strong>{{ form_data.graduation.major|default:"" }}</strong></p>
+            <p class="m-0">Thesis Title (if applicable): <strong>{{ form_data.graduation.thesis_title|default:"" }}</strong></p>
+
+            {% if form_data.graduation.subjects %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course No.</th>
+                        <th>Title</th>
+                        <th>Units</th>
+                        <th>Final Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in form_data.graduation.subjects %}
+                    <tr>
+                        <td>{{ subject.course_no|default:"" }}</td>
+                        <td>{{ subject.title|default:"" }}</td>
+                        <td>{{ subject.units|default:"" }}</td>
+                        <td>{{ subject.grade|default:"" }}</td>
+                        <td>{{ subject.remarks|default:"" }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% for i in "xxxxxxxxxx"|make_list %}
+                        {% if forloop.counter > form_data.graduation.subjects|length %}
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+            <p class="m-0" style="margin-top: 20px;">
+                I hereby request to be considered for graduation and to be granted the 
+                degree of <span class="row-line">{{ form_data.profile.program|default:"" }}</span> Major in
+                <span class="footer-line">{{ form_data.graduation.major|default:"" }}</span> this Graduation 20
+                <span class="row-line-1">{{ form_data.graduation.grad_date.year|default:"" }}</span>.
+            </p>
+
+            <div style="text-align: right; margin-top: 20px;">
+                <span class="row-line"><strong>{{ form_data.student.full_name|upper|default:"" }}</strong></span>
+                <div style="font-size: 8px; margin-top: 3px; color: #666; text-align: center;">Printed name and Signature of Applicant</div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px;">
+                    {% for signatory in form_data.graduation.graduationsignatory_set.all %}
+                        {% if signatory.status == 'approved' %}
+                            {% if signatory.signatory_type == 'registrar' or signatory.signatory_type == 'dean' or signatory.signatory_type == 'business_manager' %}
+                                <div style="text-align: center; min-width: 100px;">
+                                    <div style="margin-bottom: 5px;">
+                                        <strong style="font-size: 7px;">{{ signatory.signatory.get_full_name|upper }}</strong>
+                                    </div>
+                                    <div style="font-size: 5px; color: #666; margin-bottom: 2px;">{{ signatory.approval_date|date:"M d, Y" }}</div>
+                                    <div style="font-size: 6px; font-weight: bold; border-top: 0.5px solid #000; padding-top: 2px; margin-top: 8px;">
+                                        {% if signatory.signatory_type == 'registrar' %}Evaluated by
+                                        {% elif signatory.signatory_type == 'business_manager' %}Approved by
+                                        {% elif signatory.signatory_type == 'dean' %}Noted by
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>

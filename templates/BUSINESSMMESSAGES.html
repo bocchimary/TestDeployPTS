@@ -1,0 +1,15 @@
+{% extends 'main-bm.html' %}
+{% load static %}
+
+{% block title %}BM MESSAGES{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/BMMESSAGES.css' %}">
+<link rel="stylesheet" href="{% static 'css/enhanced_messaging.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<div class="bm_messages_main-content">
+  {% include 'includes/universal_messages.html' %}
+</div>
+{% endblock %}

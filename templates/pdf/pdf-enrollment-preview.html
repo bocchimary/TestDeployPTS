@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Forms Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: white;
+        }
+        .enrollment-form {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            page-break-after: always;
+        }
+        .enrollment-form:last-child {
+            page-break-after: avoid;
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .subtitle {
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        .form-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 12px;
+        }
+        .details-table th,
+        .details-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .details-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-processing {
+            background-color: #cce7ff;
+            color: #004085;
+        }
+        .status-draft {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+    </style>
+</head>
+<body>
+    {% for form_data in enrollment_forms %}
+    <div class="enrollment-form">
+        <div class="form-header">
+            <p class="title">PTS COLLEGE & ADVANCED STUDIES</p>
+            <p class="subtitle">Salitran IV, City of Dasmariñas, Cavite</p>
+            <p class="form-title">Enrollment Form</p>
+        </div>
+
+        <table class="details-table">
+            <tr>
+                <th>Student Name</th>
+                <td>{{ form_data.student.full_name }}</td>
+            </tr>
+            <tr>
+                <th>Course</th>
+                <td>{{ form_data.enrollment.course }}</td>
+            </tr>
+            <tr>
+                <th>Year & Section</th>
+                <td>{{ form_data.enrollment.year }} - {{ form_data.enrollment.section }}</td>
+            </tr>
+            <tr>
+                <th>Academic Year</th>
+                <td>{{ form_data.enrollment.academic_year }}</td>
+            </tr>
+            <tr>
+                <th>Enrollment Date</th>
+                <td>{{ form_data.enrollment.enrollment_date }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                    <span class="status-badge status-{{ form_data.enrollment.status }}">
+                        {{ form_data.enrollment.get_status_display }}
+                    </span>
+                </td>
+            </tr>
+            {% if form_data.profile.student_id %}
+            <tr>
+                <th>Student ID</th>
+                <td>{{ form_data.profile.student_id }}</td>
+            </tr>
+            {% endif %}
+            {% if form_data.profile.contact_number %}
+            <tr>
+                <th>Contact Number</th>
+                <td>{{ form_data.profile.contact_number }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <th>Created Date</th>
+                <td>{{ form_data.enrollment.created_at|date:"M d, Y H:i" }}</td>
+            </tr>
+            <tr>
+                <th>Last Updated</th>
+                <td>{{ form_data.enrollment.updated_at|date:"M d, Y H:i" }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,151 @@
+{% load static %}
+
+<div class="d-flex align-items-center gap-3">
+
+  <div class="fw-bold student_sidebar_user-info d-flex align-items-center gap-2 text-white">
+    <i class="bi bi-person-circle fs-4"></i>
+    <span>{{ first_name }} {% if middle_name %}{{ middle_name }}{% endif %} {{ last_name }} {% if suffix %}{{ suffix }}{% endif %}</span>
+  </div>
+</div>
+
+<div class="student_profile_main-content" id="student_profile_main_content">
+    <div class="row g-4" style="margin-top:-3rem;">
+      <!-- Left Column -->
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="card-header p-2 fw-bold">Profile Picture</div>
+          <div class="card-body text-center">
+            <div class="profile-box mx-auto mb-3">
+                              <img src="{{ profile.profile_picture_url }}" class="profile-img" alt="Preview"
+     id="student_profile_image_preview" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%;">
+            </div>
+
+            <button class="btn btn-outline-secondary w-100 mb-3" type="button" id="student_profile_upload_btn">
+              <i class="bi bi-upload me-2"></i>Upload new image
+            </button>
+            
+            <input type="file" id="student_profile_file_input" accept="image/*" style="display: none;">
+
+            <hr>
+            {% if not request.user.is_google_account %}
+            <div class="mb-3 fw-bold">Change Password</div>
+            <form id="student_profile_password_form">
+              <div class="mb-3 text-start">
+                <label for="student_profile_oldPassword" class="form-label small">Old Password</label>
+                <input type="password" class="form-control" id="student_profile_oldPassword" name="oldPassword" required>
+                <div class="invalid-feedback" id="student_profile_oldPassword_error"></div>
+              </div>
+              <div class="mb-3 text-start">
+                <label for="student_profile_newPassword" class="form-label small">New Password</label>
+                <input type="password" class="form-control" id="student_profile_newPassword" name="newPassword" required>
+                <div class="invalid-feedback" id="student_profile_newPassword_error"></div>
+              </div>
+              <div class="mb-3 text-start">
+                <label for="student_profile_confirmPassword" class="form-label small">Confirm New Password</label>
+                <input type="password" class="form-control" id="student_profile_confirmPassword" name="confirmPassword" required>
+                <div class="invalid-feedback" id="student_profile_confirmPassword_error"></div>
+              </div>
+              <button type="submit" class="btn btn-primary w-100" id="student_profile_changePassword_btn"
+                style="background-color: #183a53;">
+                <i class="bi bi-key me-2"></i>Change Password
+              </button>
+            </form>
+            {% else %}
+            <div class="mb-3 fw-bold text-muted">Change Password</div>
+            <div class="alert alert-info small">
+              <i class="bi bi-info-circle me-2"></i>
+              Password change is not available for Google accounts. Please use Google's account settings to change your password.
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-lg-8 col-md-12">
+        <div class="card">
+          <div class="card-header p-2 fw-bold">Account Details</div>
+          <div class="card-body">
+            <form id="student_profile_details_form">
+              <div class="row g-3">
+              <div class="col-md-3">
+                <label for="student_profile_firstName" class="form-label small">First name</label>
+                <input type="text" class="form-control" name="firstName" id="student_profile_firstName" placeholder="First name" value="{{ first_name|default_if_none:'' }}" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="student_profile_middleName" class="form-label small">Middle name</label>
+                <input type="text" class="form-control" name="middleName" id="student_profile_middleName" placeholder="Middle name" value="{{ middle_name|default_if_none:'' }}" readonly>
+              </div>
+              <div class="col-md-3">
+                <label for="student_profile_lastName" class="form-label small">Last name</label>
+                <input type="text" class="form-control" name="lastName" id="student_profile_lastName" placeholder="Last name" value="{{ last_name|default_if_none:'' }}" readonly>
+              </div>
+              <div class="col-md-2">
+                <label for="student_profile_suffix" class="form-label small">Suffix</label>
+                <input type="text" class="form-control" name="suffix" id="student_profile_suffix" placeholder="Suffix" value="{{ suffix|default_if_none:'' }}" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="student_profile_birthday" class="form-label small">Birthday</label>
+                <input type="date" class="form-control" name="birthday" id="student_profile_birthday" value="{{ profile.birthdate|date:'Y-m-d' }}" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="student_profile_sex" class="form-label small">Sex</label>
+                <select class="form-select" name="sex" id="student_profile_sex" disabled>
+                  <option value="" disabled selected>Select sex</option>
+                  <option value="Male" {% if profile.gender == 'Male' %}selected{% endif %}>Male</option>
+                  <option value="Female" {% if profile.gender == 'Female' %}selected{% endif %}>Female</option>
+                </select>
+              </div>
+          
+              <div class="col-md-6">
+                <label for="student_profile_department" class="form-label small">Program</label>
+                <input type="text" class="form-control" name="department" id="student_profile_department" placeholder="Department" value="{{ profile.program }}" readonly>
+              </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Contact Info Section -->
+            <h6 class="mb-3 fw-bold">Basic Information</h6>
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label for="student_profile_address" class="form-label small">Address</label>
+                <input type="text" class="form-control" name="address" id="student_profile_address" value="{{ profile.address|default_if_none:'' }}">
+                <div class="invalid-feedback" id="student_profile_address_error"></div>
+              </div>
+              <div class="col-md-6">
+                <label for="student_profile_email" class="form-label small">Email (required)</label>
+                <input type="email" class="form-control" name="email" id="student_profile_email" value="{{ request.user.email }}" required>
+                <div class="invalid-feedback" id="student_profile_email_error"></div>
+              </div>
+              <div class="col-md-6">
+                <label for="student_profile_contactNumber" class="form-label small">Contact Number</label>
+                <input type="tel" class="form-control" name="contactNumber" id="student_profile_contactNumber" value="{{ request.user.contact_number }}" placeholder="+639XXXXXXXXX" pattern="^\+63[0-9]{10}$" maxlength="13">
+                <div class="invalid-feedback" id="student_profile_contactNumber_error"></div>
+              </div>
+              <div class="col-md-12">
+                <label for="student_profile_emergency_contact" class="form-label small">Emergency Contact</label>
+                <input type="tel" class="form-control" name="emergency_contact" id="student_profile_emergency_contact" value="{{ profile.emergency_contact|default_if_none:'' }}" placeholder="+639XXXXXXXXX" pattern="^\+63[0-9]{10}$" maxlength="13">
+                <div class="invalid-feedback" id="student_profile_emergency_contact_error"></div>
+              </div>
+              </div>
+              <div class="mt-3 text-end">
+                <button type="button" class="btn btn-secondary" id="student_profile_reset_btn">
+                  <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                </button>
+                <button type="submit" class="btn text-white" id="student_profile_save_btn"
+                style="background-color: #183a53;">
+                  <i class="bi bi-check-circle me-2"></i>Save changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+<script src="{% static 'js/studentsprofile.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>

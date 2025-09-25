@@ -1,0 +1,320 @@
+{% extends 'main-bm.html' %}
+{% load static %}
+
+{% block title %}BM DASHBOARD{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/BMDASHBOARD.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<!-- Main Content -->
+<div class="bm_dashboard_main-content" id="bm_dashboard_main_content">
+  <div class="text-end text-muted mb-2 small">
+    <strong>Date:</strong> <span id="bm_dashboard_dateToday"></span>
+  </div>
+  <h1 class="fw-bold" id="bm_dashboard_title">Dashboard</h1>
+  <p id="bm_dashboard_welcome">Welcome, <strong>{{ user.full_name|default:"Business Manager" }}</strong>!</p>
+
+  <!-- New Clearance Forms Count -->
+  <div class="alert alert-info" id="bm_dashboard_count_alert" style="display: none;">
+    <i class="bi bi-info-circle me-2"></i>
+    <span id="bm_dashboard_count_message"></span>
+  </div>
+
+  <form id="bm_dashboard_form">
+    <div class="container-fluid mt-4" id="bm_dashboard_container">
+  
+      <!-- Filter + Search Row -->
+      <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+        <select class="form-select form-select-sm" style="width: auto;" id="bm_dashboard_filter_purpose">
+          <option value="" selected>All Purposes</option>
+          <option value="graduation">Graduation</option>
+          <option value="enrollment">Enrollment</option>
+        </select>
+        <select class="form-select form-select-sm" style="width: auto;" id="bm_dashboard_filter_course">
+          <option value="" selected>All Courses</option>
+        </select>
+        <select class="form-select form-select-sm" style="width: auto;" id="bm_dashboard_filter_year">
+          <option value="" selected>All Years</option>
+        </select>
+        <select class="form-select form-select-sm" style="width: auto;" id="bm_dashboard_filter_section">
+          <option value="" selected>All Sections</option>
+        </select>
+        
+    
+        <!-- Search input right next to filters -->
+        <div class="bm_dashboard_search-bar input-group">
+          <input type="text" class="form-control" placeholder="Search" id="bm_dashboard_search_input">
+          <span class="input-group-text"><i class="bi bi-search"></i></span>
+        </div>
+      </div>
+  
+      <div class="row gx-4 align-items-stretch" id="bm_dashboard_row">
+
+        <!-- Main Column -->
+        <main class="col-lg-9 col-12 mb-4 mb-lg-0 d-flex flex-column" id="bm_dashboard_main_column">
+
+          <!-- Loading Spinner -->
+          <div id="bm_dashboard_loading" class="text-center py-4" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading clearance forms...</p>
+          </div>
+        
+          <!-- Table -->
+          <div class="bm_dashboard_table-fixed-container">
+            <div class="bm_dashboard_table-scroll-wrapper">
+              <table class="table bm_dashboard_table text-center align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Student's Name</th>
+                    <th>Course</th>
+                    <th>Year</th>
+                    <th>Section</th>
+                    <th>ID Number</th>
+                    <th>Date Submitted</th>
+                    <th>Purpose of Request</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bm_dashboard_table_body">
+                  <!-- Table data will be loaded dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        
+        </main>
+        
+
+        <!-- Sidebar Calendar -->
+        <aside class="col-lg-3 col-12 d-flex flex-column mt-lg-2" id="bm_dashboard_sidebar_calendar_column">
+
+
+          <div class="card p-3 calendar-container h-100" id="bm_dashboard_calendar_card">          
+            <h6 class="fw-semibold mb-3">Calendar</h6>
+            <iframe
+              id="bm_dashboard_calendar_iframe"
+              src="https://calendar.google.com/calendar/embed?src=en.philippines%23holiday%40group.v.calendar.google.com&ctz=Asia%2FManila"
+              frameborder="0"
+              scrolling="yes"
+            ></iframe>
+            
+            <!-- Add Event Button -->
+            <div class="mt-3 mb-3">
+              <button type="button" class="btn btn-primary btn-sm w-100" id="bm_dashboard_add_event_btn">
+                <i class="bi bi-plus-circle me-1"></i>Add Event
+              </button>
+            </div>
+            
+            <div class="mt-3" id="bm_dashboard_upcoming_events">
+              <h6 class="fw-bold mb-2">
+                <i class="bi bi-calendar-event"></i> Upcoming Events
+                <small class="text-muted ms-2">(Click + to add to Google Calendar)</small>
+              </h6>
+              <div class="bm_dashboard_scrollable_events" id="bm_dashboard_events_list">
+                <!-- Events will be loaded dynamically -->
+              </div>
+            </div>
+          </div>              
+        </aside>
+
+      </div>
+    </div>
+  </form>
+
+  <!-- Add Event Modal -->
+  <div class="modal fade" id="bm_dashboard_add_event_modal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addEventModalLabel">Add New Event</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="bm_dashboard_add_event_form">
+            <div class="mb-3">
+              <label for="bm_event_title" class="form-label">Event Title *</label>
+              <input type="text" class="form-control" id="bm_event_title" name="title" required>
+            </div>
+            <div class="mb-3">
+              <label for="bm_event_description" class="form-label">Description</label>
+              <textarea class="form-control" id="bm_event_description" name="description" rows="3"></textarea>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="bm_event_type" class="form-label">Event Type</label>
+                  <select class="form-select" id="bm_event_type" name="event_type">
+                    <option value="event">Event</option>
+                    <option value="meeting">Meeting</option>
+                    <option value="deadline">Deadline</option>
+                    <option value="reminder">Reminder</option>
+                    <option value="holiday">Holiday</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="bm_event_color" class="form-label">Color</label>
+                  <select class="form-select" id="bm_event_color" name="color">
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="red">Red</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="purple">Purple</option>
+                    <option value="orange">Orange</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="bm_start_date" class="form-label">Start Date *</label>
+                  <input type="date" class="form-control" id="bm_start_date" name="start_date" required>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="bm_start_time" class="form-label">Start Time</label>
+                  <input type="time" class="form-control" id="bm_start_time" name="start_time">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="bm_end_date" class="form-label">End Date</label>
+                  <input type="date" class="form-control" id="bm_end_date" name="end_date">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="bm_end_time" class="form-label">End Time</label>
+                  <input type="time" class="form-control" id="bm_end_time" name="end_time">
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="bm_is_all_day" name="is_all_day">
+                <label class="form-check-label" for="bm_is_all_day">
+                  All Day Event
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="bm_dashboard_save_event_btn">Save Event</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Clearance Modal -->
+  <div class="modal fade" id="bm_viewClearanceModal" tabindex="-1" aria-labelledby="viewClearanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="viewClearanceModalLabel">Clearance Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Loading spinner -->
+          <div id="bm_clearance_modal_loading" class="text-center py-4" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-muted">Loading clearance details...</p>
+          </div>
+          
+          <!-- Clearance details content -->
+          <div id="bm_clearance_modal_content" style="display: none;">
+            <!-- Student Information -->
+            <div class="card mb-3">
+              <div class="card-header">
+                <h6 class="mb-0">Student Information</h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p><strong>Name:</strong> <span id="bm_modal_student_name">-</span></p>
+                    <p><strong>Student Number:</strong> <span id="bm_modal_student_number">-</span></p>
+                  </div>
+                  <div class="col-md-6">
+                    <p><strong>Course:</strong> <span id="bm_modal_course">-</span></p>
+                    <p><strong>Year & Section:</strong> <span id="bm_modal_year_section">-</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Clearance Information -->
+            <div class="card mb-3">
+              <div class="card-header">
+                <h6 class="mb-0">Clearance Information</h6>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <p><strong>Purpose:</strong> <span id="bm_modal_purpose">-</span></p>
+                    <p><strong>Semester:</strong> <span id="bm_modal_semester">-</span></p>
+                  </div>
+                  <div class="col-md-6">
+                    <p><strong>Academic Year:</strong> <span id="bm_modal_academic_year">-</span></p>
+                    <p><strong>Date Submitted:</strong> <span id="bm_modal_date_submitted">-</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Signatory Status -->
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Signatory Status</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Signatory</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Comment</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bm_modal_signatory_status">
+                      <!-- Signatory statuses will be populated here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Error message -->
+          <div id="bm_clearance_modal_error" class="alert alert-danger" style="display: none;">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <span id="bm_clearance_modal_error_message">Error loading clearance details</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/browser-notifications.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="{% static 'js/BMDASHBOARD.js' %}"></script>
+{% endblock %}

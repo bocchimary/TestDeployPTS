@@ -1,0 +1,110 @@
+{% extends 'main-signatory.html' %}
+{% load static %}
+
+{% block title %}SIGNATORY REPORTS{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/SREPORTS.css' %}">
+{% endblock %}
+
+{% block main_content %}
+  <div class="signatory_generate_report_main-content" id="signatory_generate_report_mainContent">
+    <form id="signatory_generate_report_form">
+      <div class="text-end text-muted mb-2 small">
+        <strong>Date:</strong>
+        <span id="signatory_generate_report_dateToday"></span>
+      </div>
+      <h1 class="fw-bold" id="signatory_generate_report_title">Generate Reports</h1>
+
+      <div class="d-flex flex-wrap gap-3 mb-3 align-items-end" id="signatory_generate_report_filters">
+        <div>
+          <label class="form-label" for="signatory_generate_report_fromDate">From Date</label>
+          <input type="date" class="form-control" id="signatory_generate_report_fromDate">
+        </div>
+        <div>
+          <label class="form-label" for="signatory_generate_report_toDate">To Date</label>
+          <input type="date" class="form-control" id="signatory_generate_report_toDate">
+        </div>
+        <div>
+          <label class="form-label" for="signatory_generate_report_formStatus">Form Status</label>
+          <select class="form-select" id="signatory_generate_report_formStatus">
+            <option value="">All Status</option>
+            <option value="approved_forms">Approved Forms</option>
+            <option value="disapproved_forms">Disapproved Forms</option>
+            <option value="pending_forms">Pending Forms</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label" for="signatory_generate_report_periodType">Period</label>
+          <select class="form-select" id="signatory_generate_report_periodType">
+            <option value="">All Periods</option>
+            <option value="day">Day</option>
+            <option value="week">Week</option>
+            <option value="month">Month</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label" for="signatory_reports_searchText">Search</label>
+          <input type="text" class="form-control" id="signatory_reports_searchText" placeholder="Search student name, details...">
+        </div>
+        <div>
+          <label class="form-label invisible d-block">Actions</label>
+          <div class="btn-group">
+            <button type="button" class="btn btn-outline-secondary" onclick="signatory_clearFilters()">
+              <i class="bi bi-arrow-clockwise"></i> Clear
+            </button>
+            <button type="button" class="btn btn-success" onclick="signatory_exportToCSV()">
+              <i class="bi bi-download"></i> CSV
+            </button>
+            <button type="button" class="btn btn-secondary" id="signatory_generate_report_listButton" onclick="signatory_generate_report_toggleGeneratedReportsPanel()">
+              <i class="bi bi-list-ul"></i> Reports
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="signatory_generate_report_table-fixed-container">
+        <div class="signatory_generate_report_table-scroll-wrapper">
+        
+            <table class="table table-striped table-bordered align-middle mb-0" id="signatory_generate_report_table">
+              <thead class="bg-primary text-white text-center" id="signatory_generate_report_tableHead">
+                <tr>
+                  <th>Student</th>
+                  <th>Course</th>
+                  <th>Requested Form</th>
+                  <th>Status</th>
+                  <th>Signatory</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>IP Address</th>
+                </tr>
+              </thead>
+              <tbody class="text-center" id="signatory_generate_report_tableBody">
+                <!-- Data will be loaded dynamically -->
+              </tbody>
+            </table>
+        
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4">
+        <button type="button" class="btn btn-primary" id="signatory_generate_report_generateButton">Generate Report</button>
+      </div>
+
+      <div class="generated-report-panel" id="signatory_generate_report_generatedPanel">
+        <button type="button" class="btn-close m-3" onclick="signatory_generate_report_toggleGeneratedReportsPanel()" id="signatory_generate_report_closePanel"></button>
+        <div class="p-4" id="signatory_generate_report_panelContent">
+          <h5 class="fw-bold mb-3">Generated Reports</h5>
+          <ul class="list-group" id="signatory_generate_report_listGroup">
+            <!-- Generated reports will be loaded dynamically -->
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/SREPORTS.js' %}"></script>
+{% endblock %}

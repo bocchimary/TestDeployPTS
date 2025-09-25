@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}Registrar Dashboard{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="registrar_sidebar" id="registrar_sidebar">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <span class="fw-bold fs-5 registrar_sidebar-title">Registrar</span>
+      <button class="registrar_sidebar_toggle-button d-md-none" onclick="toggleSidebar()" id="registrar_sidebar_toggleBtn">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <button class="registrar_sidebar_desktopToggle-button d-none d-md-block" onclick="toggleSidebar()" id="registrar_sidebar_desktopToggleBtn">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+    <a href="{% url 'registrar_dashboard' %}"><i class="bi bi-speedometer2"></i><span class="registrar_sidebar_link-text">Dashboard</span></a>
+    <a href="{% url 'registrar_clearance' %}"><i class="bi bi-card-checklist"></i><span class="registrar_sidebar_link-text">Clearance</span></a>
+    <a href="{% url 'registrar_enrollment' %}"><i class="bi bi-clipboard2-minus"></i><span class="registrar_sidebar_link-text">Enrollment</span></a>
+    <a href="{% url 'registrar_graduation' %}"><i class="bi bi-mortarboard"></i><span class="registrar_sidebar_link-text">Graduation</span></a>
+    <a href="{% url 'registrar_courses' %}"><i class="bi bi-book"></i><span class="registrar_sidebar_link-text">Courses</span></a>
+    <a href="{% url 'registrar_document_release' %}"><i class="bi bi-file-earmark-check"></i><span class="registrar_sidebar_link-text">Document Release</span></a>
+    <a href="{% url 'registrar_reports' %}"><i class="bi bi-table"></i><span class="registrar_sidebar_link-text">Reports</span></a>
+    <a href="{% url 'registrar_user_management' %}"><i class="bi bi-people"></i><span class="registrar_sidebar_link-text">User Management</span></a>
+    <a href="{% url 'registrar_profile' %}"><i class="bi bi-person"></i><span class="registrar_sidebar_link-text">Profile</span></a>
+    <a href="{% url 'registrar_messages' %}" class="position-relative"><i class="bi bi-chat-dots"></i><span class="registrar_sidebar_link-text">Messages</span>
+    
+      <span id="registrar_sidebar_messages_notification_count" 
+              class="badge rounded-pill bg-danger ms-auto" 
+              style="font-size: 0.6rem; display: none;">
+          0
+        </span>
+    </a> 
+    <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i><span class="registrar_sidebar_link-text">Logout</span></a>
+  </div>
+
+  <!-- Backdrop for mobile -->
+  <div id="registrar_sidebar_sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+  <!-- Top Bar -->
+  <div class="registrar_sidebar_top-bar d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+      <button class="registrar_sidebar_topbarToggle-button d-md-none" onclick="toggleSidebar()" id="registrar_sidebar_topbarToggleBtn">
+        <i class="bi bi-list"></i>
+      </button>
+      <span class="fw-bold registrar_sidebar_system-title d-flex align-items-center gap-2">
+        <img src="{% static 'images/ptslogo.png' %}" alt="ptslogo.png" class="registrar_sidebar_logo-img">
+        PTS College & Advanced Studies
+      </span>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <div class="position-relative" id="registrar_sidebar_notification">
+        <i class="bi bi-bell fs-5 text-white" style="cursor: pointer;"></i>
+        <span id="registrar_sidebar_notification_count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; display: none;">0</span>
+      </div>
+
+      <div class="fw-bold registrar_sidebar_user-info d-flex align-items-center gap-2 text-white">
+        {% if user.registrar_profile.profile_picture_url %}
+          <img src="{{ user.registrar_profile.profile_picture_url }}" class="rounded-circle" style="width: 32px; height: 32px; object-fit: cover;" alt="Profile Picture">
+        {% else %}
+          <i class="bi bi-person-circle fs-4"></i>
+        {% endif %}
+        <span>{{ user.full_name|default:"Name of the user" }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content Area -->
+  {% block main_content %}
+  <!-- This block will be overridden by child templates -->
+  {% endblock %}
+
+  <!-- Mandatory First-Time Setup Modal -->
+  <div class="modal fade" id="registrar_first_time_setup_modal" tabindex="-1" aria-labelledby="registrar_first_time_setup_modal_label" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="registrar_first_time_setup_modal_label">
+            <i class="bi bi-shield-lock me-2"></i>First Time Setup Required
+          </h5>
+        </div>
+        <div class="modal-body">
+          <!-- Error/Success Alert Container -->
+          <div id="registrar_setup_alert_container" style="display: none;">
+            <div class="alert" id="registrar_setup_alert" role="alert">
+              <i class="bi me-2" id="registrar_setup_alert_icon"></i>
+              <span id="registrar_setup_alert_message"></span>
+            </div>
+          </div>
+          
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Security Notice:</strong> For your account security, you must change your password and set a PIN before accessing the system.
+          </div>
+          
+          <form id="registrar_first_time_setup_form">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-key me-2"></i>Password Change
+                </h6>
+                <div class="mb-3">
+                  <label for="registrar_current_password" class="form-label">Current Password</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="registrar_current_password" placeholder="Enter current password" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('registrar_current_password')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="registrar_new_password" class="form-label">New Password</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="registrar_new_password" placeholder="Enter new password (min 8 characters)" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('registrar_new_password')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                  <div class="password-strength mt-2" id="password_strength_indicator" style="display: none;">
+                    <small class="text-muted">Password strength: <span id="password_strength_text">Weak</span></small>
+                    <div class="progress mt-1" style="height: 4px;">
+                      <div class="progress-bar" id="password_strength_bar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="registrar_confirm_password" class="form-label">Confirm New Password</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="registrar_confirm_password" placeholder="Confirm new password" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('registrar_confirm_password')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-shield-lock me-2"></i>PIN Setup
+                </h6>
+                <div class="mb-3">
+                  <label for="registrar_pin_input" class="form-label">Set Your PIN</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="registrar_pin_input" maxlength="8" placeholder="Enter PIN (min 6 characters)" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('registrar_pin_input')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                  <small class="text-muted">This PIN will be used for administrative actions</small>
+                </div>
+                <div class="mb-3">
+                  <label for="registrar_pin_confirm" class="form-label">Confirm PIN</label>
+                  <div class="input-group">
+                    <input type="password" class="form-control" id="registrar_pin_confirm" maxlength="8" placeholder="Confirm PIN" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('registrar_pin_confirm')">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              <small>All fields are required. You cannot proceed without completing this setup.</small>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="registrar_first_time_setup_submit">
+            <i class="bi bi-check-circle me-2"></i>Complete Setup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  <script src="{% static 'js/notifications.js' %}?v=2025082106"></script>
+  <script src="{% static 'js/REGISTRAR.js' %}?v=2025082106"></script>
+  
+  <!-- Page-specific scripts -->
+  {% block extra_js %}{% endblock %}
+  
+  <!-- Include notification system -->
+  {% include 'includes/notification_modal.html' %}
+  {% include 'includes/notification_badges.html' %}
+  
+  <!-- Set user type for notification preferences -->
+  <script>
+    document.body.dataset.userType = 'admin';
+  </script>
+</body>
+</html>
