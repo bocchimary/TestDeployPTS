@@ -99,8 +99,8 @@ function updateReportsTable(reports) {
     tableBody.innerHTML = reports.map(report => `
         <tr>
             <td>${report.student_name}</td>
+             <td>${report.course}</td>
             <td>${report.form_type}</td>
-            <td>${report.action_type}</td>
             <td>
                 <span class="badge ${getActionBadgeClass(report.action_type)}">
                     ${report.action_type}
@@ -303,3 +303,28 @@ if (typeof window !== 'undefined') {
     window.signatory_clearFilters = signatory_clearFilters;
     window.signatory_exportToCSV = signatory_exportToCSV;
 }
+
+function toggleSidebar() {
+    const signatory_sidebar = document.getElementById("signatory_sidebar");
+    const signatory_sidebar_backdrop = document.getElementById("signatory_sidebar_sidebarBackdrop");
+  
+    if (window.innerWidth <= 768) {
+      signatory_sidebar.classList.remove("collapsed");
+      signatory_sidebar.classList.toggle("show");
+      signatory_sidebar_backdrop.classList.toggle("active");
+    } else {
+      signatory_sidebar.classList.toggle("collapsed");
+    }
+  }
+  
+  // Window resize handler
+  window.addEventListener("resize", function () {
+    const signatory_sidebar = document.getElementById("signatory_sidebar");
+    const signatory_sidebar_backdrop = document.getElementById("signatory_sidebar_sidebarBackdrop");
+    if (window.innerWidth > 768) {
+      signatory_sidebar.classList.remove("show");
+      signatory_sidebar_backdrop.classList.remove("active");
+    }
+  });
+  
+  

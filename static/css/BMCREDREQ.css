@@ -59,7 +59,14 @@ body {
 .bm_sidebar a:hover i {
     color: white;
 }
+.bm_sidebar a.active {
+    background-color: #14507d;
+    color: white;
+}
 
+.bm_sidebar a.active i {
+    color: white;
+}
 .bm_sidebar.collapsed a {
     justify-content: center;
 }

@@ -1,7 +1,7 @@
 {% extends 'main-signatory.html' %}
 {% load static %}
 
-{% block title %}SIGNATORY PROFILE{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/SPROFILE.css' %}">
@@ -109,7 +109,7 @@
               <div class="col-md-6">
                 <label for="signatory_profile_position" class="form-label">Position</label>
                 <input type="text" class="form-control" name="position" id="signatory_profile_position"
-                       value="{{ user.signatory_profile.signatory_type|default:"" }}" placeholder="e.g., Dorm Supervisor, IT Director">
+                       value="{{ user.signatory_profile.signatory_type|default:"" }}" placeholder="e.g., Dorm Supervisor, IT Director" disabled>
                 <div class="invalid-feedback" id="signatory_profile_position_error"></div>
               </div>
               <div class="col-md-6">

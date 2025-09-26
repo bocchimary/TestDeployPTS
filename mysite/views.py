@@ -8307,7 +8307,8 @@ def registrar_reports_data_api(request):
                     'processing': 'Processing',
                     'ready': 'Approved',
                     'released': 'Released',
-                    'blocked_due_to_balance': 'Blocked'
+                    'blocked_due_to_balance': 'Blocked',
+                    
                 }
                 
                 action_display = status_action_map.get(doc_req.status, doc_req.status.title())
@@ -10681,6 +10682,7 @@ def signatory_disapprove_clearance(request):
             action_type='clearance_disapproval',
             description=f'Disapproved clearance form {clearance_id} for {clearance_signatory.clearance.student.full_name}. Reasons: {", ".join(reasons)} [IP: {get_client_ip(request)}]'
         )
+        
         
         # Send notification to student about disapproval with settlement period
         try:

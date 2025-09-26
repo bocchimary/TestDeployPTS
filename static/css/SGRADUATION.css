@@ -34,7 +34,6 @@ body {
 .signatory_sidebar.collapsed .signatory_sidebar_link-text {
     display: none;
 }
-
 .signatory_sidebar a {
     color: #adb5bd;
     text-decoration: none;
@@ -47,22 +46,20 @@ body {
 }
 
 .signatory_sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.signatory_sidebar a.active {
     background-color: #14507d;
     color: white;
 }
 
 .signatory_sidebar a i {
-    color: #ffffff;
-    transition: color 0.3s ease;
+    font-size: 1.2rem;
+    min-width: 1.2rem;
 }
 
-.signatory_sidebar a:hover i {
-    color: white;
-}
-
-.signatory_sidebar.collapsed a {
-    justify-content: center;
-}
 
 .signatory_graduation_main-content {
     margin-left: 250px;
@@ -99,6 +96,61 @@ body {
 .signatory_sidebar.collapsed ~ .signatory_sidebar_top-bar {
     left: 60px;
 }
+
+
+.signatory_sidebar_top-bar .signatory_sidebar_user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.signatory_sidebar_top-bar .signatory_sidebar_user-info i {
+    font-size: 2.5rem;
+}
+
+#signatory_sidebar_sidebarBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+}
+
+#signatory_sidebar_sidebarBackdrop.active {
+    display: block;
+}
+
+.signatory_sidebar_toggle-button,
+.signatory_sidebar_desktopToggle-button,
+.signatory_sidebar_topbarToggle-button {
+    background-color: #183a53;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.signatory_sidebar_toggle-button i,
+.signatory_sidebar_desktopToggle-button i,
+.signatory_sidebar_topbarToggle-button i {
+    color: white;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.signatory_sidebar_toggle-button:hover,
+.signatory_sidebar_desktopToggle-button:hover,
+.signatory_sidebar_topbarToggle-button:hover {
+    background-color: #14507d;
+}
+
+.signatory_sidebar_toggle-button:hover i,
+.signatory_sidebar_desktopToggle-button:hover i,
+.signatory_sidebar_topbarToggle-button:hover i {
+    color: #d8d8d8;
+}
+
 
 .signatory_graduation_search-bar {
     width: 300px;
@@ -272,15 +324,51 @@ border-bottom: 1px solid #eee;
     color: white;
 }
 
-/* Responsive adjustments */
+
+/* Responsive Improvements */
 @media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    .signatory_sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+        left: 0;
+    }
+
+    .signatory_sidebar.show {
+        transform: translateX(0%);
+    }
+
+    .signatory_sidebar.collapsed {
+        transform: translateX(-100%) !important;
+    }
+
     .signatory_graduation_main-content {
-        margin-left: 60px;
-        padding: 1rem;
+        margin-left: 0 !important;
+        padding-top: 1rem !important;
+    }
+
+    .signatory_sidebar_top-bar,
+    .signatory_sidebar.collapsed ~ .signatory_sidebar_top-bar {
+        left: 0 !important;
+    }
+
+    .signatory_sidebar_top-bar .signatory_sidebar_system-title,
+    .signatory_sidebar_top-bar .signatory_sidebar_user-info span {
+        display: none;
+    }
+
+    .signatory_dashboard_search-bar {
+        min-width: 200px;
     }
     
-    .signatory_graduation_search-bar {
-        width: 100%;
-        max-width: 300px;
+    .form-select-sm {
+        min-width: 100px;
+    }
+    
+    .modal-dialog {
+        margin: 1rem;
     }
 }

@@ -13,7 +13,7 @@
       <!-- Left Column -->
       <div class="col-lg-4 col-md-12">
         <div class="card">
-          <div class="card-header p-2 fw-bold">Profile Picture</div>
+          <div class="tab-header">Profile Picture</div>
           <div class="card-body text-center">
             <div class="profile-box mx-auto mb-3">
                               <img src="{{ profile.profile_picture_url }}" class="profile-img" alt="Preview"
@@ -64,7 +64,7 @@
       <!-- Right Column -->
       <div class="col-lg-8 col-md-12">
         <div class="card">
-          <div class="card-header p-2 fw-bold">Account Details</div>
+          <div class="tab-header">Account Details</div>
           <div class="card-body">
             <form id="student_profile_details_form">
               <div class="row g-3">
@@ -99,7 +99,7 @@
           
               <div class="col-md-6">
                 <label for="student_profile_department" class="form-label small">Program</label>
-                <input type="text" class="form-control" name="department" id="student_profile_department" placeholder="Department" value="{{ profile.program }}" readonly>
+                <input type="text" class="form-control" name="department" id="student_profile_department" placeholder="Course" value="{{ profile.program }}" readonly>
               </div>
             </div>
 

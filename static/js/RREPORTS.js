@@ -886,8 +886,9 @@ function registrarGetActionBadge(activity) {
     case 'disapprove': 
     case 'blocked':
     case 'blocked_due_to_balance': return 'bg-danger';
+    case 'delete_user':  return 'bg-danger';
     case 'print': return 'bg-info';
-    case 'delete': return 'bg-warning text-dark';
+    case 'Delete': return 'bg-warning text-dark';
     case 'view': return 'bg-secondary';
     case 'submitted':
     case 'pending': return 'bg-warning';

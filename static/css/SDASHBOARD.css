@@ -235,17 +235,6 @@ iframe {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.modal-header {
-    background-color: #183a53;
-    color: white;
-    border-bottom: none;
-    border-radius: 10px 10px 0 0;
-}
-
-.modal-header .btn-close {
-    filter: invert(1);
-}
-
 .modal-footer {
     border-top: 1px solid #dee2e6;
     padding: 1rem;

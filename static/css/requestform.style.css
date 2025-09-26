@@ -185,6 +185,12 @@
   color: white !important;
 }
 
+#viewRequestModal .modal-title {
+text-decoration: none !important;
+}
+
+
+
 
 #viewRequestModal .modal-sub-header {
   border-radius: 0.375rem;
@@ -268,4 +274,8 @@
   #viewRequestModal .col-md-4 {
     margin-bottom: 1rem;
   }
+}
+#viewRequestModal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 1;
 }

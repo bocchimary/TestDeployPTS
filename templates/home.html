@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PTS Registrar</title>
+  <title>PTSCAS | Office of the Registrar</title>
 
   <!-- ✅ Website Logo on Tab for Django -->
   <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
@@ -381,35 +381,42 @@
   </section>
 
   <!-- Social Media Section -->
-  <section id="facebook" class="social-section text-dark d-flex align-items-center scroll-section" 
-           style="min-height: 50vh; background: linear-gradient(90deg, rgba(24, 58, 83, 1) 47%, rgba(49, 93, 125, 1) 91%);">
-    <div class="container">
-      <div class="row align-items-center">
-        <!-- Left Column: Image -->
-        <div class="col-md-6 text-center" data-aos="fade-right" data-aos-duration="1000">
-          <img src="{% static 'images/facebook.png' %}" alt="Facebook Logo" 
-               style="width: 200px; height: 200px;" class="img-fluid" />
-        </div>
+<section id="facebook" 
+class="social-section text-dark d-flex align-items-center scroll-section py-5" 
+style="min-height: 50vh; background: linear-gradient(90deg, rgba(24, 58, 83, 1) 47%, rgba(49, 93, 125, 1) 91%);">
+<div class="container">
+<div class="row align-items-center">
 
-        <!-- Right Column: Text -->
-        <div class="col-md-6">
-          <div class="text-center">
-            <h1 class="fw-bold text-white" data-aos="fade-in" data-aos-duration="1000">
-              FACEBOOK
-            </h1>
-            <h2 class="fw-light text-white h3" data-aos="fade-in" data-aos-duration="1000">
-              PTS College & Advanced Studies - Official
-            </h2>
-            <button class="btn btn-outline-light bg-transparent border-1 text-white mt-3"
-              onclick="window.location.href='https://web.facebook.com/ptscas';"
-              aria-label="Visit our Facebook page">
-              Visit Facebook
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- Left Column: Image -->
+<div class="col-12 col-md-6 text-center mb-4 mb-md-0" 
+  data-aos="fade-right" data-aos-duration="1000">
+<img src="{% static 'images/facebook.png' %}" 
+    alt="Facebook Logo" 
+    class="img-fluid" 
+    style="max-width: 200px; height: auto;" />
+</div>
+
+<!-- Right Column: Text -->
+<div class="col-12 col-md-6 text-center text-md-start">
+<h1 class="fw-bold text-white mb-2" 
+   data-aos="fade-in" data-aos-duration="1000">
+ FACEBOOK
+</h1>
+<h2 class="fw-light text-white h4 mb-3" 
+   data-aos="fade-in" data-aos-duration="1000">
+ PTS College & Advanced Studies - Official
+</h2>
+<button class="btn btn-outline-light bg-transparent border-1 text-white mt-2"
+       onclick="window.location.href='https://web.facebook.com/ptscas';"
+       aria-label="Visit our Facebook page">
+ Visit Facebook
+</button>
+</div>
+
+</div>
+</div>
+</section>
+
 
   <!-- About Us Section -->
   <section id="about-us" class="about-section py-5" style="background-color: #f8f9fa;">

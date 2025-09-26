@@ -1310,3 +1310,27 @@ function printPreviewContent() {
     `);
     iframe.contentDocument.close();
 }
+function toggleSidebar() {
+    const signatory_sidebar = document.getElementById("signatory_sidebar");
+    const signatory_sidebar_backdrop = document.getElementById("signatory_sidebar_sidebarBackdrop");
+  
+    if (window.innerWidth <= 768) {
+      signatory_sidebar.classList.remove("collapsed");
+      signatory_sidebar.classList.toggle("show");
+      signatory_sidebar_backdrop.classList.toggle("active");
+    } else {
+      signatory_sidebar.classList.toggle("collapsed");
+    }
+  }
+  
+  // Window resize handler
+  window.addEventListener("resize", function () {
+    const signatory_sidebar = document.getElementById("signatory_sidebar");
+    const signatory_sidebar_backdrop = document.getElementById("signatory_sidebar_sidebarBackdrop");
+    if (window.innerWidth > 768) {
+      signatory_sidebar.classList.remove("show");
+      signatory_sidebar_backdrop.classList.remove("active");
+    }
+  });
+  
+  

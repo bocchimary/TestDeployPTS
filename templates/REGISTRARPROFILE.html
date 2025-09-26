@@ -1,7 +1,7 @@
 {% extends 'main-registrar.html' %}
 {% load static %}
 
-{% block title %}REGISTRAR PROFILE{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/RPROFILE.css' %}">
@@ -91,7 +91,7 @@
                 <div class="col-md-6">
                   <label for="registrar_profile_position" class="form-label">Position</label>
                   <input type="text" class="form-control" name="position" id="registrar_profile_position" 
-                         value="{{ user.registrar_profile.position }}" placeholder="e.g., Registrar, Assistant Registrar">
+                         value="{{ user.registrar_profile.position }}" placeholder="e.g., Registrar, Assistant Registrar"disabled>
                   <div class="invalid-feedback" id="registrar_profile_position_error"></div>
                 </div>
                 <div class="col-md-6">

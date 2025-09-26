@@ -421,6 +421,8 @@ body {
 }
 
 .add-user-btn {
+    background-color: #183a53;
+    color: white;
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
     border-radius: 6px;
@@ -441,7 +443,7 @@ body {
 
 .modal-header {
     background-color: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid #dee2e6;
     border-radius: 12px 12px 0 0;
 }
 

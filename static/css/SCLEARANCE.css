@@ -45,7 +45,6 @@ body {
     border-radius: 5px;
     transition: background 0.3s ease, color 0.3s ease;
 }
-
 .signatory_sidebar a:hover {
     background-color: #14507d;
     color: white;

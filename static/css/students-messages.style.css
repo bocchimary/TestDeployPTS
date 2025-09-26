@@ -181,39 +181,7 @@ body {
       margin-top: 0.5rem;
     }
   
-<<<<<<< HEAD
    
-=======
-    /* Hide sidebar system info for mobile */
-    .student_sidebar {
-      transform: translateX(-100%);
-      width: 250px;
-      left: 0;
-    }
-  
-    .student_sidebar.show {
-      transform: translateX(0%);
-    }
-  
-    .student_sidebar.collapsed {
-      transform: translateX(-100%) !important;
-    }
-  
-    .student_messages_main-content {
-      margin-left: 0 !important;
-      padding-top: 6.1rem !important;
-    }
-  
-    .student_sidebar_top-bar,
-    .student_sidebar.collapsed ~ .student_sidebar_top-bar {
-      left: 0 !important;
-    }
-  
-    .student_sidebar_top-bar .student_sidebar_system-title,
-    .student_sidebar_top-bar .student_sidebar_user-info span {
-      display: none;
-    }
->>>>>>> ea4b881e7487b81f34d796106718cb472a09ff15
   }
   
   @media (min-width: 768px) {

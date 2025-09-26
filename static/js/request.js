@@ -353,3 +353,21 @@ window.populateViewRequestModal = function(id) {
     othersInput.value = othersValue ? othersValue.replace('Others: ', '') : '';
   }
 };
+
+const checkboxes = document.querySelectorAll('input[name="request-student-credentials"]');
+const otherInput = document.getElementById('request-student-otherInput');
+
+checkboxes.forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    // Uncheck all other checkboxes
+    checkboxes.forEach(box => {
+      if (box !== checkbox) box.checked = false;
+    });
+
+    // Enable/disable the "Others" input
+    otherInput.disabled = !document.getElementById('request-student-others').checked;
+  });
+});
+
+// Also enable/disable Others input on page load if needed
+otherInput.disabled = !document.getElementById('request-student-others').checked;

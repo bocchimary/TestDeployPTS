@@ -408,11 +408,7 @@ body {
     color: #fff;
   }
   
-  .modal-header .btn-close {
-    filter: invert(1);
-    opacity: 0.8;
-  }
-  
+
   .modal-title {
     font-weight: 600;
     font-size: 1.25rem;
